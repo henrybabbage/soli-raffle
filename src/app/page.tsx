@@ -236,11 +236,15 @@ export default function Home() {
     <div className="min-h-screen bg-white font-sans">
       {/* Header */}
       <header className="text-center py-6 px-4 sm:py-8">
-        <h1 className="text-3xl sm:text-4xl font-light mb-2 tracking-wide">Soli-Raffle</h1>
+        <h1 className="text-3xl sm:text-4xl font-light mb-2 tracking-wide">
+          Soli-Raffle
+        </h1>
         <p className="text-xs sm:text-sm text-gray-600 mb-1">
           Winners announced 16.08.2025
         </p>
-        <p className="text-xs sm:text-sm text-gray-600">Contact: lilith.spink@proton.me</p>
+        <p className="text-xs sm:text-sm text-gray-600">
+          Contact: lilith.spink@proton.me
+        </p>
       </header>
 
       {/* Main Content */}
@@ -257,7 +261,9 @@ export default function Home() {
 
               {/* Content */}
               <div className="space-y-3">
-                <h2 className="text-base sm:text-lg font-medium">{item.title}</h2>
+                <h2 className="text-base sm:text-lg font-medium">
+                  {item.title}
+                </h2>
 
                 <p className="text-xs sm:text-sm text-gray-700 italic">
                   {item.instructor}

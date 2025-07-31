@@ -1,0 +1,64 @@
+{
+  // Set Prettier as the default formatter for relevant file types
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2, // Example: Project uses 2 spaces
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false // Explicitly set if project doesn't want auto-detection
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2, // Example: Project uses 2 spaces
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // Core formatting preferences for this project
+  "editor.formatOnSave": true, // Enable format on save for this project
+  "editor.formatOnPaste": true, // Often desirable for projects with formatters
+  "editor.formatOnType": true, // Often desirable for projects with formatters
+  "editor.tabSize": 2, // Project-wide default for files without specific overrides
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+
+  // ESLint specific settings for this project
+  "eslint.enable": true, // Enable ESLint for this project
+  "eslint.format.enable": true, // Allow ESLint to act as a formatter (for autofixing)
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "eslint.codeActionsOnSave.rules": null, // Use defaults or specific rules here
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit", // Run ESLint autofix on save
+    "source.organizeImports": "explicit" // Organize imports on save
+  },
+
+  // Explicitly disable Biome if it were globally enabled or for other projects
+  "biomejs.biome.enabled": false
+}
