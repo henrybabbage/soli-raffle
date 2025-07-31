@@ -1,103 +1,347 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import PayPalButton from "./components/PayPalButton";
+
+interface RaffleItem {
+  id: string;
+  title: string;
+  description: string;
+  instructor: string;
+  details: string;
+  value: string;
+  contact: string;
+  image: string;
+}
+
+const raffleItems: RaffleItem[] = [
+  {
+    id: "1",
+    title: "Private Qigong Session",
+    description:
+      "Lingji will offer a 1 hour online private qigong session. This session will offer techniques for grounding and regeneration with Zhan Zhuang (qi absorption postures) to bring the body into alignment and relaxation, and Taoist breathing techniques to cleanse and circulate energy.",
+    instructor:
+      "Lingji Hon 韓靈芝 is a Berlin based Taiji Quan and Qigong teacher",
+    details:
+      "Lingji will offer a 1 hour online private qigong session. This session will offer techniques for grounding and regeneration with Zhan Zhuang (qi absorption postures) to bring the body into alignment and relaxation, and Taoist breathing techniques to cleanse and circulate energy.",
+    value: "100€",
+    contact: "@wudongtaiji wudongtaiji.com",
+    image: "/raffle-1.jpg",
+  },
+  {
+    id: "2",
+    title: "60-Minute Private Training Session",
+    description:
+      "Elias offers 1 x 60min private training sessions for either boxing, strength and conditioning, self defence, and kick boxing.",
+    instructor: "Elias, boxing coach and MMA practitioner",
+    details:
+      "Elias offers 1 x 60min private training sessions for either boxing, strength and conditioning, self defence, and kick boxing.",
+    value: "100€ to 120€",
+    contact: "@stillelias",
+    image: "/raffle-2.jpg",
+  },
+  {
+    id: "3",
+    title: "Black and White Film Developing Workshop",
+    description:
+      "Queer Analog Darkroom offers a Black and White Film Developing Workshop (3 hours).",
+    instructor:
+      "Queer Analog Darkroom is a self-organized collective committed to a more collaborative approach to visual arts and to resisting the depoliticization of photography.",
+    details:
+      "Black and White Film Developing Workshop (3 hours). At the core of their work is the darkroom, which works towards the redistribution of knowledge, increasing accessibility and mutual empowerment—both spatially and through shared learning.",
+    value: "65€",
+    contact: "@queeranalogdarkroom @jetphoto",
+    image: "/raffle-3.jpg",
+  },
+  {
+    id: "4",
+    title: "60-Minute Personal Training Session",
+    description:
+      "Eliza offers a 60-minute personal training session with focus on strength training fundamentals, barbell technique, and building mobility and control.",
+    instructor:
+      "Eliza Cumming – Personal Trainer & Biomechanics Coach. Eliza is a strength and mobility coach based in Berlin, working primarily with FLINTA clients.",
+    details:
+      "1 x 60-minute personal training session with Eliza. Includes a full-body strength session tailored to your goals, technique coaching, and guidance around mobility or lifting basics.",
+    value: "105€",
+    contact: "@elizacumming",
+    image: "/raffle-4.jpg",
+  },
+  {
+    id: "5",
+    title: "Relaxing Facial Skincare Treatment",
+    description:
+      "A 60 minute facial skincare & relaxation treatment including cleanse, tone, exfoliate, masque and massage options.",
+    instructor:
+      "A trans* practitioner trained in cosmetic and massage, neurodiversity aware and ready to hear your sensory or access needs.",
+    details:
+      "60 minute facial skincare & relaxation treatment. Includes: cleanse, tone, exfoliate, masque + options for hand & arm, neck & shoulder massage, and a lymphatic drainage facial massage. Choice of scent: lavender, rosemary or Bergamot.",
+    value: "50€",
+    contact: "@qttherapy",
+    image: "/raffle-5.jpg",
+  },
+  {
+    id: "6",
+    title: "90-Minute Massage Session",
+    description: "Varis offers a 1.5 hour massage session.",
+    instructor: "Varis",
+    details: "1.5 hour massage session (more details coming soon).",
+    value: "TBD",
+    contact: "Contact info coming",
+    image: "/raffle-6.jpg",
+  },
+  {
+    id: "7",
+    title: "Birth Chart Reading",
+    description:
+      "Maximilian offers a one hour long birth chart reading with focus on growth lessons and archetypal patterns.",
+    instructor: "Maximilian Juno is an evolutionary astrologer & guide",
+    details:
+      "One hour long birth chart reading; a place of soulful conversation & engagement with one's personal birth horoscope to illuminate the deeper archetypal patterns of our psyche & life, with a focus on the growth lessons you are currently moving through.",
+    value: "130€",
+    contact: "@skywalker.astrology www.skywalkerastrology.com",
+    image: "/raffle-7.jpg",
+  },
+  {
+    id: "8",
+    title: "Holistic Bodywork Session",
+    description:
+      "Denise offers a 1.5hr session of classical swedish massage with lomi lomi influence and thai yoga massage.",
+    instructor:
+      "Denise is attuned to the body's energetic motions, weaving the art of touch into holistic bodywork sessions that release tension, create space for energy flow, and realign the body with mind and spirit.",
+    details:
+      "1.5hr session of classical swedish massage with a lomi lomi influence and thai yoga massage. She implements an intuitive approach, tuning into each client's responses and adjusting pressure and techniques accordingly.",
+    value: "100€",
+    contact: "Deniseagua.com",
+    image: "/raffle-8.jpg",
+  },
+  {
+    id: "9",
+    title: "Craniosacral Therapy Session",
+    description:
+      "Oly offers a 70 minute craniosacral therapy session to support nervous system regulation and healing.",
+    instructor:
+      "Oly McDowell (they/them) is a licensed heilpraktiker, biodynamic craniosacral therapist and acupuncturist in training.",
+    details:
+      "70 minute craniosacral therapy session. Cranio is a somatic touch based therapy that supports people to regulate their nervous system and tune into the healing forces of their body.",
+    value: "85€",
+    contact: "www.beinginthebody.de",
+    image: "/raffle-9.jpg",
+  },
+  {
+    id: "10",
+    title: "Online Breathwork & Meditation Session",
+    description:
+      "Diana offers a 1-hour online private session combining pranayama, somatic breathwork, and guided meditation.",
+    instructor:
+      "Diana Farhat is a Beirut-based holistic psychologist (BA Psychology), Ayurvedic therapist, and senior yoga teacher (500hr) with over 10 years of experience.",
+    details:
+      "1-hour online private session combining pranayama, somatic breathwork, and guided meditation. Drawing from psychology and Rebirthing Breathwork, the session supports nervous system regulation, emotional release, and deep inner clarity.",
+    value: "100€",
+    contact: "@integratedhealingtherapy",
+    image: "/raffle-10.jpg",
+  },
+  {
+    id: "11",
+    title: "60-Minute Bodywork Session",
+    description:
+      "Rachel offers a 1-hour 1:1 Bodywork Session focused on mindful touch, presence, and deep listening.",
+    instructor:
+      "Rachel Helmbrecht is a Berlin based Bodyworker and Physiotherapist.",
+    details:
+      "1-hour 1:1 Bodywork Session. It is a space of mindful touch, presence, and deep listening, which can create a sense of grounding, deeper relaxation, and renewed vitality.",
+    value: "90€",
+    contact: "@rachelhelmbrecht www.körpertherapie-helmbrecht.de",
+    image: "/raffle-11.jpg",
+  },
+  {
+    id: "12",
+    title: "Somatic & Bodywork Session",
+    description:
+      "Tara offers a 1.5 hour somatic/bodywork based session exploring your needs through hands-on techniques and somatic exercises.",
+    instructor:
+      "Tara is a Berlin based Bodyworker and Somatic facilitator. Her pillars of work are one-on-one and group somatic coaching, tantric bodywork, and tantric and intimacy coaching.",
+    details:
+      "1.5 hour somatic/bodywork based session, where we will explore your needs through various hands on techniques and somatic exercises.",
+    value: "180€",
+    contact: "@tara_embodied https://www.sensuali.com/tara-18880/",
+    image: "/raffle-12.jpg",
+  },
+];
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [quantities, setQuantities] = useState<Record<string, number>>({
+    "1": 1,
+    "2": 1,
+    "3": 1,
+    "4": 1,
+    "5": 1,
+    "6": 1,
+    "7": 1,
+    "8": 1,
+    "9": 1,
+    "10": 1,
+    "11": 1,
+    "12": 1,
+  });
+  const [showPayPal, setShowPayPal] = useState<Record<string, boolean>>({
+    "1": false,
+    "2": false,
+    "3": false,
+    "4": false,
+    "5": false,
+    "6": false,
+    "7": false,
+    "8": false,
+    "9": false,
+    "10": false,
+    "11": false,
+    "12": false,
+  });
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const updateQuantity = (id: string, change: number) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [id]: Math.max(1, prev[id] + change),
+    }));
+  };
+
+  const handleBuyTicket = (item: RaffleItem) => {
+    setShowPayPal((prev) => ({
+      ...prev,
+      [item.id]: true,
+    }));
+  };
+
+  const handlePaymentSuccess = (itemId: string, details: unknown) => {
+    console.log("Payment successful for item:", itemId, details);
+    alert(
+      `Payment successful! You have purchased ${quantities[itemId]} ticket(s).`
+    );
+    setShowPayPal((prev) => ({
+      ...prev,
+      [itemId]: false,
+    }));
+  };
+
+  const handlePaymentError = (itemId: string, error: unknown) => {
+    console.error("Payment error for item:", itemId, error);
+    alert("Payment failed. Please try again.");
+    setShowPayPal((prev) => ({
+      ...prev,
+      [itemId]: false,
+    }));
+  };
+
+  return (
+    <div className="min-h-screen bg-white font-sans">
+      {/* Header */}
+      <header className="text-center py-8 px-4">
+        <h1 className="text-4xl font-light mb-2 tracking-wide">Soli-Raffle</h1>
+        <p className="text-sm text-gray-600 mb-1">
+          Winners announced 16.08.2025
+        </p>
+        <p className="text-sm text-gray-600">Contact: lilith.spink@proton.me</p>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+          {raffleItems.map((item) => (
+            <div key={item.id} className="space-y-4">
+              {/* Image */}
+              <div className="aspect-[4/5] bg-gray-200 rounded-lg overflow-hidden">
+                <div className="w-full h-full bg-gray-300 flex items-center justify-center text-gray-500">
+                  Image placeholder
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="space-y-3">
+                <h2 className="text-lg font-medium">{item.title}</h2>
+
+                <p className="text-sm text-gray-700 italic">
+                  {item.instructor}
+                </p>
+
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  <span className="font-medium">What:</span> {item.details}
+                </p>
+
+                <p className="text-sm text-gray-700">
+                  <span className="font-medium">Value:</span> {item.value}
+                </p>
+
+                <p className="text-sm text-gray-700">
+                  <span className="font-medium">Links:</span> {item.contact}
+                </p>
+
+                {/* Purchase Controls */}
+                <div className="space-y-4 pt-4">
+                  <div className="flex items-center justify-between">
+                    {!showPayPal[item.id] ? (
+                      <button
+                        className="px-6 py-2 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded transition-colors duration-200"
+                        onClick={() => handleBuyTicket(item)}
+                      >
+                        BUY TICKET
+                      </button>
+                    ) : (
+                      <button
+                        className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded transition-colors duration-200 text-sm"
+                        onClick={() =>
+                          setShowPayPal((prev) => ({
+                            ...prev,
+                            [item.id]: false,
+                          }))
+                        }
+                      >
+                        Cancel
+                      </button>
+                    )}
+
+                    <div className="flex items-center space-x-3">
+                      <button
+                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors duration-200"
+                        onClick={() => updateQuantity(item.id, -1)}
+                        disabled={showPayPal[item.id]}
+                      >
+                        -
+                      </button>
+                      <span className="w-8 text-center font-medium">
+                        {quantities[item.id]}
+                      </span>
+                      <button
+                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors duration-200"
+                        onClick={() => updateQuantity(item.id, 1)}
+                        disabled={showPayPal[item.id]}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  {showPayPal[item.id] && (
+                    <div className="border-t pt-4">
+                      <div className="mb-2 text-sm text-gray-600">
+                        Total: €{(100 * quantities[item.id]).toFixed(2)}
+                      </div>
+                      <PayPalButton
+                        amount="100"
+                        itemName={item.title}
+                        quantity={quantities[item.id]}
+                        onSuccess={(details) =>
+                          handlePaymentSuccess(item.id, details)
+                        }
+                        onError={(error) => handlePaymentError(item.id, error)}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
