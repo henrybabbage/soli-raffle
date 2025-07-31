@@ -249,17 +249,19 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white font-sans">
       {/* Header */}
-      <header className="flex flex-col sm:flex-row sm:justify-between sm:items-start py-6 px-4 sm:py-8 gap-4 sm:gap-0">
-        <h1 className="text-4xl sm:text-5xl font-light tracking-wide">
-          Soli-Raffle
-        </h1>
-        <div className="flex flex-col space-y-1 text-left sm:text-right">
-          <p className="text-xs sm:text-sm text-gray-600">
-            Winners announced 16.08.2025
-          </p>
-          <p className="text-xs sm:text-sm text-gray-600">
-            Contact: lilith.spink@proton.me
-          </p>
+      <header className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 sm:gap-0">
+          <h1 className="text-4xl sm:text-5xl font-light tracking-wide">
+            Soli-Raffle
+          </h1>
+          <div className="flex flex-col space-y-1 text-left sm:text-right">
+            <p className="text-xs sm:text-sm text-gray-600">
+              Winners announced 16.08.2025
+            </p>
+            <p className="text-xs sm:text-sm text-gray-600">
+              Contact: lilith.spink@proton.me
+            </p>
+          </div>
         </div>
       </header>
 
@@ -312,7 +314,7 @@ export default function Home() {
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
                     {!showPayPal[item.id] ? (
                       <button
-                        className="px-4 sm:px-6 py-2 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded transition-colors duration-200 text-sm sm:text-base order-2 sm:order-1"
+                        className="px-4 sm:px-6 py-2 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded transition-colors duration-200 text-xs sm:text-sm order-2 sm:order-1"
                         onClick={() => handleBuyTicket(item)}
                       >
                         BUY TICKET
