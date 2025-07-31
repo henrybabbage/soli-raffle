@@ -309,7 +309,7 @@ export default function Home() {
       {/* Header */}
       <header className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 sm:gap-0">
-          <h1 className="text-4xl sm:text-5xl font-light tracking-wide">
+          <h1 className="text-4xl sm:text-5xl font-light tracking-wide italic">
             Soli-Raffle
           </h1>
           <div className="flex flex-col space-y-1 text-left sm:text-right">
