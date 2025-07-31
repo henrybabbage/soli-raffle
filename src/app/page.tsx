@@ -56,12 +56,21 @@ const normalizeLinks = (contact: string): Link[] => {
         };
       }
 
-      // Handle full URLs
+      // Handle full URLs - extract domain for display
       if (link.startsWith("http")) {
-        return {
-          label: link,
-          href: link,
-        };
+        try {
+          const url = new URL(link);
+          const domain = url.hostname;
+          return {
+            label: domain,
+            href: link,
+          };
+        } catch {
+          return {
+            label: link,
+            href: link,
+          };
+        }
       }
 
       // Fallback for other text
@@ -360,7 +369,7 @@ export default function Home() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs sm:text-sm text-blue-600 hover:underline"
+                      className="text-xs sm:text-sm text-gray-700 hover:underline"
                     >
                       {link.label}
                     </a>
