@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import PayPalButton from "./components/PayPalButton";
 
@@ -14,6 +15,19 @@ interface RaffleItem {
   image: string;
 }
 
+// Helper function to check if image exists
+const getImagePath = (item: RaffleItem): string | null => {
+  const availableImages = [
+    "/images/1_Lingji.jpeg",
+    "/images/7_Maximillian_Juno.jpeg",
+    "/images/8_Denise.jpeg",
+    "/images/9_Oly.jpeg",
+    "/images/11_Rachel.jpeg",
+    "/images/12_Tara.jpeg",
+  ];
+  return availableImages.includes(item.image) ? item.image : null;
+};
+
 const raffleItems: RaffleItem[] = [
   {
     id: "1",
@@ -26,7 +40,7 @@ const raffleItems: RaffleItem[] = [
       "Lingji will offer a 1 hour online private qigong session. This session will offer techniques for grounding and regeneration with Zhan Zhuang (qi absorption postures) to bring the body into alignment and relaxation, and Taoist breathing techniques to cleanse and circulate energy.",
     value: "100€",
     contact: "@wudongtaiji wudongtaiji.com",
-    image: "/raffle-1.jpg",
+    image: "/images/1_Lingji.jpeg",
   },
   {
     id: "2",
@@ -99,7 +113,7 @@ const raffleItems: RaffleItem[] = [
       "One hour long birth chart reading; a place of soulful conversation & engagement with one's personal birth horoscope to illuminate the deeper archetypal patterns of our psyche & life, with a focus on the growth lessons you are currently moving through.",
     value: "130€",
     contact: "@skywalker.astrology www.skywalkerastrology.com",
-    image: "/raffle-7.jpg",
+    image: "/images/7_Maximillian_Juno.jpeg",
   },
   {
     id: "8",
@@ -112,7 +126,7 @@ const raffleItems: RaffleItem[] = [
       "1.5hr session of classical swedish massage with a lomi lomi influence and thai yoga massage. She implements an intuitive approach, tuning into each client's responses and adjusting pressure and techniques accordingly.",
     value: "100€",
     contact: "Deniseagua.com",
-    image: "/raffle-8.jpg",
+    image: "/images/8_Denise.jpeg",
   },
   {
     id: "9",
@@ -125,7 +139,7 @@ const raffleItems: RaffleItem[] = [
       "70 minute craniosacral therapy session. Cranio is a somatic touch based therapy that supports people to regulate their nervous system and tune into the healing forces of their body.",
     value: "85€",
     contact: "www.beinginthebody.de",
-    image: "/raffle-9.jpg",
+    image: "/images/9_Oly.jpeg",
   },
   {
     id: "10",
@@ -151,7 +165,7 @@ const raffleItems: RaffleItem[] = [
       "1-hour 1:1 Bodywork Session. It is a space of mindful touch, presence, and deep listening, which can create a sense of grounding, deeper relaxation, and renewed vitality.",
     value: "90€",
     contact: "@rachelhelmbrecht www.körpertherapie-helmbrecht.de",
-    image: "/raffle-11.jpg",
+    image: "/images/11_Rachel.jpeg",
   },
   {
     id: "12",
@@ -164,7 +178,7 @@ const raffleItems: RaffleItem[] = [
       "1.5 hour somatic/bodywork based session, where we will explore your needs through various hands on techniques and somatic exercises.",
     value: "180€",
     contact: "@tara_embodied https://www.sensuali.com/tara-18880/",
-    image: "/raffle-12.jpg",
+    image: "/images/12_Tara.jpeg",
   },
 ];
 
@@ -235,16 +249,18 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white font-sans">
       {/* Header */}
-      <header className="text-center py-6 px-4 sm:py-8">
-        <h1 className="text-3xl sm:text-4xl font-light mb-2 tracking-wide">
+      <header className="flex flex-col sm:flex-row sm:justify-between sm:items-start py-6 px-4 sm:py-8 gap-4 sm:gap-0">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-wide">
           Soli-Raffle
         </h1>
-        <p className="text-xs sm:text-sm text-gray-600 mb-1">
-          Winners announced 16.08.2025
-        </p>
-        <p className="text-xs sm:text-sm text-gray-600">
-          Contact: lilith.spink@proton.me
-        </p>
+        <div className="flex flex-col space-y-1 text-left sm:text-right">
+          <p className="text-xs sm:text-sm text-gray-600">
+            Winners announced 16.08.2025
+          </p>
+          <p className="text-xs sm:text-sm text-gray-600">
+            Contact: lilith.spink@proton.me
+          </p>
+        </div>
       </header>
 
       {/* Main Content */}
@@ -253,10 +269,20 @@ export default function Home() {
           {raffleItems.map((item) => (
             <div key={item.id} className="space-y-4">
               {/* Image */}
-              <div className="aspect-[4/5] bg-gray-200 rounded-lg overflow-hidden">
-                <div className="w-full h-full bg-gray-300 flex items-center justify-center text-gray-500">
-                  Image placeholder
-                </div>
+              <div className="aspect-[4/5] bg-gray-200 rounded-lg overflow-hidden relative">
+                {getImagePath(item) ? (
+                  <Image
+                    src={getImagePath(item)!}
+                    alt={`${item.instructor} - ${item.title}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center text-purple-600 font-medium">
+                    Photo Coming Soon
+                  </div>
+                )}
               </div>
 
               {/* Content */}

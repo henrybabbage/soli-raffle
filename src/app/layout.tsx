@@ -1,21 +1,46 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import localFont from "next/font/local";
 import PayPalWrapper from "./components/PayPalWrapper";
+import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const quadrantText = localFont({
+  src: [
+    {
+      path: "../../public/fonts/QuadrantText-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/QuadrantText-RegularItalic.woff2",
+      weight: "400",
+      style: "italic",
+    },
+  ],
+  variable: "--font-quadrant-text",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const quadrantTextMono = localFont({
+  src: [
+    {
+      path: "../../public/fonts/QuadrantTextMono-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/QuadrantTextMono-RegularItalic.woff2",
+      weight: "400",
+      style: "italic",
+    },
+  ],
+  variable: "--font-quadrant-text-mono",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "Soli Raffle",
-  description: "Purchase raffle tickets for exclusive Qigong and personal training sessions with Lingji Hon",
+  description:
+    "Purchase raffle tickets for exclusive Qigong and personal training sessions with Lingji Hon",
 };
 
 export default function RootLayout({
@@ -26,11 +51,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${quadrantText.variable} ${quadrantTextMono.variable} antialiased`}
       >
-        <PayPalWrapper>
-          {children}
-        </PayPalWrapper>
+        <PayPalWrapper>{children}</PayPalWrapper>
       </body>
     </html>
   );
