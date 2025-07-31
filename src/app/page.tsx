@@ -49,6 +49,27 @@ const normalizeLinks = (contact: string): string => {
     .join(" ");
 };
 
+const formatContactDisplay = (contact: string): string => {
+  return contact
+    .split(" ")
+    .map((link) => {
+      // Handle Instagram links - display as @username
+      if (link.startsWith("https://instagram.com/")) {
+        const username = link.replace("https://instagram.com/", "");
+        return `@${username}`;
+      }
+      
+      // Handle Instagram links that are already in @username format
+      if (link.startsWith("@")) {
+        return link;
+      }
+
+      // For other links, return as is
+      return link;
+    })
+    .join(" ");
+};
+
 const raffleItems: RaffleItem[] = [
   {
     id: "1",
@@ -331,7 +352,42 @@ export default function Home() {
                 </p>
 
                 <p className="text-xs sm:text-sm text-gray-700">
-                  <span className="font-medium">Links:</span> {item.contact}
+                  <span className="font-medium">Links:</span>{" "}
+                  {item.contact.split(" ").map((link, index) => {
+                    // Handle Instagram links
+                    if (link.startsWith("https://instagram.com/")) {
+                      const username = link.replace("https://instagram.com/", "");
+                      return (
+                        <a
+                          key={index}
+                          href={link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-purple-600 hover:text-purple-800 underline"
+                        >
+                          @{username}
+                        </a>
+                      );
+                    }
+                    
+                    // Handle other links
+                    if (link.startsWith("http")) {
+                      return (
+                        <a
+                          key={index}
+                          href={link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-purple-600 hover:text-purple-800 underline"
+                        >
+                          {link}
+                        </a>
+                      );
+                    }
+                    
+                    // Handle plain text
+                    return <span key={index}>{link}</span>;
+                  }).reduce((prev, curr) => [prev, " ", curr], [])}
                 </p>
 
                 {/* Purchase Controls */}
