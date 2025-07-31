@@ -351,15 +351,15 @@ export default function Home() {
                   {item.title}
                 </h2>
 
-                <p className="text-xs sm:text-sm text-gray-700 italic">
+                <p className="text-xs sm:text-sm text-gray-500 italic">
                   {item.instructor}
                 </p>
 
-                <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
+                <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
                   {item.details}
                 </p>
 
-                <p className="text-xs sm:text-sm text-gray-700">
+                <p className="text-xs sm:text-sm text-gray-500">
                   <span className="font-medium">Value:</span> {item.value}
                 </p>
 
@@ -370,7 +370,7 @@ export default function Home() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs sm:text-sm text-gray-700 hover:underline"
+                      className="text-xs sm:text-sm text-gray-500 hover:underline"
                     >
                       {link.label}
                     </a>
