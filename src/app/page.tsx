@@ -4,6 +4,11 @@ import Image from "next/image";
 import { useState } from "react";
 import PayPalButton from "./components/PayPalButton";
 
+interface Link {
+  label: string;
+  href: string;
+}
+
 interface RaffleItem {
   id: string;
   title: string;
@@ -11,7 +16,7 @@ interface RaffleItem {
   instructor: string;
   details: string;
   value: string;
-  contact: string;
+  contact: Link[];
   image: string;
 }
 
@@ -29,24 +34,42 @@ const getImagePath = (item: RaffleItem): string | null => {
 };
 
 // Helper function to normalize links
-const normalizeLinks = (contact: string): string => {
+const normalizeLinks = (contact: string): Link[] => {
   return contact
     .split(" ")
+    .filter((link) => link.trim())
     .map((link) => {
       // Handle Instagram links (@username)
       if (link.startsWith("@")) {
         const username = link.substring(1);
-        return `https://instagram.com/${username}`;
+        return {
+          label: link,
+          href: `https://instagram.com/${username}`,
+        };
       }
 
       // Handle website links that don't have protocol
       if (link.includes(".") && !link.startsWith("http")) {
-        return `https://${link}`;
+        return {
+          label: link,
+          href: `https://${link}`,
+        };
       }
 
-      return link;
-    })
-    .join(" ");
+      // Handle full URLs
+      if (link.startsWith("http")) {
+        return {
+          label: link,
+          href: link,
+        };
+      }
+
+      // Fallback for other text
+      return {
+        label: link,
+        href: link,
+      };
+    });
 };
 
 const raffleItems: RaffleItem[] = [
@@ -121,7 +144,7 @@ const raffleItems: RaffleItem[] = [
     instructor: "Varis",
     details: "1.5 hour massage session (more details coming soon).",
     value: "TBD",
-    contact: "Contact info coming",
+    contact: [{ label: "Contact info coming", href: "#" }],
     image: "/raffle-6.jpg",
   },
   {
@@ -330,9 +353,19 @@ export default function Home() {
                   <span className="font-medium">Value:</span> {item.value}
                 </p>
 
-                <p className="text-xs sm:text-sm text-gray-700">
-                  {item.contact}
-                </p>
+                <div className="flex flex-wrap gap-2">
+                  {item.contact.map((link, index) => (
+                    <a
+                      key={index}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs sm:text-sm text-blue-600 hover:underline"
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
 
                 {/* Purchase Controls */}
                 <div className="space-y-4 pt-4">
