@@ -235,17 +235,17 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white font-sans">
       {/* Header */}
-      <header className="text-center py-8 px-4">
-        <h1 className="text-4xl font-light mb-2 tracking-wide">Soli-Raffle</h1>
-        <p className="text-sm text-gray-600 mb-1">
+      <header className="text-center py-6 px-4 sm:py-8">
+        <h1 className="text-3xl sm:text-4xl font-light mb-2 tracking-wide">Soli-Raffle</h1>
+        <p className="text-xs sm:text-sm text-gray-600 mb-1">
           Winners announced 16.08.2025
         </p>
-        <p className="text-sm text-gray-600">Contact: lilith.spink@proton.me</p>
+        <p className="text-xs sm:text-sm text-gray-600">Contact: lilith.spink@proton.me</p>
       </header>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 lg:gap-12">
           {raffleItems.map((item) => (
             <div key={item.id} className="space-y-4">
               {/* Image */}
@@ -257,37 +257,37 @@ export default function Home() {
 
               {/* Content */}
               <div className="space-y-3">
-                <h2 className="text-lg font-medium">{item.title}</h2>
+                <h2 className="text-base sm:text-lg font-medium">{item.title}</h2>
 
-                <p className="text-sm text-gray-700 italic">
+                <p className="text-xs sm:text-sm text-gray-700 italic">
                   {item.instructor}
                 </p>
 
-                <p className="text-sm text-gray-700 leading-relaxed">
+                <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
                   <span className="font-medium">What:</span> {item.details}
                 </p>
 
-                <p className="text-sm text-gray-700">
+                <p className="text-xs sm:text-sm text-gray-700">
                   <span className="font-medium">Value:</span> {item.value}
                 </p>
 
-                <p className="text-sm text-gray-700">
+                <p className="text-xs sm:text-sm text-gray-700">
                   <span className="font-medium">Links:</span> {item.contact}
                 </p>
 
                 {/* Purchase Controls */}
                 <div className="space-y-4 pt-4">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
                     {!showPayPal[item.id] ? (
                       <button
-                        className="px-6 py-2 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded transition-colors duration-200"
+                        className="px-4 sm:px-6 py-2 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded transition-colors duration-200 text-sm sm:text-base order-2 sm:order-1"
                         onClick={() => handleBuyTicket(item)}
                       >
                         BUY TICKET
                       </button>
                     ) : (
                       <button
-                        className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded transition-colors duration-200 text-sm"
+                        className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded transition-colors duration-200 text-sm order-2 sm:order-1"
                         onClick={() =>
                           setShowPayPal((prev) => ({
                             ...prev,
@@ -299,19 +299,19 @@ export default function Home() {
                       </button>
                     )}
 
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center justify-center space-x-3 order-1 sm:order-2">
                       <button
-                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors duration-200"
+                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors duration-200 text-lg"
                         onClick={() => updateQuantity(item.id, -1)}
                         disabled={showPayPal[item.id]}
                       >
                         -
                       </button>
-                      <span className="w-8 text-center font-medium">
+                      <span className="w-8 text-center font-medium text-base">
                         {quantities[item.id]}
                       </span>
                       <button
-                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors duration-200"
+                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors duration-200 text-lg"
                         onClick={() => updateQuantity(item.id, 1)}
                         disabled={showPayPal[item.id]}
                       >
@@ -322,7 +322,7 @@ export default function Home() {
 
                   {showPayPal[item.id] && (
                     <div className="border-t pt-4">
-                      <div className="mb-2 text-sm text-gray-600">
+                      <div className="mb-2 text-sm text-gray-600 text-center sm:text-left">
                         Total: €{(100 * quantities[item.id]).toFixed(2)}
                       </div>
                       <PayPalButton
