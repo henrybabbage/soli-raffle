@@ -27,6 +27,7 @@ const getImagePath = (item: RaffleItem): string | null => {
     "/images/7_Maximillian_Juno.jpeg",
     "/images/8_Denise.jpeg",
     "/images/9_Oly.jpeg",
+    "/images/10_Diana.jpeg",
     "/images/11_Rachel.jpeg",
     "/images/12_Tara.jpeg",
   ];
@@ -205,7 +206,7 @@ const raffleItems: RaffleItem[] = [
       "1-hour online private session combining pranayama, somatic breathwork, and guided meditation. Drawing from psychology and Rebirthing Breathwork, the session supports nervous system regulation, emotional release, and deep inner clarity.",
     value: "100€",
     contact: normalizeLinks("@integratedhealingtherapy"),
-    image: "/raffle-10.jpg",
+    image: "/images/10_Diana.jpeg",
   },
   {
     id: "11",
@@ -328,7 +329,7 @@ export default function Home() {
           {raffleItems.map((item) => (
             <div key={item.id} className="space-y-4">
               {/* Image */}
-              <div className="aspect-[4/5] bg-gray-200 rounded-lg overflow-hidden relative">
+              <div className="aspect-[4/5] bg-gray-200 overflow-hidden relative">
                 {getImagePath(item) ? (
                   <Image
                     src={getImagePath(item)!}
@@ -424,10 +425,10 @@ export default function Home() {
                   {showPayPal[item.id] && (
                     <div className="border-t pt-4">
                       <div className="mb-2 text-sm text-gray-600 text-center sm:text-left">
-                        Total: €{(100 * quantities[item.id]).toFixed(2)}
+                        Total: €{(25 * quantities[item.id]).toFixed(2)}
                       </div>
                       <PayPalButton
-                        amount="100"
+                        amount="25"
                         itemName={item.title}
                         quantity={quantities[item.id]}
                         onSuccess={(details) =>
