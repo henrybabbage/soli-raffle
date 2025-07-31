@@ -331,7 +331,7 @@ export default function Home() {
                 </p>
 
                 <p className="text-xs sm:text-sm text-gray-700">
-                  <span className="font-medium">Links:</span> {item.contact}
+                  {item.contact}
                 </p>
 
                 {/* Purchase Controls */}
