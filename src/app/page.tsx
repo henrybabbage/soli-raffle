@@ -28,6 +28,27 @@ const getImagePath = (item: RaffleItem): string | null => {
   return availableImages.includes(item.image) ? item.image : null;
 };
 
+// Helper function to normalize links
+const normalizeLinks = (contact: string): string => {
+  return contact
+    .split(" ")
+    .map((link) => {
+      // Handle Instagram links (@username)
+      if (link.startsWith("@")) {
+        const username = link.substring(1);
+        return `https://instagram.com/${username}`;
+      }
+
+      // Handle website links that don't have protocol
+      if (link.includes(".") && !link.startsWith("http")) {
+        return `https://${link}`;
+      }
+
+      return link;
+    })
+    .join(" ");
+};
+
 const raffleItems: RaffleItem[] = [
   {
     id: "1",
@@ -39,7 +60,7 @@ const raffleItems: RaffleItem[] = [
     details:
       "Lingji will offer a 1 hour online private qigong session. This session will offer techniques for grounding and regeneration with Zhan Zhuang (qi absorption postures) to bring the body into alignment and relaxation, and Taoist breathing techniques to cleanse and circulate energy.",
     value: "100€",
-    contact: "@wudongtaiji wudongtaiji.com",
+    contact: normalizeLinks("@wudongtaiji wudongtaiji.com"),
     image: "/images/1_Lingji.jpeg",
   },
   {
@@ -51,7 +72,7 @@ const raffleItems: RaffleItem[] = [
     details:
       "Elias offers 1 x 60min private training sessions for either boxing, strength and conditioning, self defence, and kick boxing.",
     value: "100€ to 120€",
-    contact: "@stillelias",
+    contact: normalizeLinks("@stillelias"),
     image: "/raffle-2.jpg",
   },
   {
@@ -64,7 +85,7 @@ const raffleItems: RaffleItem[] = [
     details:
       "Black and White Film Developing Workshop (3 hours). At the core of their work is the darkroom, which works towards the redistribution of knowledge, increasing accessibility and mutual empowerment—both spatially and through shared learning.",
     value: "65€",
-    contact: "@queeranalogdarkroom @jetphoto",
+    contact: normalizeLinks("@queeranalogdarkroom @jetphoto"),
     image: "/raffle-3.jpg",
   },
   {
@@ -77,7 +98,7 @@ const raffleItems: RaffleItem[] = [
     details:
       "1 x 60-minute personal training session with Eliza. Includes a full-body strength session tailored to your goals, technique coaching, and guidance around mobility or lifting basics.",
     value: "105€",
-    contact: "@elizacumming",
+    contact: normalizeLinks("@elizacumming"),
     image: "/raffle-4.jpg",
   },
   {
@@ -90,7 +111,7 @@ const raffleItems: RaffleItem[] = [
     details:
       "60 minute facial skincare & relaxation treatment. Includes: cleanse, tone, exfoliate, masque + options for hand & arm, neck & shoulder massage, and a lymphatic drainage facial massage. Choice of scent: lavender, rosemary or Bergamot.",
     value: "50€",
-    contact: "@qttherapy",
+    contact: normalizeLinks("@qttherapy"),
     image: "/raffle-5.jpg",
   },
   {
@@ -112,7 +133,7 @@ const raffleItems: RaffleItem[] = [
     details:
       "One hour long birth chart reading; a place of soulful conversation & engagement with one's personal birth horoscope to illuminate the deeper archetypal patterns of our psyche & life, with a focus on the growth lessons you are currently moving through.",
     value: "130€",
-    contact: "@skywalker.astrology www.skywalkerastrology.com",
+    contact: normalizeLinks("@skywalker.astrology www.skywalkerastrology.com"),
     image: "/images/7_Maximillian_Juno.jpeg",
   },
   {
@@ -125,7 +146,7 @@ const raffleItems: RaffleItem[] = [
     details:
       "1.5hr session of classical swedish massage with a lomi lomi influence and thai yoga massage. She implements an intuitive approach, tuning into each client's responses and adjusting pressure and techniques accordingly.",
     value: "100€",
-    contact: "Deniseagua.com",
+    contact: normalizeLinks("Deniseagua.com"),
     image: "/images/8_Denise.jpeg",
   },
   {
@@ -138,7 +159,7 @@ const raffleItems: RaffleItem[] = [
     details:
       "70 minute craniosacral therapy session. Cranio is a somatic touch based therapy that supports people to regulate their nervous system and tune into the healing forces of their body.",
     value: "85€",
-    contact: "www.beinginthebody.de",
+    contact: normalizeLinks("www.beinginthebody.de"),
     image: "/images/9_Oly.jpeg",
   },
   {
@@ -151,7 +172,7 @@ const raffleItems: RaffleItem[] = [
     details:
       "1-hour online private session combining pranayama, somatic breathwork, and guided meditation. Drawing from psychology and Rebirthing Breathwork, the session supports nervous system regulation, emotional release, and deep inner clarity.",
     value: "100€",
-    contact: "@integratedhealingtherapy",
+    contact: normalizeLinks("@integratedhealingtherapy"),
     image: "/raffle-10.jpg",
   },
   {
@@ -164,7 +185,9 @@ const raffleItems: RaffleItem[] = [
     details:
       "1-hour 1:1 Bodywork Session. It is a space of mindful touch, presence, and deep listening, which can create a sense of grounding, deeper relaxation, and renewed vitality.",
     value: "90€",
-    contact: "@rachelhelmbrecht www.körpertherapie-helmbrecht.de",
+    contact: normalizeLinks(
+      "@rachelhelmbrecht www.körpertherapie-helmbrecht.de"
+    ),
     image: "/images/11_Rachel.jpeg",
   },
   {
@@ -177,7 +200,9 @@ const raffleItems: RaffleItem[] = [
     details:
       "1.5 hour somatic/bodywork based session, where we will explore your needs through various hands on techniques and somatic exercises.",
     value: "180€",
-    contact: "@tara_embodied https://www.sensuali.com/tara-18880/",
+    contact: normalizeLinks(
+      "@tara_embodied https://www.sensuali.com/tara-18880/"
+    ),
     image: "/images/12_Tara.jpeg",
   },
 ];
