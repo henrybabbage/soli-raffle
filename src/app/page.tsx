@@ -4,6 +4,11 @@ import Image from "next/image";
 import { useState } from "react";
 import PayPalButton from "./components/PayPalButton";
 
+interface Link {
+  label: string;
+  href: string;
+}
+
 interface RaffleItem {
   id: string;
   title: string;
@@ -11,7 +16,7 @@ interface RaffleItem {
   instructor: string;
   details: string;
   value: string;
-  contact: string;
+  contact: Link[];
   image: string;
 }
 
@@ -22,6 +27,7 @@ const getImagePath = (item: RaffleItem): string | null => {
     "/images/7_Maximillian_Juno.jpeg",
     "/images/8_Denise.jpeg",
     "/images/9_Oly.jpeg",
+    "/images/10_Diana.jpeg",
     "/images/11_Rachel.jpeg",
     "/images/12_Tara.jpeg",
   ];
@@ -29,24 +35,51 @@ const getImagePath = (item: RaffleItem): string | null => {
 };
 
 // Helper function to normalize links
-const normalizeLinks = (contact: string): string => {
+const normalizeLinks = (contact: string): Link[] => {
   return contact
     .split(" ")
+    .filter((link) => link.trim())
     .map((link) => {
       // Handle Instagram links (@username)
       if (link.startsWith("@")) {
         const username = link.substring(1);
-        return `https://instagram.com/${username}`;
+        return {
+          label: link,
+          href: `https://instagram.com/${username}`,
+        };
       }
 
       // Handle website links that don't have protocol
       if (link.includes(".") && !link.startsWith("http")) {
-        return `https://${link}`;
+        return {
+          label: link,
+          href: `https://${link}`,
+        };
       }
 
-      return link;
-    })
-    .join(" ");
+      // Handle full URLs - extract domain for display
+      if (link.startsWith("http")) {
+        try {
+          const url = new URL(link);
+          const domain = url.hostname;
+          return {
+            label: domain,
+            href: link,
+          };
+        } catch {
+          return {
+            label: link,
+            href: link,
+          };
+        }
+      }
+
+      // Fallback for other text
+      return {
+        label: link,
+        href: link,
+      };
+    });
 };
 
 
@@ -123,7 +156,7 @@ const raffleItems: RaffleItem[] = [
     instructor: "Varis",
     details: "1.5 hour massage session (more details coming soon).",
     value: "TBD",
-    contact: "Contact info coming",
+    contact: [{ label: "Contact info coming", href: "#" }],
     image: "/raffle-6.jpg",
   },
   {
@@ -175,7 +208,7 @@ const raffleItems: RaffleItem[] = [
       "1-hour online private session combining pranayama, somatic breathwork, and guided meditation. Drawing from psychology and Rebirthing Breathwork, the session supports nervous system regulation, emotional release, and deep inner clarity.",
     value: "100€",
     contact: normalizeLinks("@integratedhealingtherapy"),
-    image: "/raffle-10.jpg",
+    image: "/images/10_Diana.jpeg",
   },
   {
     id: "11",
@@ -278,7 +311,7 @@ export default function Home() {
       {/* Header */}
       <header className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 sm:gap-0">
-          <h1 className="text-4xl sm:text-5xl font-light tracking-wide">
+          <h1 className="text-4xl sm:text-5xl font-light tracking-wide italic">
             Soli-Raffle
           </h1>
           <div className="flex flex-col space-y-1 text-left sm:text-right">
@@ -298,7 +331,7 @@ export default function Home() {
           {raffleItems.map((item) => (
             <div key={item.id} className="space-y-4">
               {/* Image */}
-              <div className="aspect-[4/5] bg-gray-200 rounded-lg overflow-hidden relative">
+              <div className="aspect-[4/5] bg-gray-200 overflow-hidden relative">
                 {getImagePath(item) ? (
                   <Image
                     src={getImagePath(item)!}
@@ -316,19 +349,19 @@ export default function Home() {
 
               {/* Content */}
               <div className="space-y-3">
-                <h2 className="text-base sm:text-lg font-medium">
+                <h2 className="text-lg sm:text-xl font-medium">
                   {item.title}
                 </h2>
 
-                <p className="text-xs sm:text-sm text-gray-700 italic">
+                <p className="text-xs sm:text-sm text-gray-500 italic">
                   {item.instructor}
                 </p>
 
-                <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
+                <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
                   {item.details}
                 </p>
 
-                <p className="text-xs sm:text-sm text-gray-700">
+                <p className="text-xs sm:text-sm text-gray-500">
                   <span className="font-medium">Value:</span> {item.value}
                 </p>
 
@@ -409,7 +442,7 @@ export default function Home() {
 
                     <div className="flex items-center justify-center space-x-3 order-1 sm:order-2">
                       <button
-                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors duration-200 text-lg"
+                        className="w-8 h-8 rounded-full border border-black border-[1px] flex items-center justify-center hover:bg-gray-50 transition-colors duration-200 text-lg"
                         onClick={() => updateQuantity(item.id, -1)}
                         disabled={showPayPal[item.id]}
                       >
@@ -419,7 +452,7 @@ export default function Home() {
                         {quantities[item.id]}
                       </span>
                       <button
-                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors duration-200 text-lg"
+                        className="w-8 h-8 rounded-full border border-black border-[1px] flex items-center justify-center hover:bg-gray-50 transition-colors duration-200 text-lg"
                         onClick={() => updateQuantity(item.id, 1)}
                         disabled={showPayPal[item.id]}
                       >
@@ -431,10 +464,10 @@ export default function Home() {
                   {showPayPal[item.id] && (
                     <div className="border-t pt-4">
                       <div className="mb-2 text-sm text-gray-600 text-center sm:text-left">
-                        Total: €{(100 * quantities[item.id]).toFixed(2)}
+                        Total: €{(25 * quantities[item.id]).toFixed(2)}
                       </div>
                       <PayPalButton
-                        amount="100"
+                        amount="25"
                         itemName={item.title}
                         quantity={quantities[item.id]}
                         onSuccess={(details) =>
