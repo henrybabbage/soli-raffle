@@ -347,7 +347,7 @@ export default function Home() {
 
               {/* Content */}
               <div className="space-y-3">
-                <h2 className="text-base sm:text-lg font-medium">
+                <h2 className="text-lg sm:text-xl font-medium">
                   {item.title}
                 </h2>
 
@@ -403,7 +403,7 @@ export default function Home() {
 
                     <div className="flex items-center justify-center space-x-3 order-1 sm:order-2">
                       <button
-                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors duration-200 text-lg"
+                        className="w-8 h-8 rounded-full border border-black border-[1px] flex items-center justify-center hover:bg-gray-50 transition-colors duration-200 text-lg"
                         onClick={() => updateQuantity(item.id, -1)}
                         disabled={showPayPal[item.id]}
                       >
@@ -413,7 +413,7 @@ export default function Home() {
                         {quantities[item.id]}
                       </span>
                       <button
-                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors duration-200 text-lg"
+                        className="w-8 h-8 rounded-full border border-black border-[1px] flex items-center justify-center hover:bg-gray-50 transition-colors duration-200 text-lg"
                         onClick={() => updateQuantity(item.id, 1)}
                         disabled={showPayPal[item.id]}
                       >
