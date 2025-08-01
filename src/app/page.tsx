@@ -351,7 +351,7 @@ export default function Home() {
 
               {/* Content */}
               <div className="space-y-3">
-                <h2 className="text-base sm:text-lg font-medium">
+                <h2 className="text-lg sm:text-xl font-medium">
                   {item.title}
                 </h2>
 
