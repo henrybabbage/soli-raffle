@@ -379,7 +379,7 @@ export default function Home() {
 
                 {/* Purchase Controls */}
                 <div className="space-y-4 pt-4">
-                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-6 sm:gap-3">
                     {!showPayPal[item.id] ? (
                       <button
                         className="px-4 sm:px-6 py-2 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded transition-colors duration-200 text-xs sm:text-sm order-2 sm:order-1"
