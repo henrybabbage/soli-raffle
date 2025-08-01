@@ -24,6 +24,10 @@ interface RaffleItem {
 const getImagePath = (item: RaffleItem): string | null => {
   const availableImages = [
     "/images/1_Lingji.jpeg",
+    "/images/2_.jpg",
+    "/images/3_.jpg",
+    "/images/4_.jpg",
+    "/images/6_.jpg",
     "/images/7_Maximillian_Juno.jpeg",
     "/images/8_Denise.jpeg",
     "/images/9_Oly.jpeg",
@@ -106,7 +110,7 @@ const raffleItems: RaffleItem[] = [
       "Elias offers 1 x 60min private training sessions for either boxing, strength and conditioning, self defence, and kick boxing.",
     value: "100€ to 120€",
     contact: normalizeLinks("@stillelias"),
-    image: "/raffle-2.jpg",
+    image: "/images/2_.jpg",
   },
   {
     id: "3",
@@ -119,7 +123,7 @@ const raffleItems: RaffleItem[] = [
       "Black and White Film Developing Workshop (3 hours). At the core of their work is the darkroom, which works towards the redistribution of knowledge, increasing accessibility and mutual empowerment—both spatially and through shared learning.",
     value: "65€",
     contact: normalizeLinks("@queeranalogdarkroom @jetphoto"),
-    image: "/raffle-3.jpg",
+    image: "/images/3_.jpg",
   },
   {
     id: "4",
@@ -132,7 +136,7 @@ const raffleItems: RaffleItem[] = [
       "1 x 60-minute personal training session with Eliza. Includes a full-body strength session tailored to your goals, technique coaching, and guidance around mobility or lifting basics.",
     value: "105€",
     contact: normalizeLinks("@elizacumming"),
-    image: "/raffle-4.jpg",
+    image: "/images/4_.jpg",
   },
   {
     id: "5",
@@ -155,7 +159,7 @@ const raffleItems: RaffleItem[] = [
     details: "1.5 hour massage session (more details coming soon).",
     value: "TBD",
     contact: [{ label: "Contact info coming", href: "#" }],
-    image: "/raffle-6.jpg",
+    image: "/images/6_.jpg",
   },
   {
     id: "7",
@@ -339,7 +343,7 @@ export default function Home() {
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center text-purple-600 font-medium">
+                  <div className="w-full h-full uppercase bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center text-purple-600 text-xs font-normal">
                     Photo Coming Soon
                   </div>
                 )}
@@ -347,7 +351,7 @@ export default function Home() {
 
               {/* Content */}
               <div className="space-y-3">
-                <h2 className="text-base sm:text-lg font-medium">
+                <h2 className="text-base sm:text-lg font-normal">
                   {item.title}
                 </h2>
 
@@ -360,7 +364,7 @@ export default function Home() {
                 </p>
 
                 <p className="text-xs sm:text-sm text-gray-500">
-                  <span className="font-medium">Value:</span> {item.value}
+                  <span className="font-normal">Value:</span> {item.value}
                 </p>
 
                 <div className="flex flex-wrap gap-2">
@@ -382,10 +386,10 @@ export default function Home() {
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
                     {!showPayPal[item.id] ? (
                       <button
-                        className="px-4 sm:px-6 py-2 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded transition-colors duration-200 text-xs sm:text-sm order-2 sm:order-1"
+                        className="px-4 sm:px-6 py-2 bg-purple-100 hover:bg-purple-200 text-purple-800 uppercase rounded transition-colors duration-200 text-xs sm:text-sm order-2 sm:order-1"
                         onClick={() => handleBuyTicket(item)}
                       >
-                        BUY TICKET
+                        Buy Ticket
                       </button>
                     ) : (
                       <button
