@@ -329,7 +329,7 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 md:gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12 md:gap-8 lg:gap-12">
           {raffleItems.map((item) => (
             <div key={item.id} className="space-y-4">
               {/* Image */}
@@ -351,7 +351,7 @@ export default function Home() {
 
               {/* Content */}
               <div className="space-y-3">
-                <h2 className="text-base sm:text-lg font-normal">
+                <h2 className="text-base sm:text-lg font-medium">
                   {item.title}
                 </h2>
 
@@ -383,7 +383,7 @@ export default function Home() {
 
                 {/* Purchase Controls */}
                 <div className="space-y-4 pt-4">
-                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-6 sm:gap-3">
                     {!showPayPal[item.id] ? (
                       <button
                         className="px-4 sm:px-6 py-2 bg-purple-100 hover:bg-purple-200 text-purple-800 uppercase rounded transition-colors duration-200 text-xs sm:text-sm order-2 sm:order-1"
@@ -407,7 +407,7 @@ export default function Home() {
 
                     <div className="flex items-center justify-center space-x-3 order-1 sm:order-2">
                       <button
-                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors duration-200 text-lg"
+                        className="w-8 h-8 rounded-full border border-black border-[1px] flex items-center justify-center hover:bg-gray-50 transition-colors duration-200 text-lg"
                         onClick={() => updateQuantity(item.id, -1)}
                         disabled={showPayPal[item.id]}
                       >
@@ -417,7 +417,7 @@ export default function Home() {
                         {quantities[item.id]}
                       </span>
                       <button
-                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors duration-200 text-lg"
+                        className="w-8 h-8 rounded-full border border-black border-[1px] flex items-center justify-center hover:bg-gray-50 transition-colors duration-200 text-lg"
                         onClick={() => updateQuantity(item.id, 1)}
                         disabled={showPayPal[item.id]}
                       >
