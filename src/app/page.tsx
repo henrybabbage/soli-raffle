@@ -318,7 +318,10 @@ export default function Home() {
           </h1>
           <div className="flex flex-col space-y-1 text-left sm:text-right">
             <p className="text-xs sm:text-sm text-gray-600">
-              Winners announced 16.08.2025
+              Winners drawn live 31.08.2025
+            </p>
+            <p className="text-xs sm:text-sm text-gray-600">
+              5€ per ticket
             </p>
             <p className="text-xs sm:text-sm text-gray-600">
               Contact: lilith.spink@proton.me
