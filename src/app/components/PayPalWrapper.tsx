@@ -11,6 +11,10 @@ const initialOptions = {
   clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || 'test',
   currency: 'EUR',
   intent: 'capture',
+  // Additional options for business account
+  'enable-funding': 'paylater,venmo',
+  'disable-funding': 'card',
+  'data-sdk-integration-source': 'button-factory',
 };
 
 export default function PayPalWrapper({ children }: PayPalWrapperProps) {

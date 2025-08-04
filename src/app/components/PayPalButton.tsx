@@ -30,6 +30,9 @@ export default function PayPalButton({
             value: totalAmount,
           },
           description: `${quantity}x ${itemName}`,
+          payee: {
+            email_address: process.env.NEXT_PUBLIC_PAYPAL_BUSINESS_EMAIL || 'seedsofliberationraffle@proton.me',
+          },
         },
       ],
     });
