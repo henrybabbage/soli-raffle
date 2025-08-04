@@ -313,7 +313,7 @@ export default function Home() {
       {/* Header */}
       <header className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 sm:gap-0">
-          <h1 className="text-4xl sm:text-5xl font-light tracking-wide italic">
+          <h1 className="text-4xl sm:text-5xl font-light tracking-wide italic text-black">
             Soli-Raffle
           </h1>
           <div className="flex flex-col space-y-1 text-left sm:text-right">
@@ -354,7 +354,7 @@ export default function Home() {
 
               {/* Content */}
               <div className="space-y-3">
-                <h2 className="text-lg sm:text-xl font-medium">
+                <h2 className="text-lg sm:text-xl font-medium text-black">
                   {item.title}
                 </h2>
 
@@ -416,7 +416,7 @@ export default function Home() {
                       >
                         -
                       </button>
-                      <span className="w-8 text-center font-medium text-base">
+                      <span className="w-8 text-center font-medium text-base text-black">
                         {quantities[item.id]}
                       </span>
                       <button
@@ -431,7 +431,7 @@ export default function Home() {
 
                   {showPayPal[item.id] && (
                     <div className="border-t pt-4">
-                      <div className="mb-2 text-sm text-gray-600 text-center sm:text-left">
+                      <div className="mb-2 text-sm text-black text-center sm:text-left">
                         Total: €{(5 * quantities[item.id]).toFixed(2)}
                       </div>
                       <PayPalButton
