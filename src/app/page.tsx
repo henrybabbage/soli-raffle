@@ -153,12 +153,12 @@ const raffleItems: RaffleItem[] = [
   },
   {
     id: "6",
-    title: "90-Minute Massage Session",
-    description: "Varis offers a 1.5 hour massage session.",
-    instructor: "Varis",
-    details: "1.5 hour massage session (more details coming soon).",
-    value: "TBD",
-    contact: [{ label: "Contact info coming", href: "#" }],
+    title: "RESTORATIVE MASSAGE RITUAL",
+    description: "Varis intuitively combines elements of Ayurvedic and classical massage into a ritual shaped by your individual needs. Flowing oil massage combined with deeper attention to areas where you are storing tension will leave you feeling more relaxed in body & mind. All massages are done using high quality organic oils.",
+    instructor: "Varis Lis (they/them)",
+    details: "Varis intuitively combines elements of Ayurvedic and classical massage into a ritual shaped by your individual needs. Flowing oil massage combined with deeper attention to areas where you are storing tension will leave you feeling more relaxed in body & mind. All massages are done using high quality organic oils.\n\nACCESSIBILITY\nThe sessions Varis offers center on a dialogue around your needs, possible physical injuries, limitations and boundaries you may have. This is always a safer space for comrades, queer and trans babes, BIPOC, sex workers and neurodivergent peeps.\n\nPlease come tested for COVID and reschedule if you are sick. Unfortunately the space is not wheelchair accessible.",
+    value: "150€",
+    contact: normalizeLinks("@existensal_moss_moan._"),
     image: "/images/6_.jpg",
   },
   {
