@@ -432,10 +432,10 @@ export default function Home() {
                   {showPayPal[item.id] && (
                     <div className="border-t pt-4">
                       <div className="mb-2 text-sm text-gray-600 text-center sm:text-left">
-                        Total: €{(25 * quantities[item.id]).toFixed(2)}
+                        Total: €{(5 * quantities[item.id]).toFixed(2)}
                       </div>
                       <PayPalButton
-                        amount="25"
+                        amount="5"
                         itemName={item.title}
                         quantity={quantities[item.id]}
                         onSuccess={(details) =>
