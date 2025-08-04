@@ -165,10 +165,10 @@ const raffleItems: RaffleItem[] = [
     id: "7",
     title: "Birth Chart Reading",
     description:
-      "Maximilian will offer a one hour long birth chart reading; a place of soulful conversation & engagement with one's personal birth horoscope to illuminate the deeper archetypal patterns of our psyche & life, with a focus on the growth lessons you are currently moving through.",
+      "Maximilian will offer a one hour online birth chart reading; a place of soulful conversation & engagement with one's personal birth horoscope to illuminate the deeper archetypal patterns of our psyche & life, with a focus on the growth lessons you are currently moving through.",
     instructor: "Maximilian Juno is an evolutionary astrologer & guide",
     details:
-      "Maximilian will offer a one hour long birth chart reading; a place of soulful conversation & engagement with one's personal birth horoscope to illuminate the deeper archetypal patterns of our psyche & life, with a focus on the growth lessons you are currently moving through.",
+      "Maximilian will offer a one hour online birth chart reading; a place of soulful conversation & engagement with one's personal birth horoscope to illuminate the deeper archetypal patterns of our psyche & life, with a focus on the growth lessons you are currently moving through.",
     value: "130€",
     contact: normalizeLinks("www.skywalkerastrology.com @skywalker.astrology"),
     image: "/images/7_Maximillian_Juno.jpeg",
