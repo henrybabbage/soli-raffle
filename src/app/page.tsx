@@ -332,7 +332,7 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-16 md:gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 md:gap-8 lg:gap-12">
           {raffleItems.map((item) => (
             <div key={item.id} className="space-y-4">
               {/* Image */}
@@ -389,7 +389,7 @@ export default function Home() {
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-6 sm:gap-3">
                     {!showPayPal[item.id] ? (
                       <button
-                        className="px-4 sm:px-6 py-2 bg-transparent border border-black text-black hover:border-purple-600 hover:text-purple-600 uppercase rounded transition-colors duration-200 text-xs sm:text-sm order-2 sm:order-1"
+                        className="px-4 sm:px-6 py-2 bg-transparent border border-black text-black hover:border-purple-600 hover:text-purple-600 uppercase rounded transition-colors duration-200 text-xs order-2 sm:order-1"
                         onClick={() => handleBuyTicket(item)}
                       >
                         Buy Ticket
