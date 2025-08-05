@@ -97,7 +97,7 @@ const raffleItems: RaffleItem[] = [
     details:
       "Lingji will offer a 1 hour online private qigong session. This session will offer techniques for grounding and regeneration with Zhan Zhuang (qi absorption postures) to bring the body into alignment and relaxation, and Taoist breathing techniques to cleanse and circulate energy.",
     value: "100€",
-    contact: normalizeLinks("@wudongtaiji wudongtaiji.com"),
+    contact: normalizeLinks("@wudongtaiji www.wudongtaiji.com"),
     image: "/images/1_Lingji.jpeg",
   },
   {
@@ -183,7 +183,7 @@ const raffleItems: RaffleItem[] = [
     details:
       "1.5hr session of classical swedish massage with a lomi lomi influence and thai yoga massage. She implements an intuitive approach, tuning into each client's responses and adjusting pressure and techniques accordingly.",
     value: "100€",
-    contact: normalizeLinks("Deniseagua.com"),
+    contact: normalizeLinks("www.deniseagua.com"),
     image: "/images/8_Denise.jpeg",
   },
   {
@@ -223,7 +223,7 @@ const raffleItems: RaffleItem[] = [
       "1-hour 1:1 Bodywork Session. It is a space of mindful touch, presence, and deep listening, which can create a sense of grounding, deeper relaxation, and renewed vitality.",
     value: "90€",
     contact: normalizeLinks(
-      "@rachelhelmbrecht www.körpertherapie-helmbrecht.de"
+      "@rachelhelmbrecht www.koerpertherapie-helmbrecht.de"
     ),
     image: "/images/11_Rachel.jpeg",
   },
@@ -238,7 +238,7 @@ const raffleItems: RaffleItem[] = [
       "1.5 hour somatic/bodywork based session, where we will explore your needs through various hands on techniques and somatic exercises.",
     value: "180€",
     contact: normalizeLinks(
-      "@tara_embodied https://www.sensuali.com/tara-18880/"
+      "@tara_embodied www.sensuali.com/tara-18880/"
     ),
     image: "/images/12_Tara.jpeg",
   },
