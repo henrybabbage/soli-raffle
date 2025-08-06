@@ -23,17 +23,18 @@ interface RaffleItem {
 // Helper function to check if image exists
 const getImagePath = (item: RaffleItem): string | null => {
   const availableImages = [
-    "/images/1_Lingji.jpeg",
+    "/images/1_Lingji.jpg",
     "/images/2_.jpg",
     "/images/3_.jpg",
     "/images/4_.jpg",
+    "/images/5_.jpg",
     "/images/6_.jpg",
-    "/images/7_Maximillian_Juno.jpeg",
-    "/images/8_Denise.jpeg",
-    "/images/9_Oly.jpeg",
-    "/images/10_Diana.jpeg",
-    "/images/11_Rachel.jpeg",
-    "/images/12_Tara.jpeg",
+    "/images/7_Maximillian_Juno.jpg",
+    "/images/8_Denise.jpg",
+    "/images/9_Oly.jpg",
+    "/images/10_Diana.jpg",
+    "/images/11_Rachel.jpg",
+    "/images/12_Tara.jpg",
   ];
   return availableImages.includes(item.image) ? item.image : null;
 };
@@ -93,22 +94,22 @@ const raffleItems: RaffleItem[] = [
     description:
       "Lingji will offer a 1 hour online private qigong session. This session will offer techniques for grounding and regeneration with Zhan Zhuang (qi absorption postures) to bring the body into alignment and relaxation, and Taoist breathing techniques to cleanse and circulate energy.",
     instructor:
-      "Lingji Hon 韓靈芝 is a Berlin based Taiji Quan and Qigong teacher",
+      "Lingji Hon 韓靈芝 is a Berlin based Taiji Quan and Qigong teacher.",
     details:
       "Lingji will offer a 1 hour online private qigong session. This session will offer techniques for grounding and regeneration with Zhan Zhuang (qi absorption postures) to bring the body into alignment and relaxation, and Taoist breathing techniques to cleanse and circulate energy.",
     value: "100€",
     contact: normalizeLinks("@wudongtaiji www.wudongtaiji.com"),
-    image: "/images/1_Lingji.jpeg",
+    image: "/images/1_Lingji.jpg",
   },
   {
     id: "2",
     title: "60-Minute Private Training Session",
     description:
       "Elias offers 1 x 60min private training sessions for either boxing, strength and conditioning, self defence, and kick boxing.",
-    instructor: "Elias, boxing coach and MMA practitioner",
+    instructor: "Elias, boxing coach and MMA practitioner.",
     details:
       "Elias offers 1 x 60min private training sessions for either boxing, strength and conditioning, self defence, and kick boxing.",
-    value: "100€ to 120€",
+    value: "120€",
     contact: normalizeLinks("@stillelias"),
     image: "/images/2_.jpg",
   },
@@ -146,17 +147,19 @@ const raffleItems: RaffleItem[] = [
     instructor:
       "A trans* practitioner trained in cosmetic and massage, neurodiversity aware and ready to hear your sensory or access needs.",
     details:
-      "60 minute facial skincare & relaxation treatment. Includes: cleanse, tone, exfoliate, masque + options for hand & arm, neck & shoulder massage, and a lymphatic drainage facial massage. Choice of scent: lavender, rosemary or Bergamot.",
+      "60 minute facial skincare & relaxation treatment. Includes: cleanse, tone, exfoliate, masque + options for hand & arm, neck & shoulder massage, and a lymphatic drainage facial massage. Choice of scent: lavender, rosemary or bergamot.",
     value: "50€",
     contact: normalizeLinks("@qttherapy"),
-    image: "/raffle-5.jpg",
+    image: "/images/5_.jpg",
   },
   {
     id: "6",
     title: "Restorative Massage Ritual",
-    description: "Varis intuitively combines elements of Ayurvedic and classical massage into a ritual shaped by your individual needs. Flowing oil massage combined with deeper attention to areas where you are storing tension will leave you feeling more relaxed in body & mind. All massages are done using high quality organic oils.",
-    instructor: "Varis Lis (they/them)",
-    details: "Varis intuitively combines elements of Ayurvedic and classical massage into a ritual shaped by your individual needs. Flowing oil massage combined with deeper attention to areas where you are storing tension will leave you feeling more relaxed in body & mind. All massages are done using high quality organic oils.\n\nAccessibility: The sessions Varis offers center on a dialogue around your needs, possible physical injuries, limitations and boundaries you may have. This is always a safer space for comrades, queer and trans babes, BIPOC, sex workers and neurodivergent peeps. Please come tested for COVID and reschedule if you are sick. Unfortunately the space is not wheelchair accessible.",
+    description:
+      "Varis intuitively combines elements of Ayurvedic and classical massage into a ritual shaped by your individual needs. Flowing oil massage combined with deeper attention to areas where you are storing tension will leave you feeling more relaxed in body & mind. All massages are done using high quality organic oils.",
+    instructor: "Varis Lis (they/them).",
+    details:
+      "Varis intuitively combines elements of Ayurvedic and classical massage into a ritual shaped by your individual needs. Flowing oil massage combined with deeper attention to areas where you are storing tension will leave you feeling more relaxed in body & mind. All massages are done using high quality organic oils.\n\nAccessibility: The sessions Varis offers center on a dialogue around your needs, possible physical injuries, limitations and boundaries you may have. This is always a safer space for comrades, queer and trans babes, BIPOC, sex workers and neurodivergent peeps. Please come tested for COVID and reschedule if you are sick. Unfortunately the space is not wheelchair accessible.",
     value: "150€",
     contact: normalizeLinks("@existential_moss_moan._"),
     image: "/images/6_.jpg",
@@ -166,12 +169,12 @@ const raffleItems: RaffleItem[] = [
     title: "Birth Chart Reading",
     description:
       "Maximilian will offer a one hour online birth chart reading; a place of soulful conversation & engagement with one's personal birth horoscope to illuminate the deeper archetypal patterns of our psyche & life, with a focus on the growth lessons you are currently moving through.",
-    instructor: "Maximilian Juno is an evolutionary astrologer & guide",
+    instructor: "Maximilian Juno is an evolutionary astrologer & guide.",
     details:
       "Maximilian will offer a one hour online birth chart reading; a place of soulful conversation & engagement with one's personal birth horoscope to illuminate the deeper archetypal patterns of our psyche & life, with a focus on the growth lessons you are currently moving through.",
     value: "130€",
-    contact: normalizeLinks("www.skywalkerastrology.com @skywalker.astrology"),
-    image: "/images/7_Maximillian_Juno.jpeg",
+    contact: normalizeLinks("@skywalker.astrology www.skywalkerastrology.com"),
+    image: "/images/7_Maximillian_Juno.jpg",
   },
   {
     id: "8",
@@ -183,8 +186,8 @@ const raffleItems: RaffleItem[] = [
     details:
       "1.5hr session of classical swedish massage with a lomi lomi influence and thai yoga massage. She implements an intuitive approach, tuning into each client's responses and adjusting pressure and techniques accordingly.",
     value: "100€",
-    contact: normalizeLinks("www.deniseagua.com"),
-    image: "/images/8_Denise.jpeg",
+    contact: normalizeLinks("Deniseagua.com"),
+    image: "/images/8_Denise.jpg",
   },
   {
     id: "9",
@@ -197,7 +200,7 @@ const raffleItems: RaffleItem[] = [
       "70 minute craniosacral therapy session. Cranio is a somatic touch based therapy that supports people to regulate their nervous system and tune into the healing forces of their body.",
     value: "85€",
     contact: normalizeLinks("www.beinginthebody.de"),
-    image: "/images/9_Oly.jpeg",
+    image: "/images/9_Oly.jpg",
   },
   {
     id: "10",
@@ -210,7 +213,7 @@ const raffleItems: RaffleItem[] = [
       "1-hour online private session combining pranayama, somatic breathwork, and guided meditation. Drawing from psychology and Rebirthing Breathwork, the session supports nervous system regulation, emotional release, and deep inner clarity.",
     value: "100€",
     contact: normalizeLinks("@integratedhealingtherapy"),
-    image: "/images/10_Diana.jpeg",
+    image: "/images/10_Diana.jpg",
   },
   {
     id: "11",
@@ -225,7 +228,7 @@ const raffleItems: RaffleItem[] = [
     contact: normalizeLinks(
       "@rachelhelmbrecht www.koerpertherapie-helmbrecht.de"
     ),
-    image: "/images/11_Rachel.jpeg",
+    image: "/images/11_Rachel.jpg",
   },
   {
     id: "12",
@@ -237,9 +240,7 @@ const raffleItems: RaffleItem[] = [
     details:
       "1.5 hour somatic/bodywork based session, where we will explore your needs through various hands on techniques and somatic exercises.",
     value: "180€",
-    contact: normalizeLinks(
-      "@tara_embodied www.sensuali.com/tara-18880/"
-    ),
+    contact: normalizeLinks("@tara_embodied www.sensuali.com/tara-18880/"),
     image: "/images/12_Tara.jpeg",
   },
 ];
@@ -320,9 +321,8 @@ export default function Home() {
             <p className="text-xs sm:text-sm text-gray-600">
               Winners drawn live 31.08.2025
             </p>
-            <p className="text-xs sm:text-sm text-gray-600">
-              5€ per ticket
-            </p>
+            <p className="text-xs sm:text-sm text-gray-600">5€ per ticket</p>
+            <p className="text-xs sm:text-sm text-gray-600">5€ per ticket</p>
             <p className="text-xs sm:text-sm text-gray-600">
               Contact: lilith.spink@proton.me
             </p>
@@ -410,7 +410,7 @@ export default function Home() {
 
                     <div className="flex items-center justify-center space-x-3 order-1 sm:order-2">
                       <button
-                        className="w-8 h-8 rounded-full border border-black border-[1px] flex items-center justify-center hover:bg-gray-50 transition-colors duration-200 text-lg"
+                        className="w-8 h-8 rounded-full border border-black flex items-center justify-center hover:bg-gray-50 transition-colors duration-200 text-lg"
                         onClick={() => updateQuantity(item.id, -1)}
                         disabled={showPayPal[item.id]}
                       >
@@ -420,7 +420,7 @@ export default function Home() {
                         {quantities[item.id]}
                       </span>
                       <button
-                        className="w-8 h-8 rounded-full border border-black border-[1px] flex items-center justify-center hover:bg-gray-50 transition-colors duration-200 text-lg"
+                        className="w-8 h-8 rounded-full border border-black flex items-center justify-center hover:bg-gray-50 transition-colors duration-200 text-lg"
                         onClick={() => updateQuantity(item.id, 1)}
                         disabled={showPayPal[item.id]}
                       >
