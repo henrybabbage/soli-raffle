@@ -241,7 +241,7 @@ const raffleItems: RaffleItem[] = [
       "1.5 hour somatic/bodywork based session, where we will explore your needs through various hands on techniques and somatic exercises.",
     value: "180€",
     contact: normalizeLinks("@tara_embodied www.sensuali.com/tara-18880/"),
-    image: "/images/12_Tara.jpeg",
+    image: "/images/12_Tara.jpg",
   },
 ];
 
@@ -376,7 +376,7 @@ export default function Home() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs sm:text-sm text-gray-500 hover:underline"
+                      className="text-xs sm:text-sm text-gray-500 hover:text-purple-600 transition-colors duration-200"
                     >
                       {link.label}
                     </a>
@@ -409,7 +409,7 @@ export default function Home() {
 
                     <div className="flex items-center justify-center space-x-3 order-1 sm:order-2">
                       <button
-                        className="w-8 h-8 rounded-full border border-black flex items-center justify-center hover:bg-gray-50 transition-colors duration-200 text-lg"
+                        className="w-8 h-8 rounded-full border border-black flex items-center justify-center hover:border-purple-600 hover:text-purple-600 transition-colors duration-200 text-lg"
                         onClick={() => updateQuantity(item.id, -1)}
                         disabled={showPayPal[item.id]}
                       >
@@ -419,7 +419,7 @@ export default function Home() {
                         {quantities[item.id]}
                       </span>
                       <button
-                        className="w-8 h-8 rounded-full border border-black flex items-center justify-center hover:bg-gray-50 transition-colors duration-200 text-lg"
+                        className="w-8 h-8 rounded-full border border-black flex items-center justify-center hover:border-purple-600 hover:text-purple-600 transition-colors duration-200 text-lg"
                         onClick={() => updateQuantity(item.id, 1)}
                         disabled={showPayPal[item.id]}
                       >
