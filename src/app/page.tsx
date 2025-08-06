@@ -186,7 +186,7 @@ const raffleItems: RaffleItem[] = [
     details:
       "1.5hr session of classical swedish massage with a lomi lomi influence and thai yoga massage. She implements an intuitive approach, tuning into each client's responses and adjusting pressure and techniques accordingly.",
     value: "100€",
-    contact: normalizeLinks("Deniseagua.com"),
+    contact: normalizeLinks("www.deniseagua.com"),
     image: "/images/8_Denise.jpg",
   },
   {
