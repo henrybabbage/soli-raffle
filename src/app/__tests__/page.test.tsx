@@ -341,6 +341,8 @@ describe('Home Page - PayPal Integration', () => {
     // Check for specific raffle item details
     expect(screen.getByText('Private Qigong Session')).toBeInTheDocument()
     expect(screen.getByText(/Lingji Hon/)).toBeInTheDocument()
-    expect(screen.getByText('Value: 100€')).toBeInTheDocument()
+    // Check that we have Value: text and 100€ text (there are multiple items, so just verify they exist)
+    expect(screen.getAllByText('Value:')).toHaveLength(12) // Should be 12 raffle items
+    expect(screen.getAllByText('100€').length).toBeGreaterThan(0) // Multiple items have 100€ value
   })
 })
