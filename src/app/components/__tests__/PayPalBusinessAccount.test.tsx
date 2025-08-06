@@ -9,7 +9,11 @@ const mockOnApprove = jest.fn()
 const mockOnError = jest.fn()
 
 jest.mock('@paypal/react-paypal-js', () => ({
-  PayPalButtons: ({ createOrder, onApprove, onError, style }: any) => {
+  PayPalButtons: ({ createOrder, onApprove, onError }: {
+    createOrder: (data: unknown, actions: unknown) => Promise<string>;
+    onApprove: (data: unknown, actions: unknown) => Promise<void>;
+    onError: (error: unknown) => void;
+  }) => {
     // Store the callbacks for testing
     mockCreateOrder.mockImplementation(createOrder)
     mockOnApprove.mockImplementation(onApprove)

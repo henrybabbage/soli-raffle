@@ -5,7 +5,12 @@ import Home from '../page'
 
 // Mock PayPal components
 jest.mock('../components/PayPalButton', () => {
-  return function MockPayPalButton({ amount, itemName, quantity, onSuccess, onError }: any) {
+  return function MockPayPalButton({ amount, quantity, onSuccess, onError }: {
+    amount: string;
+    quantity: number;
+    onSuccess?: (details: unknown) => void;
+    onError?: (error: unknown) => void;
+  }) {
     return (
       <div data-testid="paypal-button">
         <button
@@ -39,7 +44,12 @@ jest.mock('../components/PayPalButton', () => {
 
 // Mock Next.js Image component
 jest.mock('next/image', () => {
-  return function MockImage({ src, alt, ...props }: any) {
+  return function MockImage({ src, alt, ...props }: {
+    src: string;
+    alt: string;
+    [key: string]: unknown;
+  }) {
+    // eslint-disable-next-line @next/next/no-img-element
     return <img src={src} alt={alt} {...props} />
   }
 })

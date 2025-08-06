@@ -4,9 +4,12 @@ import PayPalWrapper from '../PayPalWrapper'
 
 // Mock the PayPal Script Provider
 jest.mock('@paypal/react-paypal-js', () => {
-  const mockPayPalScriptProvider = ({ children, options }: any) => {
+  const mockPayPalScriptProvider = ({ children, options }: {
+    children: React.ReactNode;
+    options: Record<string, unknown>;
+  }) => {
     // Store options for testing
-    (mockPayPalScriptProvider as any).lastOptions = options
+    (mockPayPalScriptProvider as { lastOptions?: Record<string, unknown> }).lastOptions = options
     return <div data-testid="paypal-script-provider">{children}</div>
   }
   
@@ -46,9 +49,9 @@ describe('PayPalWrapper', () => {
     )
 
     const { PayPalScriptProvider } = require('@paypal/react-paypal-js')
-    const options = (PayPalScriptProvider as any).lastOptions
+    const options = (PayPalScriptProvider as { lastOptions?: Record<string, unknown> }).lastOptions
 
-    expect(options.clientId).toBe('test-client-id')
+    expect(options?.clientId).toBe('test-client-id')
   })
 
   it('uses fallback client ID when environment variable is not set', () => {
@@ -64,10 +67,10 @@ describe('PayPalWrapper', () => {
     )
 
     const { PayPalScriptProvider } = require('@paypal/react-paypal-js')
-    const options = (PayPalScriptProvider as any).lastOptions
+    const options = (PayPalScriptProvider as { lastOptions?: Record<string, unknown> }).lastOptions
 
     // The fallback should be 'test' when NEXT_PUBLIC_PAYPAL_CLIENT_ID is undefined
-    expect(options.clientId).toBe('test')
+    expect(options?.clientId).toBe('test')
     
     // Restore the environment variable
     process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID = originalClientId
@@ -81,9 +84,9 @@ describe('PayPalWrapper', () => {
     )
 
     const { PayPalScriptProvider } = require('@paypal/react-paypal-js')
-    const options = (PayPalScriptProvider as any).lastOptions
+    const options = (PayPalScriptProvider as { lastOptions?: Record<string, unknown> }).lastOptions
 
-    expect(options.currency).toBe('EUR')
+    expect(options?.currency).toBe('EUR')
   })
 
   it('configures PayPal with correct intent (capture)', () => {
@@ -94,9 +97,9 @@ describe('PayPalWrapper', () => {
     )
 
     const { PayPalScriptProvider } = require('@paypal/react-paypal-js')
-    const options = (PayPalScriptProvider as any).lastOptions
+    const options = (PayPalScriptProvider as { lastOptions?: Record<string, unknown> }).lastOptions
 
-    expect(options.intent).toBe('capture')
+    expect(options?.intent).toBe('capture')
   })
 
   it('enables additional funding options (paylater, venmo)', () => {
@@ -107,9 +110,9 @@ describe('PayPalWrapper', () => {
     )
 
     const { PayPalScriptProvider } = require('@paypal/react-paypal-js')
-    const options = (PayPalScriptProvider as any).lastOptions
+    const options = (PayPalScriptProvider as { lastOptions?: Record<string, unknown> }).lastOptions
 
-    expect(options['enable-funding']).toBe('paylater,venmo')
+    expect(options?.['enable-funding']).toBe('paylater,venmo')
   })
 
   it('disables card funding for business account optimization', () => {
@@ -120,9 +123,9 @@ describe('PayPalWrapper', () => {
     )
 
     const { PayPalScriptProvider } = require('@paypal/react-paypal-js')
-    const options = (PayPalScriptProvider as any).lastOptions
+    const options = (PayPalScriptProvider as { lastOptions?: Record<string, unknown> }).lastOptions
 
-    expect(options['disable-funding']).toBe('card')
+    expect(options?.['disable-funding']).toBe('card')
   })
 
   it('includes SDK integration source for button factory', () => {
@@ -133,9 +136,9 @@ describe('PayPalWrapper', () => {
     )
 
     const { PayPalScriptProvider } = require('@paypal/react-paypal-js')
-    const options = (PayPalScriptProvider as any).lastOptions
+    const options = (PayPalScriptProvider as { lastOptions?: Record<string, unknown> }).lastOptions
 
-    expect(options['data-sdk-integration-source']).toBe('button-factory')
+    expect(options?.['data-sdk-integration-source']).toBe('button-factory')
   })
 
   it('passes all required configuration options', () => {
@@ -146,7 +149,7 @@ describe('PayPalWrapper', () => {
     )
 
     const { PayPalScriptProvider } = require('@paypal/react-paypal-js')
-    const options = (PayPalScriptProvider as any).lastOptions
+    const options = (PayPalScriptProvider as { lastOptions?: Record<string, unknown> }).lastOptions
 
     expect(options).toEqual({
       clientId: 'test-client-id',
