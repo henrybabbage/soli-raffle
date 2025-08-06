@@ -317,11 +317,10 @@ export default function Home() {
           <h1 className="text-4xl sm:text-5xl font-light tracking-wide italic text-black">
             Soli-Raffle
           </h1>
-          <div className="flex flex-col space-y-1 text-left sm:text-right">
+          <div className="flex flex-col space-y-0.5 text-left sm:text-right">
             <p className="text-xs sm:text-sm text-gray-600">
               Winners drawn live 31.08.2025
             </p>
-            <p className="text-xs sm:text-sm text-gray-600">5€ per ticket</p>
             <p className="text-xs sm:text-sm text-gray-600">5€ per ticket</p>
             <p className="text-xs sm:text-sm text-gray-600">
               Contact: lilith.spink@proton.me
