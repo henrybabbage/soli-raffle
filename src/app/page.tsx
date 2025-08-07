@@ -314,7 +314,7 @@ export default function Home() {
       {/* Header */}
       <header className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 sm:gap-0">
-          <h1 className="text-4xl sm:text-5xl font-light tracking-wide italic text-black">
+          <h1 className="text-4xl sm:text-5xl font-light tracking-wide italic text-purple-600">
             Soli-Raffle
           </h1>
           <div className="flex flex-col space-y-0.5 text-left sm:text-right">
@@ -322,9 +322,6 @@ export default function Home() {
               Winners drawn live 31.08.2025
             </p>
             <p className="text-xs sm:text-sm text-gray-600">5€ per ticket</p>
-            <p className="text-xs sm:text-sm text-gray-600">
-              Contact: lilith.spink@proton.me
-            </p>
           </div>
         </div>
       </header>
@@ -450,6 +447,13 @@ export default function Home() {
           ))}
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="bg-white h-[300px] flex items-end">
+        <div className="max-w-7xl mx-auto px-4 pb-4">
+          <p className="text-black text-sm">Soli-Raffle 2025</p>
+        </div>
+      </footer>
     </div>
   );
 }
