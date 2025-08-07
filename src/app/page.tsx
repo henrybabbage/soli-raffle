@@ -328,6 +328,16 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
+        {/* Introduction Section */}
+        <div className="mb-12 text-center max-w-4xl mx-auto">
+          <p className="text-sm sm:text-base text-gray-700 leading-relaxed mb-4">
+            This online raffle runs alongside our soli-event in Berlin to raise support funds for the people of Sudan, Congo, and Palestine. For more information about where the funds will be sent visit our instagram post or email Lilith. We will draw the winners live on instagram on the 31.08.25.
+          </p>
+          <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+            You can enter the draw to win the prize(s) of your choice, simple select the tickets below each prize and add as many entries as you want. Good luck!
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 md:gap-8 lg:gap-12">
           {raffleItems.map((item) => (
             <div key={item.id} className="space-y-4">
