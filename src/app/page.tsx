@@ -318,19 +318,26 @@ export default function Home() {
             Soli-Raffle
           </h1>
           <div className="flex flex-col space-y-0.5 text-left sm:text-right">
-            <p className="text-xs sm:text-sm text-gray-600">
+            <p className="text-xs sm:text-sm text-purple-600">
               Winners drawn live 31.08.2025
             </p>
-            <p className="text-xs sm:text-sm text-gray-600">5€ per ticket</p>
-            <p className="text-xs sm:text-sm text-gray-600">
-              Contact: lilith.spink@proton.me
-            </p>
+            <p className="text-xs sm:text-sm text-purple-600">5€ per ticket</p>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
+        {/* Introduction Section */}
+        <div className="mb-12 text-center max-w-4xl mx-auto">
+          <p className="text-sm sm:text-base text-gray-700 leading-relaxed mb-4">
+            This online raffle runs alongside our soli-event in Berlin to raise support funds for the people of Sudan, Congo, and Palestine. For more information about where the funds will be sent visit our instagram post or email Lilith. We will draw the winners live on instagram on the 31.08.25.
+          </p>
+          <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+            You can enter the draw to win the prize(s) of your choice, simple select the tickets below each prize and add as many entries as you want. Good luck!
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 md:gap-8 lg:gap-12">
           {raffleItems.map((item) => (
             <div key={item.id} className="space-y-4">
@@ -450,6 +457,13 @@ export default function Home() {
           ))}
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="bg-white h-[300px] flex items-end">
+        <div className="max-w-7xl mx-auto px-4 pb-4">
+          <p className="text-black text-sm">Soli-Raffle 2025</p>
+        </div>
+      </footer>
     </div>
   );
 }
