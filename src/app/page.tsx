@@ -333,9 +333,17 @@ export default function Home() {
           <p className="text-sm sm:text-base text-gray-700 leading-relaxed mb-4">
             This online raffle runs alongside our soli-event in Berlin to raise
             support funds for the people of Sudan, Congo, and Palestine. For
-            more information about where the funds will be sent visit our
-            Instagram post or email Lilith at lilith.spink@proton.me. We will
-            draw the winners live on Instagram on the 31.08.25.
+            more information about where the funds will be sent visit our{" "}
+            <a
+              href="https://www.instagram.com/p/DM2ltiXsAC_/?igsh=bW9zMXhlNXVrNGJq"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-700 hover:text-purple-600 no-underline hover:no-underline"
+            >
+              Instagram post
+            </a>{" "}
+            or email Lilith at lilith.spink@proton.me. We will draw the winners
+            live on Instagram on the 31.08.25.
           </p>
           <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
             You can enter the draw to win the prize(s) of your choice, simple
