@@ -118,7 +118,7 @@ describe("PayPalWrapper", () => {
       PayPalScriptProvider as { lastOptions?: Record<string, unknown> }
     ).lastOptions;
 
-    expect(options?.["enable-funding"]).toBe("paylater,venmo");
+    expect(options?.["enable-funding"]).toBe("paylater");
   });
 
   it("disables card funding for business account optimization", () => {
@@ -170,7 +170,7 @@ describe("PayPalWrapper", () => {
       clientId: "test-client-id",
       currency: "EUR",
       intent: "capture",
-      "enable-funding": "paylater,venmo",
+      "enable-funding": "paylater",
       "disable-funding": "card",
       "data-sdk-integration-source": "button-factory",
     });
