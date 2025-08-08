@@ -329,12 +329,18 @@ export default function Home() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
         {/* Introduction Section */}
-        <div className="mb-12 text-center max-w-4xl mx-auto">
+        <div className="mb-12 text-left max-w-4xl mr-auto">
           <p className="text-sm sm:text-base text-gray-700 leading-relaxed mb-4">
-            This online raffle runs alongside our soli-event in Berlin to raise support funds for the people of Sudan, Congo, and Palestine. For more information about where the funds will be sent visit our instagram post or email Lilith. We will draw the winners live on instagram on the 31.08.25.
+            This online raffle runs alongside our soli-event in Berlin to raise
+            support funds for the people of Sudan, Congo, and Palestine. For
+            more information about where the funds will be sent visit our
+            Instagram post or email Lilith at lilith.spink@proton.me. We will
+            draw the winners live on Instagram on the 31.08.25.
           </p>
           <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
-            You can enter the draw to win the prize(s) of your choice, simple select the tickets below each prize and add as many entries as you want. Good luck!
+            You can enter the draw to win the prize(s) of your choice, simple
+            select the tickets below each prize and add as many entries as you
+            want. Good luck!
           </p>
         </div>
 
@@ -460,7 +466,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="bg-white h-[300px] flex items-end">
-        <div className="max-w-7xl mx-auto px-4 pb-4">
+        <div className="max-w-7xl mr-auto px-4 pb-4">
           <p className="text-black text-sm">Soli-Raffle 2025</p>
         </div>
       </footer>
