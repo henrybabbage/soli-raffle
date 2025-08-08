@@ -457,6 +457,7 @@ export default function Home() {
                       <PayPalButton
                         amount="5"
                         itemName={item.title}
+                        itemId={item.id}
                         quantity={quantities[item.id]}
                         onSuccess={(details) =>
                           handlePaymentSuccess(item.id, details)
