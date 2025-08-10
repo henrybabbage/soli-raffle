@@ -1,24 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PayPalButton from "./components/PayPalButton";
-
-interface Link {
-  label: string;
-  href: string;
-}
-
-interface RaffleItem {
-  id: string;
-  title: string;
-  description: string;
-  instructor: string;
-  details: string;
-  value: string;
-  contact: Link[];
-  image: string;
-}
+import { useRaffleItems, type RaffleItem } from "../hooks/useRaffleItems";
 
 // Helper function to check if image exists
 const getImagePath = (item: RaffleItem): string | null => {
@@ -246,34 +231,21 @@ const raffleItems: RaffleItem[] = [
 ];
 
 export default function Home() {
-  const [quantities, setQuantities] = useState<Record<string, number>>({
-    "1": 1,
-    "2": 1,
-    "3": 1,
-    "4": 1,
-    "5": 1,
-    "6": 1,
-    "7": 1,
-    "8": 1,
-    "9": 1,
-    "10": 1,
-    "11": 1,
-    "12": 1,
-  });
-  const [showPayPal, setShowPayPal] = useState<Record<string, boolean>>({
-    "1": false,
-    "2": false,
-    "3": false,
-    "4": false,
-    "5": false,
-    "6": false,
-    "7": false,
-    "8": false,
-    "9": false,
-    "10": false,
-    "11": false,
-    "12": false,
-  });
+  const { raffleItems, loading, error } = useRaffleItems();
+  const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const [showPayPal, setShowPayPal] = useState<Record<string, boolean>>({});
+  const [buyerInfo, setBuyerInfo] = useState<Record<string, { email: string; name: string }>>({});
+
+  // Initialize quantities when raffle items are loaded
+  useEffect(() => {
+    if (raffleItems.length > 0) {
+      const initialQuantities: Record<string, number> = {};
+      raffleItems.forEach(item => {
+        initialQuantities[item._id] = 1;
+      });
+      setQuantities(initialQuantities);
+    }
+  }, [raffleItems]);
 
   const updateQuantity = (id: string, change: number) => {
     setQuantities((prev) => ({
@@ -285,7 +257,7 @@ export default function Home() {
   const handleBuyTicket = (item: RaffleItem) => {
     setShowPayPal((prev) => ({
       ...prev,
-      [item.id]: true,
+      [item._id]: true,
     }));
   };
 
@@ -306,6 +278,16 @@ export default function Home() {
     setShowPayPal((prev) => ({
       ...prev,
       [itemId]: false,
+    }));
+  };
+
+  const updateBuyerInfo = (itemId: string, field: 'email' | 'name', value: string) => {
+    setBuyerInfo((prev) => ({
+      ...prev,
+      [itemId]: {
+        ...prev[itemId],
+        [field]: value,
+      },
     }));
   };
 
@@ -364,9 +346,28 @@ export default function Home() {
           </p>
         </div>
 
+        {/* Loading and Error States */}
+        {loading && (
+          <div className="col-span-full text-center py-12">
+            <div className="text-lg text-foreground">Loading raffle items...</div>
+          </div>
+        )}
+
+        {error && (
+          <div className="col-span-full text-center py-12">
+            <div className="text-lg text-red-600">Error loading raffle items: {error}</div>
+          </div>
+        )}
+
+        {!loading && !error && raffleItems.length === 0 && (
+          <div className="col-span-full text-center py-12">
+            <div className="text-lg text-foreground">No raffle items available.</div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 md:gap-8 lg:gap-12">
           {raffleItems.map((item) => (
-            <div key={item.id} className="space-y-4">
+            <div key={item._id} className="space-y-4">
               {/* Image */}
               <div className="aspect-[4/5] bg-gray-200 overflow-hidden relative">
                 {getImagePath(item) ? (
@@ -422,7 +423,7 @@ export default function Home() {
                 {/* Purchase Controls */}
                 <div className="space-y-4 pt-4">
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-6 sm:gap-3">
-                    {!showPayPal[item.id] ? (
+                    {!showPayPal[item._id] ? (
                       <button
                         className="px-4 sm:px-6 py-2 bg-transparent border border-foreground text-foreground hover:border-brand hover:text-brand uppercase rounded transition-colors duration-200 text-xs order-2 sm:order-1"
                         onClick={() => handleBuyTicket(item)}
@@ -435,7 +436,7 @@ export default function Home() {
                         onClick={() =>
                           setShowPayPal((prev) => ({
                             ...prev,
-                            [item.id]: false,
+                            [item._id]: false,
                           }))
                         }
                       >
@@ -446,40 +447,83 @@ export default function Home() {
                     <div className="flex items-center justify-center space-x-3 order-1 sm:order-2">
                       <button
                         className="w-8 h-8 rounded-full border border-foreground flex items-center justify-center hover:border-brand hover:text-brand transition-colors duration-200 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                        onClick={() => updateQuantity(item.id, -1)}
-                        disabled={showPayPal[item.id]}
+                        onClick={() => updateQuantity(item._id, -1)}
+                        disabled={showPayPal[item._id]}
                       >
                         -
                       </button>
                       <span className="w-8 text-center font-medium text-base text-foreground">
-                        {quantities[item.id]}
+                        {quantities[item._id]}
                       </span>
                       <button
                         className="w-8 h-8 rounded-full border border-foreground flex items-center justify-center hover:border-brand hover:text-brand transition-colors duration-200 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                        onClick={() => updateQuantity(item.id, 1)}
-                        disabled={showPayPal[item.id]}
+                        onClick={() => updateQuantity(item._id, 1)}
+                        disabled={showPayPal[item._id]}
                       >
                         +
                       </button>
                     </div>
                   </div>
 
-                  {showPayPal[item.id] && (
+                  {showPayPal[item._id] && (
                     <div className="border-t pt-4">
                       <div className="mb-2 text-sm text-foreground text-center sm:text-left">
-                        Total: €{(5 * quantities[item.id]).toFixed(2)}
+                        Total: €{(5 * quantities[item._id]).toFixed(2)}
                       </div>
-                      <PayPalButton
-                        key={`${item.id}-${quantities[item.id]}`}
-                        amount="5"
-                        itemName={item.title}
-                        itemId={item.id}
-                        quantity={quantities[item.id]}
-                        onSuccess={(details) =>
-                          handlePaymentSuccess(item.id, details)
-                        }
-                        onError={(error) => handlePaymentError(item.id, error)}
-                      />
+                      
+                      {/* Buyer Information Form */}
+                      <div className="mb-4 space-y-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label htmlFor={`email-${item._id}`} className="block text-xs text-foreground mb-1">
+                              Email *
+                            </label>
+                            <input
+                              type="email"
+                              id={`email-${item._id}`}
+                              value={buyerInfo[item._id]?.email || ''}
+                              onChange={(e) => updateBuyerInfo(item._id, 'email', e.target.value)}
+                              className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+                              placeholder="your@email.com"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label htmlFor={`name-${item._id}`} className="block text-xs text-foreground mb-1">
+                              Name *
+                            </label>
+                            <input
+                              type="text"
+                              id={`name-${item._id}`}
+                              value={buyerInfo[item._id]?.name || ''}
+                              onChange={(e) => updateBuyerInfo(item._id, 'name', e.target.value)}
+                              className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+                              placeholder="Your Name"
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {buyerInfo[item._id]?.email && buyerInfo[item._id]?.name ? (
+                        <PayPalButton
+                          key={`${item._id}-${quantities[item._id]}`}
+                          amount="5"
+                          itemName={item.title}
+                          itemId={item._id}
+                          quantity={quantities[item._id]}
+                          buyerEmail={buyerInfo[item._id]?.email}
+                          buyerName={buyerInfo[item._id]?.name}
+                          onSuccess={(details) =>
+                            handlePaymentSuccess(item._id, details)
+                          }
+                          onError={(error) => handlePaymentError(item._id, error)}
+                        />
+                      ) : (
+                        <div className="text-center py-4 text-sm text-gray-500">
+                          Please fill in your email and name to proceed with payment
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
