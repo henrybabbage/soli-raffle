@@ -374,30 +374,30 @@ export default function Home() {
 
               {/* Content */}
               <div className="space-y-3">
-                <h2 className="text-lg sm:text-xl font-medium text-black">
+                <h2 className="text-lg sm:text-xl font-medium text-black font-sans">
                   {item.title}
                 </h2>
 
-                <p className="text-xs sm:text-sm text-gray-500 italic">
+                <p className="text-xs sm:text-sm text-secondary-foreground italic font-mono">
                   {item.instructor}
                 </p>
 
-                <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
+                <p className="text-xs sm:text-sm text-secondary-foreground leading-relaxed font-mono">
                   {item.details}
                 </p>
 
-                <p className="text-xs sm:text-sm text-gray-500">
+                <p className="text-xs sm:text-sm text-secondary-foreground font-mono">
                   <span className="font-normal">Value:</span> {item.value}
                 </p>
 
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 font-mono">
                   {item.contact.map((link, index) => (
                     <a
                       key={index}
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs sm:text-sm text-gray-500 hover:text-brand transition-colors duration-200"
+                      className="text-xs sm:text-sm text-secondary-foreground hover:text-brand transition-colors duration-200"
                     >
                       {link.label}
                     </a>
