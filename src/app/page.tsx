@@ -471,7 +471,7 @@ export default function Home() {
                       </div>
                       <PayPalButton
                         key={`${item.id}-${quantities[item.id]}`}
-                        amount="1"
+                        amount="5"
                         itemName={item.title}
                         itemId={item.id}
                         quantity={quantities[item.id]}
