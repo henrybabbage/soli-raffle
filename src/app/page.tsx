@@ -318,10 +318,10 @@ export default function Home() {
             Soli-Raffle
           </h1>
           <div className="flex flex-col space-y-0.5 text-left sm:text-right">
-            <p className="text-xs sm:text-sm text-purple-600">
+            <p className="text-xs sm:text-sm text-[#FC174C]">
               Winners drawn live 31.08.2025
             </p>
-            <p className="text-xs sm:text-sm text-purple-600">5€ per ticket</p>
+            <p className="text-xs sm:text-sm text-[#FC174C]">5€ per ticket</p>
           </div>
         </div>
       </header>
@@ -338,7 +338,7 @@ export default function Home() {
               href="https://www.instagram.com/p/DM2ltiXsAC_/?igsh=bW9zMXhlNXVrNGJq"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-700 hover:text-purple-600 no-underline hover:no-underline"
+              className="text-gray-700 hover:text-[#FC174C] no-underline hover:no-underline"
             >
               Instagram post
             </a>{" "}
@@ -366,7 +366,7 @@ export default function Home() {
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                   />
                 ) : (
-                  <div className="w-full h-full uppercase bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center text-purple-600 text-xs font-normal">
+                  <div className="w-full h-full uppercase bg-gradient-to-br from-[#FC174C]/10 to-[#FC174C]/20 flex items-center justify-center text-[#FC174C] text-xs font-normal">
                     Photo Coming Soon
                   </div>
                 )}
@@ -397,7 +397,7 @@ export default function Home() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs sm:text-sm text-gray-500 hover:text-purple-600 transition-colors duration-200"
+                      className="text-xs sm:text-sm text-gray-500 hover:text-[#FC174C] transition-colors duration-200"
                     >
                       {link.label}
                     </a>
@@ -409,7 +409,7 @@ export default function Home() {
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-6 sm:gap-3">
                     {!showPayPal[item.id] ? (
                       <button
-                        className="px-4 sm:px-6 py-2 bg-transparent border border-black text-black hover:border-purple-600 hover:text-purple-600 uppercase rounded transition-colors duration-200 text-xs order-2 sm:order-1"
+                        className="px-4 sm:px-6 py-2 bg-transparent border border-black text-black hover:border-[#FC174C] hover:text-[#FC174C] uppercase rounded transition-colors duration-200 text-xs order-2 sm:order-1"
                         onClick={() => handleBuyTicket(item)}
                       >
                         Buy Ticket
@@ -430,8 +430,9 @@ export default function Home() {
 
                     <div className="flex items-center justify-center space-x-3 order-1 sm:order-2">
                       <button
-                        className="w-8 h-8 rounded-full border border-black flex items-center justify-center hover:border-purple-600 hover:text-purple-600 transition-colors duration-200 text-lg"
+                        className="w-8 h-8 rounded-full border border-black flex items-center justify-center hover:border-[#FC174C] hover:text-[#FC174C] transition-colors duration-200 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                         onClick={() => updateQuantity(item.id, -1)}
+                        disabled={showPayPal[item.id]}
                       >
                         -
                       </button>
@@ -439,8 +440,9 @@ export default function Home() {
                         {quantities[item.id]}
                       </span>
                       <button
-                        className="w-8 h-8 rounded-full border border-black flex items-center justify-center hover:border-purple-600 hover:text-purple-600 transition-colors duration-200 text-lg"
+                        className="w-8 h-8 rounded-full border border-black flex items-center justify-center hover:border-[#FC174C] hover:text-[#FC174C] transition-colors duration-200 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                         onClick={() => updateQuantity(item.id, 1)}
+                        disabled={showPayPal[item.id]}
                       >
                         +
                       </button>
