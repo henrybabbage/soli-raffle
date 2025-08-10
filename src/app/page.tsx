@@ -315,7 +315,7 @@ export default function Home() {
       <header className="sticky top-0 z-50 bg-white border-b max-w-7xl mx-auto px-4 py-6 sm:py-8">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 sm:gap-0">
           <div className="flex items-baseline gap-3">
-            <h1 className="text-4xl sm:text-5xl font-light tracking-wide italic text-black">
+            <h1 className="text-4xl sm:text-5xl font-light tracking-wide italic text-black font-mono">
               Soli-Raffle
             </h1>
             <Image
@@ -386,23 +386,23 @@ export default function Home() {
 
               {/* Content */}
               <div className="space-y-3">
-                <h2 className="text-lg sm:text-xl font-medium text-black font-sans">
+                <h2 className="text-lg sm:text-xl font-medium text-black font-mono">
                   {item.title}
                 </h2>
 
-                <p className="text-xs sm:text-sm text-secondary-foreground italic font-mono">
+                <p className="text-xs sm:text-sm text-secondary-foreground italic">
                   {item.instructor}
                 </p>
 
-                <p className="text-xs sm:text-sm text-secondary-foreground leading-relaxed font-mono">
+                <p className="text-xs sm:text-sm text-secondary-foreground leading-relaxed">
                   {item.details}
                 </p>
 
-                <p className="text-xs sm:text-sm text-secondary-foreground font-mono">
+                <p className="text-xs sm:text-sm text-secondary-foreground">
                   <span className="font-normal">Value:</span> {item.value}
                 </p>
 
-                <div className="flex flex-wrap gap-2 font-mono">
+                <div className="flex flex-wrap gap-2">
                   {item.contact.map((link, index) => (
                     <a
                       key={index}
