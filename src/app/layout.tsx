@@ -42,7 +42,7 @@ const quadrantTextMono = localFont({
 export const metadata: Metadata = {
   title: "Soli Raffle",
   description:
-    "Purchase raffle tickets for exclusive Qigong and personal training sessions with Lingji Hon",
+    "This online raffle runs alongside our soli-event in Berlin to raise support funds for the people of Sudan, Congo, and Palestine.",
 };
 
 export default function RootLayout({
