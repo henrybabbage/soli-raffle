@@ -102,7 +102,7 @@ export default function PayPalButton({
         onError={onErrorHandler}
         style={{
           layout: "horizontal",
-          color: "blue",
+          color: "white",
           shape: "rect",
           label: "pay",
           height: 40,
