@@ -325,7 +325,7 @@ export default function Home() {
               className="align-baseline text-4xl sm:text-5xl"
               priority
             />
-            <h1 className="text-4xl sm:text-5xl font-light tracking-wide italic text-black font-mono">
+            <h1 className="text-4xl sm:text-5xl font-light tracking-wide italic text-foreground font-mono">
               Soli-Raffle
             </h1>
           </div>
@@ -386,7 +386,7 @@ export default function Home() {
 
               {/* Content */}
               <div className="space-y-3">
-                <h2 className="text-lg sm:text-xl font-medium text-black font-mono">
+                <h2 className="text-lg sm:text-xl font-medium text-foreground font-mono">
                   {item.title}
                 </h2>
 
@@ -424,7 +424,7 @@ export default function Home() {
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-6 sm:gap-3">
                     {!showPayPal[item.id] ? (
                       <button
-                        className="px-4 sm:px-6 py-2 bg-transparent border border-black text-black hover:border-brand hover:text-brand uppercase rounded transition-colors duration-200 text-xs order-2 sm:order-1"
+                        className="px-4 sm:px-6 py-2 bg-transparent border border-foreground text-foreground hover:border-brand hover:text-brand uppercase rounded transition-colors duration-200 text-xs order-2 sm:order-1"
                         onClick={() => handleBuyTicket(item)}
                       >
                         Buy Ticket
@@ -445,17 +445,17 @@ export default function Home() {
 
                     <div className="flex items-center justify-center space-x-3 order-1 sm:order-2">
                       <button
-                        className="w-8 h-8 rounded-full border border-black flex items-center justify-center hover:border-brand hover:text-brand transition-colors duration-200 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-8 h-8 rounded-full border border-foreground flex items-center justify-center hover:border-brand hover:text-brand transition-colors duration-200 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                         onClick={() => updateQuantity(item.id, -1)}
                         disabled={showPayPal[item.id]}
                       >
                         -
                       </button>
-                      <span className="w-8 text-center font-medium text-base text-black">
+                      <span className="w-8 text-center font-medium text-base text-foreground">
                         {quantities[item.id]}
                       </span>
                       <button
-                        className="w-8 h-8 rounded-full border border-black flex items-center justify-center hover:border-brand hover:text-brand transition-colors duration-200 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-8 h-8 rounded-full border border-foreground flex items-center justify-center hover:border-brand hover:text-brand transition-colors duration-200 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                         onClick={() => updateQuantity(item.id, 1)}
                         disabled={showPayPal[item.id]}
                       >
@@ -466,7 +466,7 @@ export default function Home() {
 
                   {showPayPal[item.id] && (
                     <div className="border-t pt-4">
-                      <div className="mb-2 text-sm text-black text-center sm:text-left">
+                      <div className="mb-2 text-sm text-foreground text-center sm:text-left">
                         Total: €{(5 * quantities[item.id]).toFixed(2)}
                       </div>
                       <PayPalButton
