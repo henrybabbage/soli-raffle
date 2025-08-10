@@ -312,7 +312,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white font-sans">
       {/* Header */}
-      <header className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
+      <header className="sticky top-0 z-50 bg-white border-b max-w-7xl mx-auto px-4 py-6 sm:py-8">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 sm:gap-0">
           <h1 className="text-4xl sm:text-5xl font-light tracking-wide italic text-black">
             Soli-Raffle
@@ -475,7 +475,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="bg-white h-[300px] flex items-end">
-        <div className="max-w-7xl mr-auto px-4 pb-4">
+        <div className="max-w-7xl mx-auto px-4 pb-4">
           <p className="text-black text-sm">Soli-Raffle 2025</p>
         </div>
       </footer>

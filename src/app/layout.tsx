@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import PayPalWrapper from "./components/PayPalWrapper";
+import LenisProvider from "./components/lenis-provider";
 import "./globals.css";
 
 const quadrantText = localFont({
@@ -53,7 +54,9 @@ export default function RootLayout({
       <body
         className={`${quadrantText.variable} ${quadrantTextMono.variable} antialiased`}
       >
-        <PayPalWrapper>{children}</PayPalWrapper>
+        <LenisProvider>
+          <PayPalWrapper>{children}</PayPalWrapper>
+        </LenisProvider>
       </body>
     </html>
   );
