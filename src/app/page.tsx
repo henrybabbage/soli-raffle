@@ -314,10 +314,7 @@ export default function Home() {
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white border-b max-w-7xl mx-auto px-4 py-6 sm:py-8">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 sm:gap-0">
-          <div className="flex items-baseline gap-3">
-            <h1 className="text-4xl sm:text-5xl font-light tracking-wide italic text-black font-mono">
-              Soli-Raffle
-            </h1>
+          <div className="flex items-center gap-4">
             <Image
               src="/icon-300w.svg"
               alt=""
@@ -328,6 +325,9 @@ export default function Home() {
               className="align-baseline text-4xl sm:text-5xl"
               priority
             />
+            <h1 className="text-4xl sm:text-5xl font-light tracking-wide italic text-black font-mono">
+              Soli-Raffle
+            </h1>
           </div>
           <div className="flex flex-col space-y-0.5 text-left sm:text-right">
             <p className="text-xs sm:text-sm text-brand">
@@ -350,14 +350,14 @@ export default function Home() {
               href="https://www.instagram.com/p/DM2ltiXsAC_/?igsh=bW9zMXhlNXVrNGJq"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-700 hover:text-brand no-underline hover:no-underline"
+              className="text-foreground hover:text-brand no-underline hover:no-underline"
             >
               Instagram post
             </a>{" "}
             or email Lilith at lilith.spink@proton.me. We will draw the winners
             live on Instagram on the 31.08.25.
           </p>
-          <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+          <p className="text-sm sm:text-base text-foreground leading-relaxed">
             You can enter the draw to win the prize(s) of your choice, simple
             select the tickets below each prize and add as many entries as you
             want. Good luck!
@@ -403,6 +403,9 @@ export default function Home() {
                 </p>
 
                 <div className="flex flex-wrap gap-2">
+                  <span className="text-xs sm:text-sm text-secondary-foreground font-normal">
+                    Links:
+                  </span>
                   {item.contact.map((link, index) => (
                     <a
                       key={index}

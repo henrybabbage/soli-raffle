@@ -46,6 +46,19 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
   },
+  openGraph: {
+    title: "Soli Raffle",
+    description:
+      "This online raffle runs alongside our soli-event in Berlin to raise support funds for the people of Sudan, Congo, and Palestine.",
+    images: ["/icon-300w.svg"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Soli Raffle",
+    description:
+      "This online raffle runs alongside our soli-event in Berlin to raise support funds for the people of Sudan, Congo, and Palestine.",
+    images: ["/icon-300w.svg"],
+  },
 };
 
 export default function RootLayout({
