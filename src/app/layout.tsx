@@ -7,12 +7,12 @@ import "./globals.css";
 const quadrantText = localFont({
   src: [
     {
-      path: "../../public/fonts/QuadrantText-Regular.woff2",
+      path: "../../public/fonts/QuadrantText/QuadrantText-Regular.woff2",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../../public/fonts/QuadrantText-RegularItalic.woff2",
+      path: "../../public/fonts/QuadrantText/QuadrantText-RegularItalic.woff2",
       weight: "400",
       style: "italic",
     },
@@ -24,12 +24,12 @@ const quadrantText = localFont({
 const quadrantTextMono = localFont({
   src: [
     {
-      path: "../../public/fonts/QuadrantTextMono-Regular.woff2",
+      path: "../../public/fonts/QuadrantTextMono/QuadrantTextMono-Regular.woff2",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../../public/fonts/QuadrantTextMono-RegularItalic.woff2",
+      path: "../../public/fonts/QuadrantTextMono/QuadrantTextMono-RegularItalic.woff2",
       weight: "400",
       style: "italic",
     },
