@@ -1,3 +1,4 @@
+import { cn } from "@/utils/cn";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import PayPalWrapper from "./components/PayPalWrapper";
@@ -52,7 +53,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${quadrantText.variable} ${quadrantTextMono.variable} antialiased`}
+        className={cn(
+          quadrantText.variable,
+          quadrantTextMono.variable,
+          "antialiased"
+        )}
       >
         <LenisProvider>
           <PayPalWrapper>{children}</PayPalWrapper>
