@@ -324,8 +324,8 @@ export default function Home() {
               aria-hidden="true"
               width={301}
               height={302}
-              style={{ width: "1em", height: "auto" }}
-              className="align-baseline"
+              style={{ height: "1em", width: "auto" }}
+              className="align-baseline text-4xl sm:text-5xl"
               priority
             />
           </div>
@@ -342,7 +342,7 @@ export default function Home() {
       <main className="max-w-7xl mx-auto px-4 py-8">
         {/* Introduction Section */}
         <div className="mb-12 text-left max-w-4xl mr-auto">
-          <p className="text-sm sm:text-base text-gray-700 leading-relaxed mb-4">
+          <p className="text-sm sm:text-base text-foreground leading-relaxed mb-4">
             This online raffle runs alongside our soli-event in Berlin to raise
             support funds for the people of Sudan, Congo, and Palestine. For
             more information about where the funds will be sent visit our{" "}
