@@ -432,7 +432,6 @@ export default function Home() {
                       <button
                         className="w-8 h-8 rounded-full border border-black flex items-center justify-center hover:border-purple-600 hover:text-purple-600 transition-colors duration-200 text-lg"
                         onClick={() => updateQuantity(item.id, -1)}
-                        disabled={showPayPal[item.id]}
                       >
                         -
                       </button>
@@ -442,7 +441,6 @@ export default function Home() {
                       <button
                         className="w-8 h-8 rounded-full border border-black flex items-center justify-center hover:border-purple-600 hover:text-purple-600 transition-colors duration-200 text-lg"
                         onClick={() => updateQuantity(item.id, 1)}
-                        disabled={showPayPal[item.id]}
                       >
                         +
                       </button>
@@ -455,6 +453,7 @@ export default function Home() {
                         Total: €{(5 * quantities[item.id]).toFixed(2)}
                       </div>
                       <PayPalButton
+                        key={`${item.id}-${quantities[item.id]}`}
                         amount="5"
                         itemName={item.title}
                         itemId={item.id}

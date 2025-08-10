@@ -100,6 +100,7 @@ export default function PayPalButton({
         createOrder={createOrder}
         onApprove={onApprove}
         onError={onErrorHandler}
+        forceReRender={[amount, itemName, itemId, quantity]}
         style={{
           layout: "horizontal",
           color: "white",
