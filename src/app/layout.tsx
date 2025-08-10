@@ -43,6 +43,9 @@ export const metadata: Metadata = {
   title: "Soli Raffle",
   description:
     "This online raffle runs alongside our soli-event in Berlin to raise support funds for the people of Sudan, Congo, and Palestine.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({

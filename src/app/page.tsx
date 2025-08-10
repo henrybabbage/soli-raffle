@@ -314,9 +314,21 @@ export default function Home() {
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white border-b max-w-7xl mx-auto px-4 py-6 sm:py-8">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 sm:gap-0">
-          <h1 className="text-4xl sm:text-5xl font-light tracking-wide italic text-black">
-            Soli-Raffle
-          </h1>
+          <div className="flex items-baseline gap-3">
+            <h1 className="text-4xl sm:text-5xl font-light tracking-wide italic text-black">
+              Soli-Raffle
+            </h1>
+            <Image
+              src="/icon-300w.svg"
+              alt=""
+              aria-hidden="true"
+              width={301}
+              height={302}
+              style={{ width: "1em", height: "auto" }}
+              className="align-baseline"
+              priority
+            />
+          </div>
           <div className="flex flex-col space-y-0.5 text-left sm:text-right">
             <p className="text-xs sm:text-sm text-brand">
               Winners drawn live 31.08.2025
