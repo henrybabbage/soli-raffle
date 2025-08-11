@@ -276,6 +276,7 @@ async function migrateToSanity() {
     console.log("\n📝 Note: Images were not migrated. You'll need to:");
     console.log("1. Upload the images to Sanity Studio manually");
     console.log("2. Update each raffle item with the correct image reference");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error("\n❌ Migration failed:", error.message);
     if (error.statusCode === 401) {
