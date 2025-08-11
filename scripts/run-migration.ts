@@ -1,11 +1,18 @@
-// Load environment variables
+import { createClient } from '@sanity/client';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 
 // Load environment variables from .env.local
 dotenv.config({ path: path.resolve(__dirname, '../.env.local') });
 
-import { client } from "../src/sanity/lib/client";
+// Create Sanity client directly
+const client = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
+  apiVersion: '2024-01-01',
+  useCdn: false,
+  token: process.env.SANITY_API_WRITE_TOKEN, // You'll need to add this to .env.local if you want to write
+});
 
 // Current raffle items data from the frontend
 const raffleItems = [
@@ -217,13 +224,24 @@ const raffleItems = [
 
 async function migrateToSanity() {
   console.log("Starting migration to Sanity...");
+  console.log(`Project ID: ${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}`);
+  console.log(`Dataset: ${process.env.NEXT_PUBLIC_SANITY_DATASET}`);
+
+  // Check if we have a write token
+  if (!process.env.SANITY_API_WRITE_TOKEN) {
+    console.log("\n⚠️  Warning: No SANITY_API_WRITE_TOKEN found in .env.local");
+    console.log("You may need to add a write token to create documents.");
+    console.log("Get a token from: https://www.sanity.io/manage/project/aibflqfk/api");
+    console.log("Then add it to .env.local as: SANITY_API_WRITE_TOKEN=your-token-here\n");
+  }
 
   try {
     for (const item of raffleItems) {
       console.log(`Migrating: ${item.title}`);
 
-      // Create the raffle item in Sanity
-      const result = await client.create({
+      // Note: The image field will need to be handled separately
+      // as Sanity requires images to be uploaded first
+      const document = {
         _type: "raffleItem",
         title: item.title,
         description: item.description,
@@ -231,13 +249,14 @@ async function migrateToSanity() {
         details: item.details,
         value: item.value,
         contact: item.contact,
-        image: {
-          _type: "image",
-          asset: {
-            _type: "reference",
-            _ref: item.image, // This will need to be updated with actual Sanity image assets
-          },
-        },
+        // Commenting out image for now as it needs special handling
+        // image: {
+        //   _type: "image",
+        //   asset: {
+        //     _type: "reference",
+        //     _ref: item.image,
+        //   },
+        // },
         isActive: true,
         order: item.order,
         slug: {
@@ -247,20 +266,25 @@ async function migrateToSanity() {
             .replace(/\s+/g, "-")
             .replace(/[^a-z0-9-]/g, ""),
         },
-      });
+      };
 
+      const result = await client.create(document);
       console.log(`✅ Created: ${item.title} with ID: ${result._id}`);
     }
 
-    console.log("🎉 Migration completed successfully!");
-  } catch (error) {
-    console.error("❌ Migration failed:", error);
+    console.log("\n🎉 Migration completed successfully!");
+    console.log("\n📝 Note: Images were not migrated. You'll need to:");
+    console.log("1. Upload the images to Sanity Studio manually");
+    console.log("2. Update each raffle item with the correct image reference");
+  } catch (error: any) {
+    console.error("\n❌ Migration failed:", error.message);
+    if (error.statusCode === 401) {
+      console.error("\n🔑 Authentication error. Please add a write token to .env.local:");
+      console.error("SANITY_API_WRITE_TOKEN=your-token-here");
+      console.error("\nGet a token from: https://www.sanity.io/manage/project/aibflqfk/api");
+    }
   }
 }
 
-// Run migration if this script is executed directly
-if (require.main === module) {
-  migrateToSanity();
-}
-
-export default migrateToSanity;
+// Run the migration
+migrateToSanity();
