@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { PayPalIcon } from "./PayPalIcon";
 
 interface PayPalMeButtonProps {
   amount: number; // Amount in EUR
@@ -164,16 +165,7 @@ export default function PayPalMeButton({
           </>
         ) : (
           <>
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.72a.641.641 0 0 1 .633-.542h7.535c2.541 0 4.434.577 5.474 1.67 1.08 1.134 1.463 2.825 1.047 4.636-.591 2.57-2.984 5.293-7.015 5.293H9.524l-.881 5.85a.641.641 0 0 1-.633.545l-.002.002-.932 2.163zm6.832-18.159h-7.01l-2.583 14.66h3.235l.994-6.59a.641.641 0 0 1 .633-.545h3.72c3.338 0 5.475-2.12 5.977-4.315.241-1.054.048-1.87-.53-2.415-.609-.574-1.629-.795-3.436-.795z" />
-            </svg>
+            <PayPalIcon />
             Pay with PayPal
           </>
         )}
