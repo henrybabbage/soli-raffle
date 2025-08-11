@@ -127,15 +127,14 @@ export default function PayPalMeButton({
         </ul>
         <p className="text-xs italic mt-3">
           After clicking {`"Pay with PayPal"`}, you&apos;ll be redirected to
-          PayPal to complete your payment. Please include your name and email in
-          the PayPal notes for raffle entry confirmation.
+          PayPal to complete your payment.
         </p>
       </div>
 
       <button
         onClick={handlePayment}
         disabled={isProcessing}
-        className="font-sans w-full bg-background border-primary hover:bg-neutral-200 disabled:bg-neutral-200 disabled:cursor-not-allowed text-foreground font-normal py-3 px-6 rounded-xs transition-colors duration-200 flex items-center justify-center gap-2"
+        className="font-sans w-full bg-background border border-primary hover:bg-neutral-200 disabled:bg-neutral-200 disabled:cursor-not-allowed text-foreground font-normal py-3 px-6 rounded-xs transition-colors duration-200 flex items-center justify-center gap-2"
         style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}
         aria-label={`Pay €${totalAmount} with PayPal`}
       >
