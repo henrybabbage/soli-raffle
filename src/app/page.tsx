@@ -1,279 +1,30 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PayPalButton from "./components/PayPalButton";
+import { useRaffleItems, type RaffleItem } from "../hooks/useRaffleItems";
 
-interface Link {
-  label: string;
-  href: string;
-}
 
-interface RaffleItem {
-  id: string;
-  title: string;
-  description: string;
-  instructor: string;
-  details: string;
-  value: string;
-  contact: Link[];
-  image: string;
-}
 
-// Helper function to check if image exists
-const getImagePath = (item: RaffleItem): string | null => {
-  const availableImages = [
-    "/images/1_Lingji.jpg",
-    "/images/2_.jpg",
-    "/images/3_.jpg",
-    "/images/4_.jpg",
-    "/images/5_.jpg",
-    "/images/6_.jpg",
-    "/images/7_Maximillian_Juno.jpg",
-    "/images/8_Denise.jpg",
-    "/images/9_Oly.jpg",
-    "/images/10_Diana.jpg",
-    "/images/11_Rachel.jpg",
-    "/images/12_Tara.jpg",
-  ];
-  return availableImages.includes(item.image) ? item.image : null;
-};
 
-// Helper function to normalize links
-const normalizeLinks = (contact: string): Link[] => {
-  return contact
-    .split(" ")
-    .filter((link) => link.trim())
-    .map((link) => {
-      // Handle Instagram links (@username)
-      if (link.startsWith("@")) {
-        const username = link.substring(1);
-        return {
-          label: link,
-          href: `https://instagram.com/${username}`,
-        };
-      }
-
-      // Handle website links that don't have protocol
-      if (link.includes(".") && !link.startsWith("http")) {
-        return {
-          label: link,
-          href: `https://${link}`,
-        };
-      }
-
-      // Handle full URLs - extract domain for display
-      if (link.startsWith("http")) {
-        try {
-          const url = new URL(link);
-          const domain = url.hostname;
-          return {
-            label: domain,
-            href: link,
-          };
-        } catch {
-          return {
-            label: link,
-            href: link,
-          };
-        }
-      }
-
-      // Fallback for other text
-      return {
-        label: link,
-        href: link,
-      };
-    });
-};
-
-const raffleItems: RaffleItem[] = [
-  {
-    id: "1",
-    title: "Private Qigong Session",
-    description:
-      "Lingji will offer a 1 hour online private qigong session. This session will offer techniques for grounding and regeneration with Zhan Zhuang (qi absorption postures) to bring the body into alignment and relaxation, and Taoist breathing techniques to cleanse and circulate energy.",
-    instructor:
-      "Lingji Hon 韓靈芝 is a Berlin based Taiji Quan and Qigong teacher.",
-    details:
-      "Lingji will offer a 1 hour online private qigong session. This session will offer techniques for grounding and regeneration with Zhan Zhuang (qi absorption postures) to bring the body into alignment and relaxation, and Taoist breathing techniques to cleanse and circulate energy.",
-    value: "100€",
-    contact: normalizeLinks("@wudongtaiji www.wudongtaiji.com"),
-    image: "/images/1_Lingji.jpg",
-  },
-  {
-    id: "2",
-    title: "60-Minute Private Training Session",
-    description:
-      "Elias offers 1 x 60min private training sessions for either boxing, strength and conditioning, self defence, and kick boxing.",
-    instructor: "Elias, boxing coach and MMA practitioner.",
-    details:
-      "Elias offers 1 x 60min private training sessions for either boxing, strength and conditioning, self defence, and kick boxing.",
-    value: "120€",
-    contact: normalizeLinks("@stillelias"),
-    image: "/images/2_.jpg",
-  },
-  {
-    id: "3",
-    title: "Black and White Film Developing Workshop",
-    description:
-      "Queer Analog Darkroom offers a Black and White Film Developing Workshop (3 hours).",
-    instructor:
-      "Queer Analog Darkroom is a self-organized collective committed to a more collaborative approach to visual arts and to resisting the depoliticization of photography.",
-    details:
-      "Black and White Film Developing Workshop (3 hours). At the core of their work is the darkroom, which works towards the redistribution of knowledge, increasing accessibility and mutual empowerment—both spatially and through shared learning.",
-    value: "65€",
-    contact: normalizeLinks("@queeranalogdarkroom @jetphoto"),
-    image: "/images/3_.jpg",
-  },
-  {
-    id: "4",
-    title: "60-Minute Personal Training Session",
-    description:
-      "Eliza offers a 60-minute personal training session with focus on strength training fundamentals, barbell technique, and building mobility and control.",
-    instructor:
-      "Eliza Cumming – Personal Trainer & Biomechanics Coach. Eliza is a strength and mobility coach based in Berlin, working primarily with FLINTA clients.",
-    details:
-      "1 x 60-minute personal training session with Eliza. Includes a full-body strength session tailored to your goals, technique coaching, and guidance around mobility or lifting basics.",
-    value: "105€",
-    contact: normalizeLinks("@elizacumming"),
-    image: "/images/4_.jpg",
-  },
-  {
-    id: "5",
-    title: "Relaxing Facial Skincare Treatment",
-    description:
-      "A 60 minute facial skincare & relaxation treatment including cleanse, tone, exfoliate, masque and massage options.",
-    instructor:
-      "A trans* practitioner trained in cosmetic and massage, neurodiversity aware and ready to hear your sensory or access needs.",
-    details:
-      "60 minute facial skincare & relaxation treatment. Includes: cleanse, tone, exfoliate, masque + options for hand & arm, neck & shoulder massage, and a lymphatic drainage facial massage. Choice of scent: lavender, rosemary or bergamot.",
-    value: "50€",
-    contact: normalizeLinks("@qttherapy"),
-    image: "/images/5_.jpg",
-  },
-  {
-    id: "6",
-    title: "Restorative Massage Ritual",
-    description:
-      "Varis intuitively combines elements of Ayurvedic and classical massage into a ritual shaped by your individual needs. Flowing oil massage combined with deeper attention to areas where you are storing tension will leave you feeling more relaxed in body & mind. All massages are done using high quality organic oils.",
-    instructor: "Varis Lis (they/them).",
-    details:
-      "Varis intuitively combines elements of Ayurvedic and classical massage into a ritual shaped by your individual needs. Flowing oil massage combined with deeper attention to areas where you are storing tension will leave you feeling more relaxed in body & mind. All massages are done using high quality organic oils.\n\nAccessibility: The sessions Varis offers center on a dialogue around your needs, possible physical injuries, limitations and boundaries you may have. This is always a safer space for comrades, queer and trans babes, BIPOC, sex workers and neurodivergent peeps. Please come tested for COVID and reschedule if you are sick. Unfortunately the space is not wheelchair accessible.",
-    value: "150€",
-    contact: normalizeLinks("@existential_moss_moan._"),
-    image: "/images/6_.jpg",
-  },
-  {
-    id: "7",
-    title: "Birth Chart Reading",
-    description:
-      "Maximilian will offer a one hour online birth chart reading; a place of soulful conversation & engagement with one's personal birth horoscope to illuminate the deeper archetypal patterns of our psyche & life, with a focus on the growth lessons you are currently moving through.",
-    instructor: "Maximilian Juno is an evolutionary astrologer & guide.",
-    details:
-      "Maximilian will offer a one hour online birth chart reading; a place of soulful conversation & engagement with one's personal birth horoscope to illuminate the deeper archetypal patterns of our psyche & life, with a focus on the growth lessons you are currently moving through.",
-    value: "130€",
-    contact: normalizeLinks("@skywalker.astrology www.skywalkerastrology.com"),
-    image: "/images/7_Maximillian_Juno.jpg",
-  },
-  {
-    id: "8",
-    title: "Holistic Bodywork Session",
-    description:
-      "Denise offers a 1.5hr session of classical swedish massage with lomi lomi influence and thai yoga massage.",
-    instructor:
-      "Denise is attuned to the body's energetic motions, weaving the art of touch into holistic bodywork sessions that release tension, create space for energy flow, and realign the body with mind and spirit.",
-    details:
-      "1.5hr session of classical swedish massage with a lomi lomi influence and thai yoga massage. She implements an intuitive approach, tuning into each client's responses and adjusting pressure and techniques accordingly.",
-    value: "100€",
-    contact: normalizeLinks("www.deniseagua.com"),
-    image: "/images/8_Denise.jpg",
-  },
-  {
-    id: "9",
-    title: "Craniosacral Therapy Session",
-    description:
-      "Oly offers a 70 minute craniosacral therapy session to support nervous system regulation and healing.",
-    instructor:
-      "Oly McDowell (they/them) is a licensed heilpraktiker, biodynamic craniosacral therapist and acupuncturist in training.",
-    details:
-      "70 minute craniosacral therapy session. Cranio is a somatic touch based therapy that supports people to regulate their nervous system and tune into the healing forces of their body.",
-    value: "85€",
-    contact: normalizeLinks("www.beinginthebody.de"),
-    image: "/images/9_Oly.jpg",
-  },
-  {
-    id: "10",
-    title: "Online Breathwork & Meditation Session",
-    description:
-      "Diana offers a 1-hour online private session combining pranayama, somatic breathwork, and guided meditation.",
-    instructor:
-      "Diana Farhat is a Beirut-based holistic psychologist (BA Psychology), Ayurvedic therapist, and senior yoga teacher (500hr) with over 10 years of experience.",
-    details:
-      "1-hour online private session combining pranayama, somatic breathwork, and guided meditation. Drawing from psychology and Rebirthing Breathwork, the session supports nervous system regulation, emotional release, and deep inner clarity.",
-    value: "100€",
-    contact: normalizeLinks("@integratedhealingtherapy"),
-    image: "/images/10_Diana.jpg",
-  },
-  {
-    id: "11",
-    title: "60-Minute Bodywork Session",
-    description:
-      "Rachel offers a 1-hour 1:1 Bodywork Session focused on mindful touch, presence, and deep listening.",
-    instructor:
-      "Rachel Helmbrecht is a Berlin based Bodyworker and Physiotherapist.",
-    details:
-      "1-hour 1:1 Bodywork Session. It is a space of mindful touch, presence, and deep listening, which can create a sense of grounding, deeper relaxation, and renewed vitality.",
-    value: "90€",
-    contact: normalizeLinks(
-      "@rachelhelmbrecht www.koerpertherapie-helmbrecht.de"
-    ),
-    image: "/images/11_Rachel.jpg",
-  },
-  {
-    id: "12",
-    title: "Somatic & Bodywork Session",
-    description:
-      "Tara offers a 1.5 hour somatic/bodywork based session exploring your needs through hands-on techniques and somatic exercises.",
-    instructor:
-      "Tara is a Berlin based Bodyworker and Somatic facilitator. Her pillars of work are one-on-one and group somatic coaching, tantric bodywork, and tantric and intimacy coaching.",
-    details:
-      "1.5 hour somatic/bodywork based session, where we will explore your needs through various hands on techniques and somatic exercises.",
-    value: "180€",
-    contact: normalizeLinks("@tara_embodied www.sensuali.com/tara-18880/"),
-    image: "/images/12_Tara.jpg",
-  },
-];
 
 export default function Home() {
-  const [quantities, setQuantities] = useState<Record<string, number>>({
-    "1": 1,
-    "2": 1,
-    "3": 1,
-    "4": 1,
-    "5": 1,
-    "6": 1,
-    "7": 1,
-    "8": 1,
-    "9": 1,
-    "10": 1,
-    "11": 1,
-    "12": 1,
-  });
-  const [showPayPal, setShowPayPal] = useState<Record<string, boolean>>({
-    "1": false,
-    "2": false,
-    "3": false,
-    "4": false,
-    "5": false,
-    "6": false,
-    "7": false,
-    "8": false,
-    "9": false,
-    "10": false,
-    "11": false,
-    "12": false,
-  });
+  const { raffleItems, loading, error } = useRaffleItems();
+  const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const [showPayPal, setShowPayPal] = useState<Record<string, boolean>>({});
+  const [buyerInfo, setBuyerInfo] = useState<Record<string, { email: string; name: string }>>({});
+
+  // Initialize quantities when raffle items are loaded
+  useEffect(() => {
+    if (raffleItems.length > 0) {
+      const initialQuantities: Record<string, number> = {};
+      raffleItems.forEach(item => {
+        initialQuantities[item._id] = 1;
+      });
+      setQuantities(initialQuantities);
+    }
+  }, [raffleItems]);
 
   const updateQuantity = (id: string, change: number) => {
     setQuantities((prev) => ({
@@ -285,7 +36,7 @@ export default function Home() {
   const handleBuyTicket = (item: RaffleItem) => {
     setShowPayPal((prev) => ({
       ...prev,
-      [item.id]: true,
+      [item._id]: true,
     }));
   };
 
@@ -306,6 +57,16 @@ export default function Home() {
     setShowPayPal((prev) => ({
       ...prev,
       [itemId]: false,
+    }));
+  };
+
+  const updateBuyerInfo = (itemId: string, field: 'email' | 'name', value: string) => {
+    setBuyerInfo((prev) => ({
+      ...prev,
+      [itemId]: {
+        ...prev[itemId],
+        [field]: value,
+      },
     }));
   };
 
@@ -364,14 +125,33 @@ export default function Home() {
           </p>
         </div>
 
+        {/* Loading and Error States */}
+        {loading && (
+          <div className="col-span-full text-center py-12">
+            <div className="text-lg text-foreground">Loading raffle items...</div>
+          </div>
+        )}
+
+        {error && (
+          <div className="col-span-full text-center py-12">
+            <div className="text-lg text-red-600">Error loading raffle items: {error}</div>
+          </div>
+        )}
+
+        {!loading && !error && raffleItems.length === 0 && (
+          <div className="col-span-full text-center py-12">
+            <div className="text-lg text-foreground">No raffle items available.</div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 md:gap-8 lg:gap-12">
           {raffleItems.map((item) => (
-            <div key={item.id} className="space-y-4">
+            <div key={item._id} className="space-y-4">
               {/* Image */}
               <div className="aspect-[4/5] bg-gray-200 overflow-hidden relative">
-                {getImagePath(item) ? (
+                {item.image ? (
                   <Image
-                    src={getImagePath(item)!}
+                    src={item.image}
                     alt={`${item.instructor} - ${item.title}`}
                     fill
                     className="object-cover"
@@ -422,7 +202,7 @@ export default function Home() {
                 {/* Purchase Controls */}
                 <div className="space-y-4 pt-4">
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-6 sm:gap-3">
-                    {!showPayPal[item.id] ? (
+                    {!showPayPal[item._id] ? (
                       <button
                         className="px-4 sm:px-6 py-2 bg-transparent border border-foreground text-foreground hover:border-brand hover:text-brand uppercase rounded transition-colors duration-200 text-xs order-2 sm:order-1"
                         onClick={() => handleBuyTicket(item)}
@@ -435,7 +215,7 @@ export default function Home() {
                         onClick={() =>
                           setShowPayPal((prev) => ({
                             ...prev,
-                            [item.id]: false,
+                            [item._id]: false,
                           }))
                         }
                       >
@@ -446,40 +226,83 @@ export default function Home() {
                     <div className="flex items-center justify-center space-x-3 order-1 sm:order-2">
                       <button
                         className="w-8 h-8 rounded-full border border-foreground flex items-center justify-center hover:border-brand hover:text-brand transition-colors duration-200 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                        onClick={() => updateQuantity(item.id, -1)}
-                        disabled={showPayPal[item.id]}
+                        onClick={() => updateQuantity(item._id, -1)}
+                        disabled={showPayPal[item._id]}
                       >
                         -
                       </button>
                       <span className="w-8 text-center font-medium text-base text-foreground">
-                        {quantities[item.id]}
+                        {quantities[item._id]}
                       </span>
                       <button
                         className="w-8 h-8 rounded-full border border-foreground flex items-center justify-center hover:border-brand hover:text-brand transition-colors duration-200 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                        onClick={() => updateQuantity(item.id, 1)}
-                        disabled={showPayPal[item.id]}
+                        onClick={() => updateQuantity(item._id, 1)}
+                        disabled={showPayPal[item._id]}
                       >
                         +
                       </button>
                     </div>
                   </div>
 
-                  {showPayPal[item.id] && (
+                  {showPayPal[item._id] && (
                     <div className="border-t pt-4">
                       <div className="mb-2 text-sm text-foreground text-center sm:text-left">
-                        Total: €{(5 * quantities[item.id]).toFixed(2)}
+                        Total: €{(5 * quantities[item._id]).toFixed(2)}
                       </div>
-                      <PayPalButton
-                        key={`${item.id}-${quantities[item.id]}`}
-                        amount="5"
-                        itemName={item.title}
-                        itemId={item.id}
-                        quantity={quantities[item.id]}
-                        onSuccess={(details) =>
-                          handlePaymentSuccess(item.id, details)
-                        }
-                        onError={(error) => handlePaymentError(item.id, error)}
-                      />
+                      
+                      {/* Buyer Information Form */}
+                      <div className="mb-4 space-y-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label htmlFor={`email-${item._id}`} className="block text-xs text-foreground mb-1">
+                              Email *
+                            </label>
+                            <input
+                              type="email"
+                              id={`email-${item._id}`}
+                              value={buyerInfo[item._id]?.email || ''}
+                              onChange={(e) => updateBuyerInfo(item._id, 'email', e.target.value)}
+                              className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+                              placeholder="your@email.com"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label htmlFor={`name-${item._id}`} className="block text-xs text-foreground mb-1">
+                              Name *
+                            </label>
+                            <input
+                              type="text"
+                              id={`name-${item._id}`}
+                              value={buyerInfo[item._id]?.name || ''}
+                              onChange={(e) => updateBuyerInfo(item._id, 'name', e.target.value)}
+                              className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+                              placeholder="Your Name"
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {buyerInfo[item._id]?.email && buyerInfo[item._id]?.name ? (
+                        <PayPalButton
+                          key={`${item._id}-${quantities[item._id]}`}
+                          amount="5"
+                          itemName={item.title}
+                          itemId={item._id}
+                          quantity={quantities[item._id]}
+                          buyerEmail={buyerInfo[item._id]?.email}
+                          buyerName={buyerInfo[item._id]?.name}
+                          onSuccess={(details) =>
+                            handlePaymentSuccess(item._id, details)
+                          }
+                          onError={(error) => handlePaymentError(item._id, error)}
+                        />
+                      ) : (
+                        <div className="text-center py-4 text-sm text-gray-500">
+                          Please fill in your email and name to proceed with payment
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

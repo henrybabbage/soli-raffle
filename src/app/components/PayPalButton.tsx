@@ -13,6 +13,8 @@ interface PayPalButtonProps {
   itemName: string;
   itemId?: string;
   quantity: number;
+  buyerEmail?: string;
+  buyerName?: string;
   onSuccess?: (details: unknown) => void;
   onError?: (error: unknown) => void;
 }
@@ -22,6 +24,8 @@ export default function PayPalButton({
   itemName,
   itemId,
   quantity,
+  buyerEmail,
+  buyerName,
   onSuccess,
   onError,
 }: PayPalButtonProps) {
@@ -82,6 +86,40 @@ export default function PayPalButton({
     try {
       const details = await actions.order.capture();
       console.log("Payment completed:", details);
+      
+      // Create purchase record in Sanity if we have the required information
+      if (itemId && buyerEmail && buyerName) {
+        try {
+          const totalAmount = parseFloat(amount) * quantity * 100; // Convert to cents
+          const purchaseData = {
+            buyerEmail,
+            buyerName,
+            raffleItemId: itemId,
+            quantity,
+            totalAmount: Math.round(totalAmount),
+            paypalTransactionId: details.id,
+            paymentStatus: 'completed',
+            notes: `PayPal Order ID: ${data.orderID}`,
+          };
+
+          const response = await fetch('/api/purchases', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(purchaseData),
+          });
+
+          if (!response.ok) {
+            console.error('Failed to create purchase record:', response.statusText);
+          } else {
+            console.log('Purchase record created successfully');
+          }
+        } catch (error) {
+          console.error('Error creating purchase record:', error);
+        }
+      }
+      
       onSuccess?.(details);
     } catch (error) {
       console.error("Payment error:", error);
