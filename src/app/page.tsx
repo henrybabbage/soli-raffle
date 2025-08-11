@@ -255,13 +255,13 @@ export default function Home() {
                   </div>
 
                   {showPayPal[item._id] && (
-                    <div className="border-t pt-4">
+                    <div className="border-t pt-6 md:pt-8">
                       <div className="mb-2 text-sm text-foreground text-center sm:text-left">
                         Total: €{(5 * quantities[item._id]).toFixed(2)}
                       </div>
 
                       {/* Buyer Information Form */}
-                      <div className="mb-4 space-y-3">
+                      <div className="mt-3 mb-4 space-y-3">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <div>
                             <label
@@ -327,7 +327,7 @@ export default function Home() {
                           }
                         />
                       ) : (
-                        <div className="text-center py-4 text-sm text-gray-500">
+                        <div className="text-left py-4 text-sm text-gray-500">
                           Please fill in your email and name to proceed with
                           payment
                         </div>
