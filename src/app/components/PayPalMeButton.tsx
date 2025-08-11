@@ -135,7 +135,8 @@ export default function PayPalMeButton({
       <button
         onClick={handlePayment}
         disabled={isProcessing}
-        className="font-sans w-full bg-background border-foreground hover:bg-secondary-foreground disabled:bg-gray-400 disabled:cursor-not-allowed text-foreground font-normal py-3 px-6 rounded-xs transition-colors duration-200 flex items-center justify-center gap-2"
+        className="font-sans w-full bg-background border-primary hover:bg-neutral-200 disabled:bg-neutral-200 disabled:cursor-not-allowed text-foreground font-normal py-3 px-6 rounded-xs transition-colors duration-200 flex items-center justify-center gap-2"
+        style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}
         aria-label={`Pay €${totalAmount} with PayPal`}
       >
         {isProcessing ? (
