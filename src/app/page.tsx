@@ -7,7 +7,7 @@ import { useRaffleItems, type RaffleItem } from "../hooks/useRaffleItems";
 import PayPalMeButton from "./components/PayPalMeButton";
 
 export default function Home() {
-  const { raffleItems, loading, error } = useRaffleItems();
+  const { raffleItems } = useRaffleItems();
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [showPayPal, setShowPayPal] = useState<Record<string, boolean>>({});
   const [buyerInfo, setBuyerInfo] = useState<
@@ -128,31 +128,6 @@ export default function Home() {
             want. Good luck!
           </p>
         </div>
-
-        {/* Loading and Error States */}
-        {loading && (
-          <div className="col-span-full text-center py-12">
-            <div className="text-lg text-foreground">
-              Loading raffle items...
-            </div>
-          </div>
-        )}
-
-        {error && (
-          <div className="col-span-full text-center py-12">
-            <div className="text-lg text-red-600">
-              Error loading raffle items: {error}
-            </div>
-          </div>
-        )}
-
-        {!loading && !error && raffleItems.length === 0 && (
-          <div className="col-span-full text-center py-12">
-            <div className="text-lg text-foreground">
-              No raffle items available.
-            </div>
-          </div>
-        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 md:gap-8 lg:gap-12">
           {raffleItems.map((item) => (
@@ -342,7 +317,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-background h-[300px] flex items-end">
+      <footer className="bg-background h-[300px] mt-auto flex items-end">
         <div className="max-w-7xl mx-auto px-4 pb-4">
           <p className="text-foreground text-sm">Soli-Raffle 2025</p>
         </div>
