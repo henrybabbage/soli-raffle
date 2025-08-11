@@ -41,10 +41,6 @@ export default function Home() {
 
   const handlePaymentInitiated = (itemId: string) => {
     console.log("Payment initiated for item:", itemId);
-    // Show a message that payment was initiated
-    alert(
-      `You're being redirected to PayPal to complete your purchase of ${quantities[itemId]} ticket(s). Please include your name and email in the PayPal notes.`
-    );
     // Reset the form after a delay to allow the user to see the redirect
     setTimeout(() => {
       setShowPayPal((prev) => ({
