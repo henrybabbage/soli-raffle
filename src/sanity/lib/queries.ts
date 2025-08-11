@@ -1,4 +1,4 @@
-import { groq } from 'next-sanity';
+import { groq } from "next-sanity";
 
 // Query for fetching active raffle items
 export const raffleItemsQuery = groq`
@@ -10,7 +10,7 @@ export const raffleItemsQuery = groq`
     details,
     value,
     contact,
-    "image": image.asset->url,
+    image,
     slug,
     order
   }

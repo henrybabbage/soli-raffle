@@ -1,25 +1,24 @@
 "use client";
 
+import { urlFor } from "@/sanity/lib/image";
 import Image from "next/image";
-import { useState, useEffect } from "react";
-import PayPalMeButton from "./components/PayPalMeButton";
+import { useEffect, useState } from "react";
 import { useRaffleItems, type RaffleItem } from "../hooks/useRaffleItems";
-
-
-
-
+import PayPalMeButton from "./components/PayPalMeButton";
 
 export default function Home() {
   const { raffleItems, loading, error } = useRaffleItems();
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [showPayPal, setShowPayPal] = useState<Record<string, boolean>>({});
-  const [buyerInfo, setBuyerInfo] = useState<Record<string, { email: string; name: string }>>({});
+  const [buyerInfo, setBuyerInfo] = useState<
+    Record<string, { email: string; name: string }>
+  >({});
 
   // Initialize quantities when raffle items are loaded
   useEffect(() => {
     if (raffleItems.length > 0) {
       const initialQuantities: Record<string, number> = {};
-      raffleItems.forEach(item => {
+      raffleItems.forEach((item) => {
         initialQuantities[item._id] = 1;
       });
       setQuantities(initialQuantities);
@@ -61,7 +60,11 @@ export default function Home() {
     }, 2000);
   };
 
-  const updateBuyerInfo = (itemId: string, field: 'email' | 'name', value: string) => {
+  const updateBuyerInfo = (
+    itemId: string,
+    field: "email" | "name",
+    value: string
+  ) => {
     setBuyerInfo((prev) => ({
       ...prev,
       [itemId]: {
@@ -129,19 +132,25 @@ export default function Home() {
         {/* Loading and Error States */}
         {loading && (
           <div className="col-span-full text-center py-12">
-            <div className="text-lg text-foreground">Loading raffle items...</div>
+            <div className="text-lg text-foreground">
+              Loading raffle items...
+            </div>
           </div>
         )}
 
         {error && (
           <div className="col-span-full text-center py-12">
-            <div className="text-lg text-red-600">Error loading raffle items: {error}</div>
+            <div className="text-lg text-red-600">
+              Error loading raffle items: {error}
+            </div>
           </div>
         )}
 
         {!loading && !error && raffleItems.length === 0 && (
           <div className="col-span-full text-center py-12">
-            <div className="text-lg text-foreground">No raffle items available.</div>
+            <div className="text-lg text-foreground">
+              No raffle items available.
+            </div>
           </div>
         )}
 
@@ -152,7 +161,7 @@ export default function Home() {
               <div className="aspect-[4/5] bg-gray-200 overflow-hidden relative">
                 {item.image ? (
                   <Image
-                    src={item.image}
+                    src={urlFor(item.image).url()}
                     alt={`${item.instructor} - ${item.title}`}
                     fill
                     className="object-cover"
@@ -250,33 +259,51 @@ export default function Home() {
                       <div className="mb-2 text-sm text-foreground text-center sm:text-left">
                         Total: €{(5 * quantities[item._id]).toFixed(2)}
                       </div>
-                      
+
                       {/* Buyer Information Form */}
                       <div className="mb-4 space-y-3">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <div>
-                            <label htmlFor={`email-${item._id}`} className="block text-xs text-foreground mb-1">
+                            <label
+                              htmlFor={`email-${item._id}`}
+                              className="block text-xs text-foreground mb-1"
+                            >
                               Email *
                             </label>
                             <input
                               type="email"
                               id={`email-${item._id}`}
-                              value={buyerInfo[item._id]?.email || ''}
-                              onChange={(e) => updateBuyerInfo(item._id, 'email', e.target.value)}
+                              value={buyerInfo[item._id]?.email || ""}
+                              onChange={(e) =>
+                                updateBuyerInfo(
+                                  item._id,
+                                  "email",
+                                  e.target.value
+                                )
+                              }
                               className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
                               placeholder="your@email.com"
                               required
                             />
                           </div>
                           <div>
-                            <label htmlFor={`name-${item._id}`} className="block text-xs text-foreground mb-1">
+                            <label
+                              htmlFor={`name-${item._id}`}
+                              className="block text-xs text-foreground mb-1"
+                            >
                               Name *
                             </label>
                             <input
                               type="text"
                               id={`name-${item._id}`}
-                              value={buyerInfo[item._id]?.name || ''}
-                              onChange={(e) => updateBuyerInfo(item._id, 'name', e.target.value)}
+                              value={buyerInfo[item._id]?.name || ""}
+                              onChange={(e) =>
+                                updateBuyerInfo(
+                                  item._id,
+                                  "name",
+                                  e.target.value
+                                )
+                              }
                               className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
                               placeholder="Your Name"
                               required
@@ -284,8 +311,9 @@ export default function Home() {
                           </div>
                         </div>
                       </div>
-                      
-                      {buyerInfo[item._id]?.email && buyerInfo[item._id]?.name ? (
+
+                      {buyerInfo[item._id]?.email &&
+                      buyerInfo[item._id]?.name ? (
                         <PayPalMeButton
                           key={`${item._id}-${quantities[item._id]}`}
                           amount={5}
@@ -294,11 +322,14 @@ export default function Home() {
                           quantity={quantities[item._id]}
                           buyerEmail={buyerInfo[item._id]?.email}
                           buyerName={buyerInfo[item._id]?.name}
-                          onPaymentInitiated={() => handlePaymentInitiated(item._id)}
+                          onPaymentInitiated={() =>
+                            handlePaymentInitiated(item._id)
+                          }
                         />
                       ) : (
                         <div className="text-center py-4 text-sm text-gray-500">
-                          Please fill in your email and name to proceed with payment
+                          Please fill in your email and name to proceed with
+                          payment
                         </div>
                       )}
                     </div>
