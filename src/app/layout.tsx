@@ -1,7 +1,6 @@
 import { cn } from "@/utils/cn";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import PayPalWrapper from "./components/PayPalWrapper";
 import LenisProvider from "./components/lenis-provider";
 import "./globals.css";
 
@@ -76,7 +75,7 @@ export default function RootLayout({
         )}
       >
         <LenisProvider>
-          <PayPalWrapper>{children}</PayPalWrapper>
+          {children}
         </LenisProvider>
       </body>
     </html>

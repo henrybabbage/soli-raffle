@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import PayPalButton from "./components/PayPalButton";
+import PayPalMeButton from "./components/PayPalMeButton";
 import { useRaffleItems, type RaffleItem } from "../hooks/useRaffleItems";
 
 
@@ -40,24 +40,25 @@ export default function Home() {
     }));
   };
 
-  const handlePaymentSuccess = (itemId: string, details: unknown) => {
-    console.log("Payment successful for item:", itemId, details);
+  const handlePaymentInitiated = (itemId: string) => {
+    console.log("Payment initiated for item:", itemId);
+    // Show a message that payment was initiated
     alert(
-      `Payment successful! You have purchased ${quantities[itemId]} ticket(s).`
+      `You're being redirected to PayPal to complete your purchase of ${quantities[itemId]} ticket(s). Please include your name and email in the PayPal notes.`
     );
-    setShowPayPal((prev) => ({
-      ...prev,
-      [itemId]: false,
-    }));
-  };
-
-  const handlePaymentError = (itemId: string, error: unknown) => {
-    console.error("Payment error for item:", itemId, error);
-    alert("Payment failed. Please try again.");
-    setShowPayPal((prev) => ({
-      ...prev,
-      [itemId]: false,
-    }));
+    // Reset the form after a delay to allow the user to see the redirect
+    setTimeout(() => {
+      setShowPayPal((prev) => ({
+        ...prev,
+        [itemId]: false,
+      }));
+      // Clear buyer info for this item
+      setBuyerInfo((prev) => {
+        const newInfo = { ...prev };
+        delete newInfo[itemId];
+        return newInfo;
+      });
+    }, 2000);
   };
 
   const updateBuyerInfo = (itemId: string, field: 'email' | 'name', value: string) => {
@@ -285,18 +286,15 @@ export default function Home() {
                       </div>
                       
                       {buyerInfo[item._id]?.email && buyerInfo[item._id]?.name ? (
-                        <PayPalButton
+                        <PayPalMeButton
                           key={`${item._id}-${quantities[item._id]}`}
-                          amount="5"
+                          amount={5}
                           itemName={item.title}
                           itemId={item._id}
                           quantity={quantities[item._id]}
                           buyerEmail={buyerInfo[item._id]?.email}
                           buyerName={buyerInfo[item._id]?.name}
-                          onSuccess={(details) =>
-                            handlePaymentSuccess(item._id, details)
-                          }
-                          onError={(error) => handlePaymentError(item._id, error)}
+                          onPaymentInitiated={() => handlePaymentInitiated(item._id)}
                         />
                       ) : (
                         <div className="text-center py-4 text-sm text-gray-500">

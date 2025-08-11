@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { sanityClient } from '../../../../lib/sanity'
-import { purchasesQuery } from '../../../../lib/sanity'
+import { client } from '@/sanity/lib/client'
+import { purchasesQuery } from '@/sanity/lib/queries'
 
 export async function GET() {
   try {
-    const purchases = await sanityClient.fetch(purchasesQuery)
+    const purchases = await client.fetch(purchasesQuery)
     return NextResponse.json(purchases)
   } catch (error) {
     console.error('Error fetching purchases:', error)
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create purchase document
-    const purchase = await sanityClient.create({
+    const purchase = await client.create({
       _type: 'purchase',
       buyerEmail,
       buyerName,

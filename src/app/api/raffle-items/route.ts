@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server'
-import { sanityClient } from '../../../../lib/sanity'
-import { raffleItemsQuery } from '../../../../lib/sanity'
+import { client } from '@/sanity/lib/client'
+import { raffleItemsQuery } from '@/sanity/lib/queries'
 
 export async function GET() {
   try {
-    const raffleItems = await sanityClient.fetch(raffleItemsQuery)
+    const raffleItems = await client.fetch(raffleItemsQuery)
     return NextResponse.json(raffleItems)
   } catch (error) {
     console.error('Error fetching raffle items:', error)
