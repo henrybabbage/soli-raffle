@@ -281,7 +281,7 @@ export default function Home() {
                                   e.target.value
                                 )
                               }
-                              className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+                              className="w-full px-3 py-2 text-sm border border-secondary-foreground rounded-xs focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
                               placeholder="your@email.com"
                               required
                             />
@@ -304,7 +304,7 @@ export default function Home() {
                                   e.target.value
                                 )
                               }
-                              className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+                              className="w-full px-3 py-2 text-sm border border-secondary-foreground rounded-xs focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
                               placeholder="Your Name"
                               required
                             />
@@ -327,7 +327,7 @@ export default function Home() {
                           }
                         />
                       ) : (
-                        <div className="text-left py-4 text-sm text-gray-500">
+                        <div className="text-left py-4 text-sm text-secondary-foreground">
                           Please fill in your email and name to proceed with
                           payment
                         </div>
