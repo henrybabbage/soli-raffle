@@ -36,12 +36,12 @@ export default function PayPalMeButton({
   // The link format is: https://www.paypal.me/[username]/[amount][currency]
   const paypalMeUrl = `https://www.paypal.me/BiancaHeuser/${totalAmount}EUR`;
 
-  const handlePayment = async () => {
+  const handlePayment = () => {
     setIsProcessing(true);
-    // Create a unique transaction ID for tracking
-    const transactionId = `PPLME_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const transactionId = `PPLME_${Date.now()}_${Math.random()
+      .toString(36)
+      .substr(2, 9)}`;
 
-    // Store purchase intent in localStorage for tracking
     if (typeof window !== "undefined") {
       const purchaseIntent = {
         itemId,
@@ -55,61 +55,58 @@ export default function PayPalMeButton({
         transactionId,
       };
 
-      // Store the purchase intent locally
-      const existingIntents = JSON.parse(
-        localStorage.getItem("paypalMePurchaseIntents") || "[]"
-      );
-      existingIntents.push(purchaseIntent);
-      localStorage.setItem(
-        "paypalMePurchaseIntents",
-        JSON.stringify(existingIntents)
-      );
+      try {
+        const existingIntents = JSON.parse(
+          localStorage.getItem("paypalMePurchaseIntents") || "[]"
+        );
+        existingIntents.push(purchaseIntent);
+        localStorage.setItem(
+          "paypalMePurchaseIntents",
+          JSON.stringify(existingIntents)
+        );
+      } catch (error) {
+        console.error("Error storing purchase intent:", error);
+      }
 
-      // Send purchase data to Sanity with pending status
       try {
         const purchaseData = {
           buyerEmail: buyerEmail || "pending@email.com",
           buyerName: buyerName || "Pending Name",
           raffleItemId: itemId,
           quantity,
-          totalAmount: Math.round(parseFloat(totalAmount) * 100), // Convert to cents
+          totalAmount: Math.round(parseFloat(totalAmount) * 100),
           paypalTransactionId: transactionId,
           paymentStatus: "pending",
           notes: `PayPal.Me payment initiated. Reference: ${reference}. PayPal.Me URL: ${paypalMeUrl}`,
         };
 
-        const response = await fetch("/api/purchases", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(purchaseData),
-        });
+        const payload = JSON.stringify(purchaseData);
+        const blob = new Blob([payload], { type: "application/json" });
 
-        if (response.ok) {
-          const result = await response.json();
-          console.log("Purchase record created in Sanity:", result);
-        } else {
-          console.error(
-            "Failed to create purchase record:",
-            response.statusText
-          );
+        let sent = false;
+        if ("navigator" in window && "sendBeacon" in navigator) {
+          sent = navigator.sendBeacon("/api/purchases", blob);
+        }
+
+        if (!sent) {
+          fetch("/api/purchases", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: payload,
+            keepalive: true,
+          }).catch(() => {});
         }
       } catch (error) {
-        console.error("Error creating purchase record:", error);
+        console.error("Error sending purchase data:", error);
       }
 
-      // Log for tracking
       console.log("Payment initiated:", purchaseIntent);
     }
 
-    // Call the callback if provided
     onPaymentInitiated?.();
 
-    // Open PayPal.Me link in a new tab
-    window.open(paypalMeUrl, "_blank", "noopener,noreferrer");
+    window.location.assign(paypalMeUrl);
 
-    // Reset processing state after a short delay
     setTimeout(() => {
       setIsProcessing(false);
     }, 2000);
