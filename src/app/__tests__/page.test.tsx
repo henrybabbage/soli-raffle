@@ -1,6 +1,22 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Home from "../page";
+import RaffleGrid from "../components/RaffleGrid";
+
+const sampleItems = Array.from({ length: 12 }).map((_, idx) => {
+  const i = idx + 1;
+  return {
+    _id: `item-${i}`,
+    title: i === 1 ? "Private Qigong Session" : `Item ${i}`,
+    description: `Description ${i}`,
+    instructor: i === 1 ? "Lingji Hon" : `Instructor ${i}`,
+    details: `Details ${i}`,
+    value: i % 3 === 0 ? "100€" : `${50 + i}€`,
+    contact: [{ label: "Link", href: "https://example.com" }],
+    image: undefined as unknown as never,
+    slug: { current: `item-${i}` },
+    order: i,
+  };
+});
 
 // Mock PayPal components
 jest.mock("../components/PayPalButton", () => {
@@ -67,40 +83,40 @@ jest.mock("next/image", () => {
   };
 });
 
-describe("Home Page - PayPal Integration", () => {
+describe("RaffleGrid - PayPal Integration", () => {
   beforeEach(() => {
     // Mock environment variables
     process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID = "test-client-id";
     process.env.NEXT_PUBLIC_PAYPAL_BUSINESS_EMAIL =
       "seedsofliberationraffle@proton.me";
+    // Provide minimal Sanity env so hooks/pages that import Sanity config don't throw
+    process.env.NEXT_PUBLIC_SANITY_DATASET = "aibflqfk";
+    process.env.NEXT_PUBLIC_SANITY_PROJECT_ID = "production";
+
+    (global.fetch as unknown as jest.Mock) = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => sampleItems,
+    });
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it("renders the main page with raffle items", () => {
-    render(<Home />);
+  // Header tested at the layout/page level — grid focuses on item interactions
 
-    expect(screen.getByText("Soli-Raffle")).toBeInTheDocument();
-    expect(
-      screen.getByText("Winners drawn live 31.08.2025")
-    ).toBeInTheDocument();
-    expect(screen.getByText("5€ per ticket")).toBeInTheDocument();
+  it('displays "Buy Ticket" buttons for each raffle item', async () => {
+    render(<RaffleGrid items={sampleItems} />);
+
+    const buyButtons = await screen.findAllByText("Buy Ticket");
+    expect(buyButtons.length).toBe(12);
   });
 
-  it('displays "Buy Ticket" buttons for each raffle item', () => {
-    render(<Home />);
+  it("shows quantity controls for each item", async () => {
+    render(<RaffleGrid items={sampleItems} />);
 
-    const buyButtons = screen.getAllByText("Buy Ticket");
-    expect(buyButtons.length).toBeGreaterThan(0);
-  });
-
-  it("shows quantity controls for each item", () => {
-    render(<Home />);
-
-    const minusButtons = screen.getAllByText("-");
-    const plusButtons = screen.getAllByText("+");
+    const minusButtons = await screen.findAllByText("-");
+    const plusButtons = await screen.findAllByText("+");
 
     expect(minusButtons.length).toBeGreaterThan(0);
     expect(plusButtons.length).toBeGreaterThan(0);
@@ -108,9 +124,9 @@ describe("Home Page - PayPal Integration", () => {
 
   it("allows users to increase quantity", async () => {
     const user = userEvent.setup();
-    render(<Home />);
+    render(<RaffleGrid items={sampleItems} />);
 
-    const plusButtons = screen.getAllByText("+");
+    const plusButtons = await screen.findAllByText("+");
     const firstPlusButton = plusButtons[0];
 
     // Get the initial quantity
@@ -125,10 +141,10 @@ describe("Home Page - PayPal Integration", () => {
 
   it("allows users to decrease quantity (minimum 1)", async () => {
     const user = userEvent.setup();
-    render(<Home />);
+    render(<RaffleGrid items={sampleItems} />);
 
-    const plusButtons = screen.getAllByText("+");
-    const minusButtons = screen.getAllByText("-");
+    const plusButtons = await screen.findAllByText("+");
+    const minusButtons = await screen.findAllByText("-");
     const firstPlusButton = plusButtons[0];
     const firstMinusButton = minusButtons[0];
 
@@ -150,9 +166,9 @@ describe("Home Page - PayPal Integration", () => {
 
   it("prevents quantity from going below 1", async () => {
     const user = userEvent.setup();
-    render(<Home />);
+    render(<RaffleGrid items={sampleItems} />);
 
-    const minusButtons = screen.getAllByText("-");
+    const minusButtons = await screen.findAllByText("-");
     const firstMinusButton = minusButtons[0];
 
     // Get the initial quantity
@@ -167,24 +183,25 @@ describe("Home Page - PayPal Integration", () => {
     }
   });
 
-  it('shows PayPal button when "Buy Ticket" is clicked', async () => {
+  it('shows PayPal section when "Buy Ticket" is clicked', async () => {
     const user = userEvent.setup();
-    render(<Home />);
+    render(<RaffleGrid items={sampleItems} />);
 
-    const buyButtons = screen.getAllByText("Buy Ticket");
+    const buyButtons = await screen.findAllByText("Buy Ticket");
     const firstBuyButton = buyButtons[0];
 
     await user.click(firstBuyButton);
 
-    expect(screen.getByTestId("paypal-button")).toBeInTheDocument();
-    expect(screen.getByText("Pay with PayPal")).toBeInTheDocument();
+    expect(
+      screen.getByText(/Please fill in your email and name/)
+    ).toBeInTheDocument();
   });
 
-  it("shows total amount when PayPal button is displayed", async () => {
+  it("shows total amount when PayPal section is displayed", async () => {
     const user = userEvent.setup();
-    render(<Home />);
+    render(<RaffleGrid items={sampleItems} />);
 
-    const buyButtons = screen.getAllByText("Buy Ticket");
+    const buyButtons = await screen.findAllByText("Buy Ticket");
     const firstBuyButton = buyButtons[0];
 
     await user.click(firstBuyButton);
@@ -195,11 +212,11 @@ describe("Home Page - PayPal Integration", () => {
 
   it("calculates total amount correctly based on quantity", async () => {
     const user = userEvent.setup();
-    render(<Home />);
+    render(<RaffleGrid items={sampleItems} />);
 
-    const buyButtons = screen.getAllByText("Buy Ticket");
+    const buyButtons = await screen.findAllByText("Buy Ticket");
     const firstBuyButton = buyButtons[0];
-    const plusButtons = screen.getAllByText("+");
+    const plusButtons = await screen.findAllByText("+");
     const firstPlusButton = plusButtons[0];
 
     // Increase quantity to 3
@@ -213,11 +230,11 @@ describe("Home Page - PayPal Integration", () => {
     expect(screen.getByText("Total: €15.00")).toBeInTheDocument();
   });
 
-  it("shows cancel button when PayPal is displayed", async () => {
+  it("shows cancel button when PayPal section is displayed", async () => {
     const user = userEvent.setup();
-    render(<Home />);
+    render(<RaffleGrid items={sampleItems} />);
 
-    const buyButtons = screen.getAllByText("Buy Ticket");
+    const buyButtons = await screen.findAllByText("Buy Ticket");
     const firstBuyButton = buyButtons[0];
 
     await user.click(firstBuyButton);
@@ -225,139 +242,79 @@ describe("Home Page - PayPal Integration", () => {
     expect(screen.getByText("Cancel")).toBeInTheDocument();
   });
 
-  it("hides PayPal button when cancel is clicked", async () => {
+  it("hides PayPal section when cancel is clicked", async () => {
     const user = userEvent.setup();
-    render(<Home />);
+    render(<RaffleGrid items={sampleItems} />);
 
-    const buyButtons = screen.getAllByText("Buy Ticket");
+    const buyButtons = await screen.findAllByText("Buy Ticket");
     const firstBuyButton = buyButtons[0];
 
-    // Show PayPal
     await user.click(firstBuyButton);
-    expect(screen.getByTestId("paypal-button")).toBeInTheDocument();
+    expect(screen.getByText(/Total: €/)).toBeInTheDocument();
 
-    // Cancel
     await user.click(screen.getByText("Cancel"));
 
-    // PayPal should be hidden
-    expect(screen.queryByTestId("paypal-button")).not.toBeInTheDocument();
+    expect(screen.queryByText(/Total: €/)).not.toBeInTheDocument();
   });
 
-  it("handles successful payment correctly", async () => {
+  // PayPal.Me flow redirects; no inline success handling to assert
+
+  // No inline error path in PayPal.Me flow
+
+  it("disables quantity controls when PayPal section is displayed", async () => {
     const user = userEvent.setup();
-    render(<Home />);
+    render(<RaffleGrid items={sampleItems} />);
 
-    const buyButtons = screen.getAllByText("Buy Ticket");
-    const firstBuyButton = buyButtons[0];
-
-    // Show PayPal
-    await user.click(firstBuyButton);
-
-    // Complete payment
-    await user.click(screen.getByTestId("mock-paypal-button"));
-
-    await waitFor(() => {
-      expect(alert).toHaveBeenCalledWith(
-        expect.stringContaining("Payment successful! You have purchased")
-      );
-    });
-
-    // PayPal should be hidden after successful payment
-    expect(screen.queryByTestId("paypal-button")).not.toBeInTheDocument();
-  });
-
-  it("handles payment error correctly", async () => {
-    const user = userEvent.setup();
-    render(<Home />);
-
-    const buyButtons = screen.getAllByText("Buy Ticket");
-    const firstBuyButton = buyButtons[0];
-
-    // Show PayPal
-    await user.click(firstBuyButton);
-
-    // Simulate payment error
-    await user.click(screen.getByTestId("mock-paypal-error-button"));
-
-    await waitFor(() => {
-      expect(alert).toHaveBeenCalledWith("Payment failed. Please try again.");
-    });
-
-    // PayPal should be hidden after error
-    expect(screen.queryByTestId("paypal-button")).not.toBeInTheDocument();
-  });
-
-  it("disables quantity controls when PayPal is displayed", async () => {
-    const user = userEvent.setup();
-    render(<Home />);
-
-    const buyButtons = screen.getAllByText("Buy Ticket");
+    const buyButtons = await screen.findAllByText("Buy Ticket");
     const firstBuyButton = buyButtons[0];
     const plusButtons = screen.getAllByText("+");
     const firstPlusButton = plusButtons[0];
 
-    // Show PayPal
     await user.click(firstBuyButton);
 
-    // Quantity controls should be disabled
     expect(firstPlusButton).toBeDisabled();
   });
 
-  it("logs payment success details to console", async () => {
-    const user = userEvent.setup();
-    render(<Home />);
+  it("logs payment initiated details to console when paying", async () => {
+    jest.useFakeTimers();
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
 
-    const buyButtons = screen.getAllByText("Buy Ticket");
-    const firstBuyButton = buyButtons[0];
+    render(<RaffleGrid items={sampleItems} />);
 
-    // Show PayPal
-    await user.click(firstBuyButton);
+    const buyButtons = await screen.findAllByText("Buy Ticket");
+    await user.click(buyButtons[0]);
 
-    // Complete payment
-    await user.click(screen.getByTestId("mock-paypal-button"));
+    const emailInput = screen.getByLabelText("Email *");
+    const nameInput = screen.getByLabelText("Name *");
+    await user.type(emailInput, "test@example.com");
+    await user.type(nameInput, "Test User");
+
+    const payButton = screen.getByRole("button", {
+      name: /Pay €5.00 with PayPal/,
+    });
+    await user.click(payButton);
 
     await waitFor(() => {
       expect(console.log).toHaveBeenCalledWith(
-        "Payment successful for item:",
-        expect.any(String),
-        expect.objectContaining({
-          id: "test-payment-id",
-          status: "COMPLETED",
-        })
+        "Payment initiated:",
+        expect.objectContaining({ itemId: expect.any(String) })
       );
     });
+
+    jest.useRealTimers();
   });
 
-  it("logs payment error details to console", async () => {
-    const user = userEvent.setup();
-    render(<Home />);
+  // No error logging path now
 
-    const buyButtons = screen.getAllByText("Buy Ticket");
-    const firstBuyButton = buyButtons[0];
+  it("displays raffle items with correct information", async () => {
+    render(<RaffleGrid items={sampleItems} />);
 
-    // Show PayPal
-    await user.click(firstBuyButton);
-
-    // Simulate payment error
-    await user.click(screen.getByTestId("mock-paypal-error-button"));
-
-    await waitFor(() => {
-      expect(console.error).toHaveBeenCalledWith(
-        "Payment error for item:",
-        expect.any(String),
-        expect.any(Error)
-      );
-    });
-  });
-
-  it("displays raffle items with correct information", () => {
-    render(<Home />);
-
-    // Check for specific raffle item details
-    expect(screen.getByText("Private Qigong Session")).toBeInTheDocument();
-    expect(screen.getByText(/Lingji Hon/)).toBeInTheDocument();
-    // Check that we have Value: text and 100€ text (there are multiple items, so just verify they exist)
-    expect(screen.getAllByText("Value:")).toHaveLength(12); // Should be 12 raffle items
-    expect(screen.getAllByText("100€").length).toBeGreaterThan(0); // Multiple items have 100€ value
+    // Wait for items to load
+    await screen.findByText("Private Qigong Session");
+    await screen.findByText(/Lingji Hon/);
+    const valueLabels = await screen.findAllByText("Value:");
+    expect(valueLabels).toHaveLength(12);
+    const hundredValues = await screen.findAllByText("100€");
+    expect(hundredValues.length).toBeGreaterThan(0);
   });
 });

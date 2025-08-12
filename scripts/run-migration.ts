@@ -1,15 +1,15 @@
-import { createClient } from '@sanity/client';
-import * as dotenv from 'dotenv';
-import * as path from 'path';
+import { createClient } from "@sanity/client";
+import * as dotenv from "dotenv";
+import * as path from "path";
 
 // Load environment variables from .env.local
-dotenv.config({ path: path.resolve(__dirname, '../.env.local') });
+dotenv.config({ path: path.resolve(__dirname, "../.env.local") });
 
 // Create Sanity client directly
 const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
-  apiVersion: '2024-01-01',
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "aibflqfk",
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
+  apiVersion: "2024-01-01",
   useCdn: false,
   token: process.env.SANITY_API_WRITE_TOKEN, // You'll need to add this to .env.local if you want to write
 });
@@ -231,8 +231,12 @@ async function migrateToSanity() {
   if (!process.env.SANITY_API_WRITE_TOKEN) {
     console.log("\n⚠️  Warning: No SANITY_API_WRITE_TOKEN found in .env.local");
     console.log("You may need to add a write token to create documents.");
-    console.log("Get a token from: https://www.sanity.io/manage/project/aibflqfk/api");
-    console.log("Then add it to .env.local as: SANITY_API_WRITE_TOKEN=your-token-here\n");
+    console.log(
+      "Get a token from: https://www.sanity.io/manage/project/aibflqfk/api"
+    );
+    console.log(
+      "Then add it to .env.local as: SANITY_API_WRITE_TOKEN=your-token-here\n"
+    );
   }
 
   try {
@@ -276,13 +280,17 @@ async function migrateToSanity() {
     console.log("\n📝 Note: Images were not migrated. You'll need to:");
     console.log("1. Upload the images to Sanity Studio manually");
     console.log("2. Update each raffle item with the correct image reference");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error("\n❌ Migration failed:", error.message);
     if (error.statusCode === 401) {
-      console.error("\n🔑 Authentication error. Please add a write token to .env.local:");
+      console.error(
+        "\n🔑 Authentication error. Please add a write token to .env.local:"
+      );
       console.error("SANITY_API_WRITE_TOKEN=your-token-here");
-      console.error("\nGet a token from: https://www.sanity.io/manage/project/aibflqfk/api");
+      console.error(
+        "\nGet a token from: https://www.sanity.io/manage/project/aibflqfk/api"
+      );
     }
   }
 }
