@@ -133,6 +133,7 @@ export default function PayPalMeButton({
       </div>
 
       <button
+        type="button"
         onClick={handlePayment}
         disabled={isProcessing}
         className="font-sans w-full bg-background border border-primary hover:bg-neutral-200 disabled:bg-neutral-200 disabled:cursor-not-allowed text-foreground font-normal py-3 px-6 rounded-xs transition-colors duration-200 flex items-center justify-center gap-2"

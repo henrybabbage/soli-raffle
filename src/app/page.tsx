@@ -253,7 +253,7 @@ export default function Home() {
                                 )
                               }
                               className="w-full px-3 py-2 text-sm border border-secondary-foreground rounded-xs focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
-                              placeholder="your@email.com"
+                              placeholder="Email address"
                               required
                             />
                           </div>
@@ -276,7 +276,7 @@ export default function Home() {
                                 )
                               }
                               className="w-full px-3 py-2 text-sm border border-secondary-foreground rounded-xs focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
-                              placeholder="Your Name"
+                              placeholder="Name"
                               required
                             />
                           </div>
@@ -300,7 +300,7 @@ export default function Home() {
                       ) : (
                         <div className="text-left py-4 text-sm text-secondary-foreground">
                           Please fill in your email and name to proceed with
-                          payment
+                          payment.
                         </div>
                       )}
                     </div>
