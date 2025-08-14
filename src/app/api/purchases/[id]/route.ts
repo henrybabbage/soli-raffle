@@ -1,22 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { client } from '@/sanity/lib/client';
 
+interface UpdateFields {
+  notes?: string;
+  paymentStatus?: string;
+  totalAmount?: number;
+}
+
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
     const { notes, ...otherFields } = body;
 
     // Only allow updating specific fields for security
     const allowedFields = ['notes', 'paymentStatus', 'totalAmount'];
-    const updateData: any = {};
+    const updateData: UpdateFields = {};
 
     Object.keys(otherFields).forEach(key => {
       if (allowedFields.includes(key)) {
-        updateData[key] = otherFields[key];
+        (updateData as Record<string, unknown>)[key] = otherFields[key];
       }
     });
 

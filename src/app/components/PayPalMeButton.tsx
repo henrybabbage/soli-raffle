@@ -94,6 +94,7 @@ export default function PayPalMeButton({
         // Use sendBeacon for reliable delivery, fallback to fetch
         let sent = false;
         if ("navigator" in window && "sendBeacon" in navigator) {
+          const blob = new Blob([payload], { type: "application/json" });
           sent = navigator.sendBeacon("/api/purchases", blob);
         }
 
@@ -115,7 +116,7 @@ export default function PayPalMeButton({
     onPaymentInitiated?.();
 
     // Open PayPal.Me in a new tab with instructions
-    const paypalWindow = window.open(
+    window.open(
       paypalMeUrl,
       '_blank',
       'width=800,height=600'

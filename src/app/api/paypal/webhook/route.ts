@@ -2,6 +2,25 @@ import { NextRequest, NextResponse } from 'next/server';
 import { client } from '@/sanity/lib/client';
 import crypto from 'crypto';
 
+// PayPal webhook data interfaces
+interface PayPalWebhookResource {
+  id: string;
+  amount?: {
+    value: string;
+    currency_code: string;
+  };
+  payer?: {
+    payer_id: string;
+  };
+  custom_id?: string;
+}
+
+interface PayPalWebhookData {
+  id: string;
+  event_type: string;
+  resource: PayPalWebhookResource;
+}
+
 // PayPal webhook verification
 function verifyWebhookSignature(
   body: string,
@@ -56,7 +75,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
     }
     
-    const webhookData = JSON.parse(body);
+    const webhookData: PayPalWebhookData = JSON.parse(body);
     console.log('PayPal webhook received:', webhookData);
     
     // Handle different webhook event types
@@ -84,9 +103,10 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function handlePaymentCompleted(webhookData: any) {
+async function handlePaymentCompleted(webhookData: PayPalWebhookData) {
   try {
-    const { id: paymentId, amount, payer, custom_id } = webhookData.resource;
+    const { resource } = webhookData;
+    const { id: paymentId, amount, payer, custom_id } = resource;
     
     // Extract custom_id which should contain our purchase reference
     // We'll need to modify the PayPal.Me button to include this
@@ -164,9 +184,10 @@ async function handlePaymentCompleted(webhookData: any) {
   }
 }
 
-async function handlePaymentDenied(webhookData: any) {
+async function handlePaymentDenied(webhookData: PayPalWebhookData) {
   try {
-    const { id: paymentId, custom_id } = webhookData.resource;
+    const { resource } = webhookData;
+    const { custom_id } = resource;
     
     if (custom_id) {
       // Update purchase status to failed
@@ -193,9 +214,10 @@ async function handlePaymentDenied(webhookData: any) {
   }
 }
 
-async function handlePaymentRefunded(webhookData: any) {
+async function handlePaymentRefunded(webhookData: PayPalWebhookData) {
   try {
-    const { id: paymentId, custom_id } = webhookData.resource;
+    const { resource } = webhookData;
+    const { custom_id } = resource;
     
     if (custom_id) {
       // Update purchase status to refunded

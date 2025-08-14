@@ -1,45 +1,42 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-interface PaymentSuccessProps {
-  // Component props
+interface PurchaseDetails {
+  itemId: string;
+  itemName: string;
+  quantity: number;
+  buyerEmail: string;
+  buyerName: string;
+  customId: string;
 }
 
 export default function PaymentSuccessPage() {
   const searchParams = useSearchParams();
   const [paymentStatus, setPaymentStatus] = useState<"verifying" | "success" | "pending" | "error">("verifying");
-  const [purchaseDetails, setPurchaseDetails] = useState<any>(null);
+  const [purchaseDetails, setPurchaseDetails] = useState<PurchaseDetails | null>(null);
   const [verificationMessage, setVerificationMessage] = useState("");
 
-  useEffect(() => {
-    const ref = searchParams.get("ref");
-    if (ref) {
-      verifyPayment(ref);
-    } else {
-      setPaymentStatus("error");
-      setVerificationMessage("No payment reference found. Please contact support.");
-    }
-  }, [searchParams]);
-
-  const verifyPayment = async (customId: string) => {
+  const verifyPayment = useCallback(async (customId: string) => {
     try {
       setPaymentStatus("verifying");
       setVerificationMessage("Verifying your payment...");
 
       // Decode the custom ID to get purchase details
-      const [itemId, itemName, quantity, buyerEmail, buyerName] = decodeURIComponent(customId).split("|");
+      const [itemId, itemName, quantityStr, buyerEmail, buyerName] = decodeURIComponent(customId).split("|");
       
       if (!itemId || !itemName || !buyerEmail || !buyerName) {
         throw new Error("Invalid payment reference");
       }
 
+      const quantity = parseInt(quantityStr) || 1;
+
       setPurchaseDetails({
         itemId,
         itemName,
-        quantity: parseInt(quantity),
+        quantity,
         buyerEmail,
         buyerName,
         customId,
@@ -56,7 +53,7 @@ export default function PaymentSuccessPage() {
           setVerificationMessage("Payment verified successfully! Your tickets have been confirmed.");
         } else if (data.paymentStatus === "pending") {
           setPaymentStatus("pending");
-          setVerificationMessage("Payment is being processed. This may take a few minutes. You'll receive a confirmation email once verified.");
+          setVerificationMessage("Payment is being processed. This may take a few minutes. You&apos;ll receive a confirmation email once verified.");
         } else {
           setPaymentStatus("error");
           setVerificationMessage("Payment verification failed. Please contact support with your reference code.");
@@ -65,14 +62,24 @@ export default function PaymentSuccessPage() {
         // If no purchase record found, create one with pending status
         await createPendingPurchase(customId, itemId, itemName, quantity, buyerEmail, buyerName);
         setPaymentStatus("pending");
-        setVerificationMessage("Payment received! We're verifying your payment. You'll receive a confirmation email once verified.");
+        setVerificationMessage("Payment received! We&apos;re verifying your payment. You&apos;ll receive a confirmation email once verified.");
       }
     } catch (error) {
       console.error("Error verifying payment:", error);
       setPaymentStatus("error");
       setVerificationMessage("Error verifying payment. Please contact support with your reference code.");
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    const ref = searchParams.get("ref");
+    if (ref) {
+      verifyPayment(ref);
+    } else {
+      setPaymentStatus("error");
+      setVerificationMessage("No payment reference found. Please contact support.");
+    }
+  }, [searchParams, verifyPayment]);
 
   const createPendingPurchase = async (
     customId: string,
@@ -172,8 +179,8 @@ export default function PaymentSuccessPage() {
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
             <h3 className="font-semibold text-blue-900 mb-2">What happens next?</h3>
             <ul className="text-sm text-blue-800 space-y-1">
-              <li>• We'll verify your payment with PayPal</li>
-              <li>• You'll receive a confirmation email</li>
+              <li>• We&apos;ll verify your payment with PayPal</li>
+              <li>• You&apos;ll receive a confirmation email</li>
               <li>• Your tickets will be confirmed</li>
               <li>• This process usually takes 5-15 minutes</li>
             </ul>
@@ -185,7 +192,7 @@ export default function PaymentSuccessPage() {
             <h3 className="font-semibold text-green-900 mb-2">🎉 Congratulations!</h3>
             <p className="text-sm text-green-800">
               Your payment has been verified and your tickets are confirmed. 
-              You'll receive a confirmation email shortly.
+              You&apos;ll receive a confirmation email shortly.
             </p>
           </div>
         )}

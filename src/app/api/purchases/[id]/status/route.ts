@@ -1,14 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { client } from '@/sanity/lib/client';
 
+interface StatusUpdateData {
+  paymentStatus: string;
+  notes?: string;
+}
+
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
-    const { paymentStatus, notes } = body;
+    const { paymentStatus, notes }: StatusUpdateData = body;
 
     if (!paymentStatus) {
       return NextResponse.json(
@@ -18,7 +23,7 @@ export async function PATCH(
     }
 
     // Update the purchase status
-    const updateData: any = { paymentStatus };
+    const updateData: StatusUpdateData = { paymentStatus };
     
     if (notes) {
       updateData.notes = notes;
@@ -26,7 +31,7 @@ export async function PATCH(
 
     // If marking as completed, add verification date
     if (paymentStatus === 'completed') {
-      updateData.paymentVerifiedDate = new Date().toISOString();
+      (updateData as StatusUpdateData & { paymentVerifiedDate: string }).paymentVerifiedDate = new Date().toISOString();
     }
 
     const updatedPurchase = await client
