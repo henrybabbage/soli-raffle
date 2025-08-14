@@ -44,6 +44,18 @@ const purchase = {
       description: "Unique identifier from PayPal for this transaction",
     },
     {
+      name: "paypalPaymentId",
+      title: "PayPal Payment ID",
+      type: "string",
+      description: "PayPal payment identifier from webhook notifications",
+    },
+    {
+      name: "paypalPayerId",
+      title: "PayPal Payer ID",
+      type: "string",
+      description: "PayPal payer identifier",
+    },
+    {
       name: "paymentStatus",
       title: "Payment Status",
       type: "string",
@@ -53,9 +65,24 @@ const purchase = {
           { title: "Completed", value: "completed" },
           { title: "Failed", value: "failed" },
           { title: "Refunded", value: "refunded" },
+          { title: "Cancelled", value: "cancelled" },
         ],
       },
-      initialValue: "completed",
+      initialValue: "pending",
+      validation: (Rule: any) => Rule.required(),
+    },
+    {
+      name: "paymentMethod",
+      title: "Payment Method",
+      type: "string",
+      options: {
+        list: [
+          { title: "PayPal.Me", value: "paypal_me" },
+          { title: "PayPal Webhook", value: "paypal_webhook" },
+          { title: "Manual Verification", value: "manual" },
+        ],
+      },
+      initialValue: "paypal_me",
       validation: (Rule: any) => Rule.required(),
     },
     {
@@ -66,12 +93,60 @@ const purchase = {
       validation: (Rule: any) => Rule.required(),
     },
     {
+      name: "paymentVerifiedDate",
+      title: "Payment Verified Date",
+      type: "datetime",
+      description: "When the payment was verified as successful",
+    },
+    {
+      name: "verificationMethod",
+      title: "Verification Method",
+      type: "string",
+      options: {
+        list: [
+          { title: "PayPal Webhook", value: "webhook" },
+          { title: "Manual Check", value: "manual" },
+          { title: "Return URL", value: "return_url" },
+        ],
+      },
+      description: "How this payment was verified",
+    },
+    {
       name: "notes",
       title: "Notes",
       type: "text",
       rows: 3,
       description:
-        "Additional notes about this purchase (e.g., customer service notes)",
+        "Additional notes about this purchase (e.g., customer service notes, verification details)",
+    },
+    {
+      name: "webhookData",
+      title: "Webhook Data",
+      type: "object",
+      fields: [
+        {
+          name: "eventType",
+          title: "Event Type",
+          type: "string",
+        },
+        {
+          name: "eventId",
+          title: "Event ID",
+          type: "string",
+        },
+        {
+          name: "receivedAt",
+          title: "Received At",
+          type: "datetime",
+        },
+        {
+          name: "rawData",
+          title: "Raw Webhook Data",
+          type: "text",
+          rows: 5,
+        },
+      ],
+      description: "Data received from PayPal webhook",
     },
   ],
   preview: {
@@ -83,6 +158,7 @@ const purchase = {
       totalAmount: "totalAmount",
       purchaseDate: "purchaseDate",
       paymentStatus: "paymentStatus",
+      paymentMethod: "paymentMethod",
     },
     prepare(selection: any) {
       const {
@@ -93,12 +169,13 @@ const purchase = {
         totalAmount,
         purchaseDate,
         paymentStatus,
+        paymentMethod,
       } = selection;
       const date = new Date(purchaseDate).toLocaleDateString();
       const amount = (totalAmount / 100).toFixed(2); // Assuming amount is in cents
       return {
         title: `${title} (${quantity}x)`,
-        subtitle: `${subtitle} • ${amount}€ • ${date} • ${paymentStatus}`,
+        subtitle: `${subtitle} • ${amount}€ • ${date} • ${paymentStatus} • ${paymentMethod}`,
         media: media,
       };
     },
@@ -123,6 +200,11 @@ const purchase = {
       title: "Payment Status",
       name: "paymentStatusAsc",
       by: [{ field: "paymentStatus", direction: "asc" }],
+    },
+    {
+      title: "Payment Method",
+      name: "paymentMethodAsc",
+      by: [{ field: "paymentMethod", direction: "asc" }],
     },
   ],
 };

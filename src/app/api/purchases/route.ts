@@ -2,9 +2,33 @@ import { NextRequest, NextResponse } from 'next/server'
 import { client } from '@/sanity/lib/client'
 import { purchasesQuery } from '@/sanity/lib/queries'
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const purchases = await client.fetch(purchasesQuery)
+    const { searchParams } = new URL(request.url);
+    const status = searchParams.get('status');
+    
+    let query = purchasesQuery;
+    
+    // If status filter is provided, modify the query
+    if (status && status !== 'all') {
+      query = `*[_type == "purchase" && paymentStatus == $status] {
+        _id,
+        buyerEmail,
+        buyerName,
+        raffleItem->{ title, _id },
+        quantity,
+        totalAmount,
+        paymentStatus,
+        paymentMethod,
+        purchaseDate,
+        paymentVerifiedDate,
+        verificationMethod,
+        paypalTransactionId,
+        notes
+      } | order(purchaseDate desc)`;
+    }
+
+    const purchases = await client.fetch(query, { status });
     return NextResponse.json(purchases)
   } catch (error) {
     console.error('Error fetching purchases:', error)
@@ -25,7 +49,8 @@ export async function POST(request: NextRequest) {
       quantity,
       totalAmount,
       paypalTransactionId,
-      paymentStatus = 'completed',
+      paymentStatus = 'pending',
+      paymentMethod = 'paypal_me',
       notes,
     } = body
 
@@ -50,6 +75,7 @@ export async function POST(request: NextRequest) {
       totalAmount,
       paypalTransactionId,
       paymentStatus,
+      paymentMethod,
       purchaseDate: new Date().toISOString(),
       notes,
     })

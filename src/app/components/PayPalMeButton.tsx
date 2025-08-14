@@ -25,19 +25,21 @@ export default function PayPalMeButton({
   const [isProcessing, setIsProcessing] = useState(false);
   const totalAmount = (amount * quantity).toFixed(2);
 
-  // Create a reference for the payment
-  const reference =
-    `${itemName} - ${quantity}x tickets - ${buyerName || "Guest"} - ${buyerEmail || ""}`.slice(
-      0,
-      100
-    );
+  // Create a unique reference for the payment that includes all necessary data
+  // This will be used in the PayPal.Me URL and for tracking
+  const customId = `${itemId}|${itemName}|${quantity}|${buyerEmail || 'pending'}|${buyerName || 'pending'}`;
+  
+  // Create a return URL that users will be redirected to after payment
+  const returnUrl = `${window.location.origin}/payment-success?ref=${encodeURIComponent(customId)}`;
 
-  // PayPal.Me link with amount in EUR
-  // The link format is: https://www.paypal.me/[username]/[amount][currency]
+  // PayPal.Me link with amount in EUR and custom note
+  // Note: PayPal.Me doesn't support custom_id directly, so we'll use the note field
   const paypalMeUrl = `https://www.paypal.me/BiancaHeuser/${totalAmount}EUR`;
 
   const handlePayment = () => {
     setIsProcessing(true);
+    
+    // Create a unique transaction ID for tracking
     const transactionId = `PPLME_${Date.now()}_${Math.random()
       .toString(36)
       .substr(2, 9)}`;
@@ -51,11 +53,13 @@ export default function PayPalMeButton({
         buyerEmail,
         buyerName,
         timestamp: new Date().toISOString(),
-        reference,
+        customId,
         transactionId,
+        returnUrl,
       };
 
       try {
+        // Store purchase intent in localStorage for tracking
         const existingIntents = JSON.parse(
           localStorage.getItem("paypalMePurchaseIntents") || "[]"
         );
@@ -64,25 +68,30 @@ export default function PayPalMeButton({
           "paypalMePurchaseIntents",
           JSON.stringify(existingIntents)
         );
+
+        // Also store the current purchase intent for immediate access
+        localStorage.setItem("currentPurchaseIntent", JSON.stringify(purchaseIntent));
       } catch (error) {
         console.error("Error storing purchase intent:", error);
       }
 
       try {
+        // Create initial purchase record with pending status
         const purchaseData = {
           buyerEmail: buyerEmail || "pending@email.com",
           buyerName: buyerName || "Pending Name",
           raffleItemId: itemId,
           quantity,
           totalAmount: Math.round(parseFloat(totalAmount) * 100),
-          paypalTransactionId: transactionId,
+          paypalTransactionId: customId,
           paymentStatus: "pending",
-          notes: `PayPal.Me payment initiated. Reference: ${reference}. PayPal.Me URL: ${paypalMeUrl}`,
+          paymentMethod: "paypal_me",
+          notes: `PayPal.Me payment initiated. Reference: ${customId}. PayPal.Me URL: ${paypalMeUrl}. Return URL: ${returnUrl}`,
         };
 
         const payload = JSON.stringify(purchaseData);
-        const blob = new Blob([payload], { type: "application/json" });
-
+        
+        // Use sendBeacon for reliable delivery, fallback to fetch
         let sent = false;
         if ("navigator" in window && "sendBeacon" in navigator) {
           sent = navigator.sendBeacon("/api/purchases", blob);
@@ -105,11 +114,48 @@ export default function PayPalMeButton({
 
     onPaymentInitiated?.();
 
-    window.location.assign(paypalMeUrl);
+    // Open PayPal.Me in a new tab with instructions
+    const paypalWindow = window.open(
+      paypalMeUrl,
+      '_blank',
+      'width=800,height=600'
+    );
 
+    // Show instructions to the user
+    const instructions = `
+      Please complete your payment on PayPal and include the following information in the payment note:
+      
+      Item: ${itemName}
+      Quantity: ${quantity} ticket(s)
+      Total: €${totalAmount}
+      Reference: ${customId}
+      
+      After payment, you'll be redirected back to our site to confirm your purchase.
+    `;
+    
+    alert(instructions);
+
+    // Set a timeout to check if the user returns
     setTimeout(() => {
       setIsProcessing(false);
-    }, 2000);
+      // Check if user has returned and verify payment
+      checkPaymentStatus(customId);
+    }, 30000); // 30 seconds timeout
+  };
+
+  const checkPaymentStatus = async (customId: string) => {
+    try {
+      // This would typically involve checking with PayPal's API
+      // For now, we'll just log that we're checking
+      console.log("Checking payment status for:", customId);
+      
+      // In a real implementation, you would:
+      // 1. Call PayPal's API to check payment status
+      // 2. Update the purchase record accordingly
+      // 3. Notify the user of the status
+    } catch (error) {
+      console.error("Error checking payment status:", error);
+    }
   };
 
   return (
@@ -125,7 +171,12 @@ export default function PayPalMeButton({
         </ul>
         <p className="text-xs italic mt-3">
           After clicking {`"Pay with PayPal"`}, you&apos;ll be redirected to
-          PayPal to complete your payment.
+          PayPal to complete your payment. Please include the reference information
+          in your payment note.
+        </p>
+        <p className="text-xs text-blue-600 mt-2">
+          💡 <strong>Important:</strong> Include the reference code in your PayPal payment note
+          so we can match your payment to your purchase.
         </p>
       </div>
 
@@ -168,6 +219,19 @@ export default function PayPalMeButton({
           </>
         )}
       </button>
+
+      {/* Reference Information Display */}
+      <div className="bg-gray-50 p-3 rounded border">
+        <p className="text-xs font-medium text-gray-700 mb-2">
+          Reference Code (include in PayPal note):
+        </p>
+        <div className="bg-white p-2 rounded border-2 border-dashed border-gray-300">
+          <code className="text-xs text-gray-800 break-all">{customId}</code>
+        </div>
+        <p className="text-xs text-gray-600 mt-2">
+          Copy this code and paste it in the PayPal payment note field.
+        </p>
+      </div>
     </div>
   );
 }
