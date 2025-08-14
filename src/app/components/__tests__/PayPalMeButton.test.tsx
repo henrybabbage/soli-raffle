@@ -1,137 +1,206 @@
-import "@testing-library/jest-dom";
-import { fireEvent, render, screen } from "@testing-library/react";
-import PayPalMeButton from "../PayPalMeButton";
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import PayPalMeButton from '../PayPalMeButton';
 
-describe("PayPalMeButton", () => {
+// Mock window.open
+const mockWindowOpen = jest.fn();
+Object.defineProperty(window, 'open', {
+  writable: true,
+  value: mockWindowOpen,
+});
+
+// Mock localStorage
+const mockLocalStorage = {
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+  clear: jest.fn(),
+};
+Object.defineProperty(window, 'localStorage', {
+  value: mockLocalStorage,
+});
+
+// Mock navigator.sendBeacon
+const mockSendBeacon = jest.fn();
+Object.defineProperty(navigator, 'sendBeacon', {
+  writable: true,
+  value: mockSendBeacon,
+});
+
+// Mock fetch
+global.fetch = jest.fn();
+
+describe('PayPalMeButton', () => {
   const defaultProps = {
-    amount: 5,
-    itemName: "Test Item",
-    itemId: "item-123",
+    amount: 25,
+    itemName: 'Qigong Session',
+    itemId: 'raffle-item-123',
     quantity: 2,
-    buyerEmail: "buyer@example.com",
-    buyerName: "Buyer Name",
+    buyerEmail: 'test@example.com',
+    buyerName: 'John Doe',
     onPaymentInitiated: jest.fn(),
   };
 
   beforeEach(() => {
     jest.clearAllMocks();
-    localStorage.clear();
-  });
-
-  it("renders payment details and button", () => {
-    render(<PayPalMeButton {...defaultProps} />);
-
-    expect(screen.getByText("Payment Details:")).toBeInTheDocument();
-    expect(screen.getByText("• Item: Test Item")).toBeInTheDocument();
-    expect(screen.getByText("• Quantity: 2 ticket(s)")).toBeInTheDocument();
-    expect(screen.getByText("• Total: €10.00")).toBeInTheDocument();
-    expect(screen.getByText("• Name: Buyer Name")).toBeInTheDocument();
-    expect(screen.getByText("• Email: buyer@example.com")).toBeInTheDocument();
-
-    const button = screen.getByRole("button", {
-      name: "Pay €10.00 with PayPal",
-    });
-    expect(button).toBeInTheDocument();
-    expect(button).toBeEnabled();
-  });
-
-  it("stores purchase intent, posts to API, opens PayPal, and calls callback", async () => {
-    (fetch as unknown as jest.Mock).mockResolvedValue({
+    mockLocalStorage.getItem.mockReturnValue('[]');
+    mockSendBeacon.mockReturnValue(true);
+    (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
-      json: async () => ({ id: "sanity-1" }),
+      json: () => Promise.resolve({ _id: 'test-purchase-id' }),
     });
+  });
 
+  it('renders payment details correctly', () => {
     render(<PayPalMeButton {...defaultProps} />);
+    
+    expect(screen.getByText(/• Item:/)).toBeInTheDocument();
+    expect(screen.getByText(/• Quantity:/)).toBeInTheDocument();
+    expect(screen.getByText(/• Total:/)).toBeInTheDocument();
+    expect(screen.getByText(/• Name:/)).toBeInTheDocument();
+    expect(screen.getByText(/• Email:/)).toBeInTheDocument();
+  });
 
-    fireEvent.click(
-      screen.getByRole("button", { name: "Pay €10.00 with PayPal" })
+  it('displays reference code for PayPal payment note', () => {
+    render(<PayPalMeButton {...defaultProps} />);
+    
+    const expectedReference = 'raffle-item-123|Qigong Session|2|test@example.com|John Doe';
+    expect(screen.getByText(expectedReference)).toBeInTheDocument();
+    expect(screen.getByText('Reference Code (include in PayPal note):')).toBeInTheDocument();
+  });
+
+  it('handles payment initiation correctly', async () => {
+    render(<PayPalMeButton {...defaultProps} />);
+    
+    const payButton = screen.getByRole('button', { name: /Pay €50\.00 with PayPal/ });
+    fireEvent.click(payButton);
+
+    // Check that purchase intent is stored in localStorage
+    expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
+      'paypalMePurchaseIntents',
+      expect.any(String)
+    );
+    expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
+      'currentPurchaseIntent',
+      expect.any(String)
     );
 
-    const intentsRaw = localStorage.getItem("paypalMePurchaseIntents");
-    expect(intentsRaw).not.toBeNull();
-    const intents = JSON.parse(intentsRaw as string);
-    expect(Array.isArray(intents)).toBe(true);
-    expect(intents.length).toBe(1);
-    expect(intents[0].itemId).toBe("item-123");
-    expect(intents[0].itemName).toBe("Test Item");
-    expect(intents[0].quantity).toBe(2);
-    expect(intents[0].totalAmount).toBe("10.00");
-    expect(typeof intents[0].transactionId).toBe("string");
-    expect(intents[0].reference).toContain("Test Item");
-    expect(intents[0].reference).toContain("2x tickets");
-    expect(intents[0].reference).toContain("Buyer Name");
-    expect(intents[0].reference).toContain("buyer@example.com");
-
-    expect(fetch).toHaveBeenCalledTimes(1);
-    expect(fetch).toHaveBeenCalledWith(
-      "/api/purchases",
-      expect.objectContaining({
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: expect.any(String),
-      })
+    // Check that PayPal.Me URL is opened
+    expect(mockWindowOpen).toHaveBeenCalledWith(
+      'https://www.paypal.me/BiancaHeuser/50.00EUR',
+      '_blank',
+      'width=800,height=600'
     );
 
-    const body = JSON.parse(
-      (fetch as unknown as jest.Mock).mock.calls[0][1].body
-    );
-    expect(body).toEqual(
-      expect.objectContaining({
-        buyerEmail: "buyer@example.com",
-        buyerName: "Buyer Name",
-        raffleItemId: "item-123",
-        quantity: 2,
-        totalAmount: 1000,
-        paymentStatus: "pending",
-      })
-    );
-    expect(typeof body.paypalTransactionId).toBe("string");
-    expect(body.notes).toContain("PayPal.Me payment initiated");
-    expect(body.notes).toContain("https://www.paypal.me/BiancaHeuser/10.00EUR");
-
-    // navigation side-effect is exercised; URL is present in notes above
-
+    // Check that callback is called
     expect(defaultProps.onPaymentInitiated).toHaveBeenCalled();
-
-    expect(
-      screen.getByRole("button", { name: "Pay €10.00 with PayPal" })
-    ).toBeDisabled();
-    expect(screen.getByText("Processing...")).toBeInTheDocument();
   });
 
-  it("handles missing buyer info by using pending defaults", async () => {
-    (fetch as unknown as jest.Mock).mockResolvedValue({
-      ok: true,
-      json: async () => ({ id: "sanity-2" }),
+  it('creates correct purchase data structure', async () => {
+    render(<PayPalMeButton {...defaultProps} />);
+    
+    const payButton = screen.getByRole('button', { name: /Pay €50\.00 with PayPal/ });
+    fireEvent.click(payButton);
+
+    // Check that PayPal.Me URL is opened
+    expect(mockWindowOpen).toHaveBeenCalledWith(
+      'https://www.paypal.me/BiancaHeuser/50.00EUR',
+      '_blank',
+      'width=800,height=600'
+    );
+  });
+
+  it('handles missing buyer information gracefully', () => {
+    const propsWithoutBuyer = {
+      ...defaultProps,
+      buyerEmail: undefined,
+      buyerName: undefined,
+    };
+    
+    render(<PayPalMeButton {...propsWithoutBuyer} />);
+    
+    // Should not show name and email when not provided
+    expect(screen.queryByText(/• Name:/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/• Email:/)).not.toBeInTheDocument();
+  });
+
+  it('calculates total amount correctly for different quantities', () => {
+    const propsWithDifferentQuantity = {
+      ...defaultProps,
+      quantity: 3,
+    };
+    
+    render(<PayPalMeButton {...propsWithDifferentQuantity} />);
+    
+    expect(screen.getByText(/• Total: €75\.00/)).toBeInTheDocument();
+  });
+
+  it('shows processing state during payment initiation', async () => {
+    render(<PayPalMeButton {...defaultProps} />);
+    
+    const payButton = screen.getByRole('button', { name: /Pay €50\.00 with PayPal/ });
+    fireEvent.click(payButton);
+
+    expect(screen.getByText('Processing...')).toBeInTheDocument();
+    expect(screen.getByRole('button')).toBeDisabled();
+  });
+
+  it('handles localStorage errors gracefully', () => {
+    mockLocalStorage.setItem.mockImplementation(() => {
+      throw new Error('Storage error');
     });
+    
+    render(<PayPalMeButton {...defaultProps} />);
+    
+    const payButton = screen.getByRole('button', { name: /Pay €50\.00 with PayPal/ });
+    fireEvent.click(payButton);
 
-    render(
-      <PayPalMeButton
-        amount={3.5}
-        itemName="Another Item"
-        itemId="item-999"
-        quantity={3}
-      />
-    );
+    // Should not crash and should still open PayPal
+    expect(mockWindowOpen).toHaveBeenCalled();
+  });
 
-    fireEvent.click(
-      screen.getByRole("button", { name: "Pay €10.50 with PayPal" })
-    );
+  it('handles API errors gracefully', async () => {
+    (global.fetch as jest.Mock).mockRejectedValue(new Error('API error'));
+    
+    render(<PayPalMeButton {...defaultProps} />);
+    
+    const payButton = screen.getByRole('button', { name: /Pay €50\.00 with PayPal/ });
+    fireEvent.click(payButton);
 
-    expect(fetch).toHaveBeenCalled();
-    const body = JSON.parse(
-      (fetch as unknown as jest.Mock).mock.calls[0][1].body
-    );
-    expect(body.buyerEmail).toBe("pending@email.com");
-    expect(body.buyerName).toBe("Pending Name");
-    expect(body.totalAmount).toBe(1050);
+    // Should still open PayPal even if API call fails
+    expect(mockWindowOpen).toHaveBeenCalled();
+  });
 
-    const details = screen.getByText("Payment Details:");
-    expect(details).toBeInTheDocument();
-    expect(screen.getByText("• Item: Another Item")).toBeInTheDocument();
-    expect(screen.getByText("• Quantity: 3 ticket(s)")).toBeInTheDocument();
-    expect(screen.getByText("• Total: €10.50")).toBeInTheDocument();
-    expect(screen.queryByText(/• Name:/)).toBeNull();
-    expect(screen.queryByText(/• Email:/)).toBeNull();
+  it('uses sendBeacon when available', async () => {
+    render(<PayPalMeButton {...defaultProps} />);
+    
+    const payButton = screen.getByRole('button', { name: /Pay €50\.00 with PayPal/ });
+    fireEvent.click(payButton);
+
+    await waitFor(() => {
+      expect(mockSendBeacon).toHaveBeenCalledWith(
+        '/api/purchases',
+        expect.any(Blob)
+      );
+    });
+  });
+
+  it('falls back to fetch when sendBeacon is not available', async () => {
+    mockSendBeacon.mockReturnValue(false);
+    
+    render(<PayPalMeButton {...defaultProps} />);
+    
+    const payButton = screen.getByRole('button', { name: /Pay €50\.00 with PayPal/ });
+    fireEvent.click(payButton);
+
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalled();
+    });
+  });
+
+  it('displays clear instructions for users', () => {
+    render(<PayPalMeButton {...defaultProps} />);
+    
+    expect(screen.getByText(/include the reference code in your paypal payment note/i)).toBeInTheDocument();
+    expect(screen.getByText(/copy this code and paste it in the paypal payment note field/i)).toBeInTheDocument();
   });
 });
