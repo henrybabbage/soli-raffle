@@ -10,6 +10,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
+    "test:purchase": "tsx scripts/test-purchase.ts",
+    "test:secure-api": "tsx scripts/test-secure-api.ts",
     "studio": "next dev --port 3333",
     "migrate": "tsx scripts/migrate-to-sanity.ts"
   },
@@ -19,6 +21,7 @@
     "@sanity/client": "^7.8.2",
     "@sanity/image-url": "^1.1.0",
     "@sanity/vision": "^4.3.0",
+    "botid": "^1.5.2",
     "clsx": "^2.1.1",
     "dotenv": "^17.2.1",
     "lenis": "^1.3.8",

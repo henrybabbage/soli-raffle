@@ -1,6 +1,5 @@
 "use client";
 
-import { urlFor } from "@/sanity/lib/image";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import PayPalMeButton from "./PayPalMeButton";
@@ -17,7 +16,7 @@ export interface RaffleItem {
   details: string;
   value: string;
   contact: LinkItem[];
-  image: unknown;
+  image: string | null;
   slug: { current: string };
   order: number;
 }
@@ -88,7 +87,7 @@ export default function RaffleGrid({ items }: RaffleGridProps) {
           <div className="aspect-[4/5] bg-gray-200 overflow-hidden relative">
             {item.image ? (
               <Image
-                src={urlFor(item.image).url()}
+                src={item.image}
                 alt={`${item.instructor} - ${item.title}`}
                 fill
                 className="object-cover"

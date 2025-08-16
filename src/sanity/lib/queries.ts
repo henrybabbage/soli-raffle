@@ -10,7 +10,7 @@ export const raffleItemsQuery = groq`
     details,
     value,
     contact,
-    image,
+    "image": image.asset->url,
     slug,
     order
   }
