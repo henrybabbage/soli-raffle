@@ -89,7 +89,6 @@ const raffleItems = [
     details:
       "60 minute facial skincare & relaxation treatment. Includes: cleanse, tone, exfoliate, masque + options for hand & arm, neck & shoulder massage, and a lymphatic drainage facial massage. Choice of scent: lavender, rosemary or bergamot.",
     value: "50€",
-    contact: [{ label: "@qttherapy", href: "https://instagram.com/qttherapy" }],
     image: "/images/5_.jpg",
     order: 5,
   },
