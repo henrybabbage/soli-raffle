@@ -81,6 +81,15 @@ export default function RaffleGrid({ items, isDrawn = false }: RaffleGridProps) 
     return pattern.test(email);
   }
 
+  // Handle null or undefined items
+  if (!items || !Array.isArray(items)) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh] md:min-h-[70vh]">
+        <p className="text-secondary-foreground">No raffle items available at this time.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 md:gap-8 lg:gap-12 min-h-[60vh] md:min-h-[70vh]">
       {items.map((item, index) => (
@@ -120,7 +129,7 @@ export default function RaffleGrid({ items, isDrawn = false }: RaffleGridProps) 
               <span className="text-xs sm:text-sm text-secondary-foreground font-normal">
                 Links:
               </span>
-              {item.contact.map((link, index) => (
+              {item.contact && Array.isArray(item.contact) && item.contact.map((link, index) => (
                 <a
                   key={index}
                   href={link.href}
