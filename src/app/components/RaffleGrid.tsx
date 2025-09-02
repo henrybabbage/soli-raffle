@@ -23,9 +23,10 @@ export interface RaffleItem {
 
 interface RaffleGridProps {
   items: RaffleItem[];
+  isDrawn?: boolean;
 }
 
-export default function RaffleGrid({ items }: RaffleGridProps) {
+export default function RaffleGrid({ items, isDrawn = false }: RaffleGridProps) {
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [showPayPal, setShowPayPal] = useState<Record<string, boolean>>({});
   const [buyerInfo, setBuyerInfo] = useState<
@@ -83,7 +84,7 @@ export default function RaffleGrid({ items }: RaffleGridProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 md:gap-8 lg:gap-12 min-h-[60vh] md:min-h-[70vh]">
       {items.map((item, index) => (
-        <div key={item._id} className="space-y-4">
+        <div key={item._id} className={`space-y-4 ${isDrawn ? 'opacity-60 pointer-events-none' : ''}`}>
           <div className="aspect-[4/5] bg-gray-200 overflow-hidden relative">
             {item.image ? (
               <Image
@@ -136,10 +137,11 @@ export default function RaffleGrid({ items }: RaffleGridProps) {
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-6 sm:gap-3">
                 {!showPayPal[item._id] ? (
                   <button
-                    className="px-4 sm:px-6 py-2 bg-transparent border border-foreground text-foreground hover:border-brand hover:text-brand uppercase rounded transition-colors duration-200 text-xs order-2 sm:order-1"
+                    className={`px-4 sm:px-6 py-2 bg-transparent border border-foreground text-foreground hover:border-brand hover:text-brand uppercase rounded transition-colors duration-200 text-xs order-2 sm:order-1 ${isDrawn ? 'opacity-50 cursor-not-allowed' : ''}`}
                     onClick={() => handleBuyTicket(item)}
+                    disabled={isDrawn}
                   >
-                    Buy Ticket
+                    {isDrawn ? 'Raffle Drawn' : 'Buy Ticket'}
                   </button>
                 ) : (
                   <button
