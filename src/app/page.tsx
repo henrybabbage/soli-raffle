@@ -4,7 +4,13 @@ import Image from "next/image";
 import RaffleGrid from "./components/RaffleGrid";
 
 export default async function Home() {
-  const raffleItems = await client.fetch(raffleItemsQuery);
+  let raffleItems;
+  try {
+    raffleItems = await client.fetch(raffleItemsQuery);
+  } catch (error) {
+    console.error('Failed to fetch raffle items:', error);
+    raffleItems = [];
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background font-sans">
@@ -28,7 +34,7 @@ export default async function Home() {
               </div>
               <div className="flex flex-col space-y-0.5 text-left sm:text-right">
                 <p className="text-xs sm:text-sm text-brand">
-                  Winners drawn live 31.08.2025
+                  The raffle has been drawn. Winners will be contacted.
                 </p>
                 <p className="text-xs sm:text-sm text-brand">5€ per ticket</p>
               </div>
@@ -61,7 +67,7 @@ export default async function Home() {
           </p>
         </div>
 
-        <RaffleGrid items={raffleItems} />
+        <RaffleGrid items={raffleItems} isDrawn={true} />
       </main>
 
       <footer className="bg-background h-[300px] mt-auto flex items-end">
