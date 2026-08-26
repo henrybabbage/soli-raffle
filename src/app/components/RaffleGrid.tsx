@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import PayPalMeButton from "./PayPalMeButton";
+import { TICKET_PRICE_EUR } from "../constants";
 
 export interface LinkItem {
   label: string;
@@ -187,7 +188,7 @@ export default function RaffleGrid({ items, isDrawn = false }: RaffleGridProps) 
               {showPayPal[item._id] && (
                 <div className="border-t pt-6 md:pt-8">
                   <div className="mb-2 text-sm text-foreground text-center sm:text-left">
-                    Total: €{(5 * (quantities[item._id] || 1)).toFixed(2)}
+                    Total: €{(TICKET_PRICE_EUR * (quantities[item._id] || 1)).toFixed(2)}
                   </div>
 
                   <div className="mt-3 mb-4 space-y-3">
@@ -268,7 +269,7 @@ export default function RaffleGrid({ items, isDrawn = false }: RaffleGridProps) 
                   })() ? (
                     <PayPalMeButton
                       key={`${item._id}-${quantities[item._id]}`}
-                      amount={5}
+                      amount={TICKET_PRICE_EUR}
                       itemName={item.title}
                       itemId={item._id}
                       quantity={quantities[item._id] || 1}

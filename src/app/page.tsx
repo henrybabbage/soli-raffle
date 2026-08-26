@@ -2,6 +2,7 @@ import { client } from "@/sanity/lib/client";
 import { raffleItemsQuery } from "@/sanity/lib/queries";
 import Image from "next/image";
 import RaffleGrid from "./components/RaffleGrid";
+import { TICKET_PRICE_EUR } from "./constants";
 
 export default async function Home() {
   let raffleItems;
@@ -34,9 +35,8 @@ export default async function Home() {
               </div>
               <div className="flex flex-col space-y-0.5 text-left sm:text-right">
                 <p className="text-xs sm:text-sm text-brand">
-                  The raffle has been drawn. Winners will be contacted.
+                  {TICKET_PRICE_EUR}€ per ticket
                 </p>
-                <p className="text-xs sm:text-sm text-brand">5€ per ticket</p>
               </div>
             </div>
           </div>
@@ -57,8 +57,7 @@ export default async function Home() {
             >
               Instagram post
             </a>{" "}
-            or email Lilith at lilith.spink@proton.me. We will draw the winners
-            live on Instagram on the 31.08.25.
+            or email Lilith at lilith.spink@proton.me.
           </p>
           <p className="text-sm sm:text-base text-foreground leading-relaxed">
             You can enter the draw to win the prize(s) of your choice, simple
@@ -67,12 +66,12 @@ export default async function Home() {
           </p>
         </div>
 
-        <RaffleGrid items={raffleItems} isDrawn={true} />
+        <RaffleGrid items={raffleItems} isDrawn={false} />
       </main>
 
       <footer className="bg-background h-[300px] mt-auto flex items-end">
         <div className="max-w-7xl mx-auto px-4 pb-4">
-          <p className="text-foreground text-sm">Soli-Raffle 2025</p>
+          <p className="text-foreground text-sm">Soli-Raffle 2026</p>
         </div>
       </footer>
     </div>
