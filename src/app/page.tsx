@@ -48,16 +48,8 @@ export default async function Home() {
           <p className="text-sm sm:text-base text-foreground leading-relaxed mb-4">
             This online raffle runs alongside our soli-event in Berlin to raise
             support funds for the people of Sudan, Congo, and Palestine. For
-            more information about where the funds will be sent visit our{" "}
-            <a
-              href="https://www.instagram.com/p/DM2ltiXsAC_/?igsh=bW9zMXhlNXVrNGJq"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-foreground hover:text-brand no-underline hover:no-underline"
-            >
-              Instagram post
-            </a>{" "}
-            or email Lilith at lilith.spink@proton.me.
+            more information about where the funds will be sent, email Lilith
+            at lilith.spink@proton.me.
           </p>
           <p className="text-sm sm:text-base text-foreground leading-relaxed">
             You can enter the draw to win the prize(s) of your choice, simple
@@ -71,7 +63,9 @@ export default async function Home() {
 
       <footer className="bg-background h-[300px] mt-auto flex items-end">
         <div className="max-w-7xl mx-auto px-4 pb-4">
-          <p className="text-foreground text-sm">Soli-Raffle 2026</p>
+          <p className="text-foreground text-sm">
+            Soli-Raffle {new Date().getFullYear()}
+          </p>
         </div>
       </footer>
     </div>
