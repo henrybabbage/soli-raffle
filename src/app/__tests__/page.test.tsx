@@ -206,7 +206,7 @@ describe("RaffleGrid - PayPal Integration", () => {
 
     await user.click(firstBuyButton);
 
-    // Should show total amount (5€ * quantity)
+    // Should show total amount (10€ * quantity)
     expect(screen.getByText(/Total: €/)).toBeInTheDocument();
   });
 
@@ -226,8 +226,8 @@ describe("RaffleGrid - PayPal Integration", () => {
     // Click buy ticket
     await user.click(firstBuyButton);
 
-    // Should show total of 15€ (5€ * 3)
-    expect(screen.getByText("Total: €15.00")).toBeInTheDocument();
+    // Should show total of 30€ (10€ * 3)
+    expect(screen.getByText("Total: €30.00")).toBeInTheDocument();
   });
 
   it("shows cancel button when PayPal section is displayed", async () => {
@@ -290,7 +290,7 @@ describe("RaffleGrid - PayPal Integration", () => {
     await user.type(nameInput, "Test User");
 
     const payButton = screen.getByRole("button", {
-      name: /Pay €5.00 with PayPal/,
+      name: /Pay €10.00 with PayPal/,
     });
     await user.click(payButton);
 
