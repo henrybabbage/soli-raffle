@@ -7,6 +7,7 @@
 
 import dotenv from 'dotenv'
 import path from 'path'
+import { buildPayPalMeUrl } from '../src/app/config/paypal'
 
 // Load environment variables
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') })
@@ -45,7 +46,9 @@ async function testPayPalMeFlow() {
 
   // 3. Create purchase record (this happens when PayPal.Me button is clicked)
   const transactionId = `PPLME_${Date.now()}_${Math.random().toString(36).substring(7)}`
-  const paypalMeUrl = `https://www.paypal.me/BiancaHeuser/${userInput.totalAmount / 100}EUR`
+  const paypalMeUrl = buildPayPalMeUrl(
+    (userInput.totalAmount / 100).toFixed(2)
+  )
 
   console.log('\n💾 Creating purchase record in Sanity...')
   const purchaseData = {

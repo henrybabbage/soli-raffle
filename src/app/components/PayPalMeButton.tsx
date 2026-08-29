@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { buildPayPalMeUrl } from "../config/paypal";
 import { PayPalIcon } from "./PayPalIcon";
 
 interface PayPalMeButtonProps {
@@ -32,9 +33,7 @@ export default function PayPalMeButton({
       100
     );
 
-  // PayPal.Me link with amount in EUR
-  // The link format is: https://www.paypal.me/[username]/[amount][currency]
-  const paypalMeUrl = `https://www.paypal.me/BiancaHeuser/${totalAmount}EUR`;
+  const paypalMeUrl = buildPayPalMeUrl(totalAmount);
 
   const handlePayment = () => {
     setIsProcessing(true);

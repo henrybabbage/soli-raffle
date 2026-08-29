@@ -87,7 +87,9 @@ describe("PayPalMeButton", () => {
     );
     expect(typeof body.paypalTransactionId).toBe("string");
     expect(body.notes).toContain("PayPal.Me payment initiated");
-    expect(body.notes).toContain("https://www.paypal.me/BiancaHeuser/10.00EUR");
+    expect(body.notes).toContain(
+      "https://www.paypal.me/palirafflefundraiser/10.00EUR"
+    );
 
     // navigation side-effect is exercised; URL is present in notes above
 
