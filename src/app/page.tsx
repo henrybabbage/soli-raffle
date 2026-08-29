@@ -46,15 +46,40 @@ export default async function Home() {
       <main className="max-w-7xl mx-auto px-4 py-8 flex-1 w-full">
         <div className="mb-12 text-left max-w-4xl mr-auto">
           <p className="text-sm sm:text-base text-foreground leading-relaxed mb-4">
-            This online raffle runs alongside our soli-event in Berlin to raise
-            support funds for the people of Sudan, Congo, and Palestine. For
-            more information about where the funds will be sent, email Lilith
-            at lilith.spink@proton.me.
+            This online raffle is raising funds for families in Gaza to help
+            meet basic needs, including food, shelter, clothing, medicine, and
+            hygiene products. Our goal is to raise 500€ for each of three
+            families, for a total of 1.500€. Any additional funds raised will
+            be distributed in 50-100€ amounts to support other families. If you
+            would like to learn more about the families receiving the funds,
+            please email Lilith at{" "}
+            <a
+              href="mailto:lilith.spink@proton.me"
+              className="hover:text-brand transition-colors duration-200"
+            >
+              lilith.spink@proton.me
+            </a>
+            .
+          </p>
+          <p className="text-sm sm:text-base text-foreground leading-relaxed mb-4">
+            To enter the raffle, simply select the ticket below the prize(s)
+            you would like to win and purchase as many entries as you wish.
+            Each ticket costs 10€, with payment via PayPal.
+          </p>
+          <p className="text-sm sm:text-base text-foreground leading-relaxed mb-4">
+            The winners will be drawn live on Lilith&apos;s Instagram{" "}
+            <a
+              href="https://www.instagram.com/lilith__llllllll/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-brand transition-colors duration-200"
+            >
+              lilith__llllllll
+            </a>{" "}
+            on the 1st October using an online random name selector.
           </p>
           <p className="text-sm sm:text-base text-foreground leading-relaxed">
-            You can enter the draw to win the prize(s) of your choice, simple
-            select the tickets below each prize and add as many entries as you
-            want. Good luck!
+            Good luck!
           </p>
         </div>
 
