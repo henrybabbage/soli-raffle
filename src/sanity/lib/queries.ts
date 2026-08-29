@@ -2,7 +2,7 @@ import { groq } from "next-sanity";
 
 // Query for fetching active raffle items
 export const raffleItemsQuery = groq`
-  *[_type == "raffleItem" && isActive == true] | order(order asc) {
+  *[_type == "raffleItem" && isActive == true] | order(orderRank asc) {
     _id,
     title,
     description,
@@ -20,7 +20,7 @@ export const raffleItemsQuery = groq`
 
 // Query for fetching all raffle items (including inactive)
 export const allRaffleItemsQuery = groq`
-  *[_type == "raffleItem"] | order(order asc) {
+  *[_type == "raffleItem"] | order(orderRank asc) {
     _id,
     title,
     description,

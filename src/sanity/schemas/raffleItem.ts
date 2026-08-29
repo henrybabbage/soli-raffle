@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import {orderRankField, orderRankOrdering} from "@sanity/orderable-document-list";
+
 const raffleItem = {
   name: "raffleItem",
   title: "Raffle Item",
   type: "document",
   fields: [
+    orderRankField({ type: "raffleItem", newItemPosition: "before" }),
     {
       name: "title",
       title: "Title",
@@ -127,6 +130,7 @@ const raffleItem = {
     },
   },
   orderings: [
+    orderRankOrdering,
     {
       title: "Order",
       name: "orderAsc",
