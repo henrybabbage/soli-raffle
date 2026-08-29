@@ -37,6 +37,19 @@ const raffleItem = {
       validation: (Rule: any) => Rule.required(),
     },
     {
+      name: "validity",
+      title: "Validity",
+      type: "string",
+      description: "How long the prize is valid for (e.g. \"6 months\")",
+    },
+    {
+      name: "location",
+      title: "Location",
+      type: "string",
+      description:
+        "Where the prize takes place (e.g. studio name and neighbourhood)",
+    },
+    {
       name: "contact",
       title: "Contact Links",
       type: "array",

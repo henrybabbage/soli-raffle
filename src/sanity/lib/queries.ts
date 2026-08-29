@@ -9,12 +9,14 @@ export const raffleItemsQuery = groq`
     instructor,
     details,
     value,
+    validity,
+    location,
     contact,
     "image": image.asset->url,
     slug,
     order
   }
-`;
+`
 
 // Query for fetching all raffle items (including inactive)
 export const allRaffleItemsQuery = groq`
@@ -25,6 +27,8 @@ export const allRaffleItemsQuery = groq`
     instructor,
     details,
     value,
+    validity,
+    location,
     contact,
     "image": image.asset->url,
     slug,
@@ -42,13 +46,15 @@ export const raffleItemByIdQuery = groq`
     instructor,
     details,
     value,
+    validity,
+    location,
     contact,
     "image": image.asset->url,
     slug,
     order,
     isActive
   }
-`;
+`
 
 // Query for fetching a single raffle item by slug
 export const raffleItemBySlugQuery = groq`
@@ -59,6 +65,8 @@ export const raffleItemBySlugQuery = groq`
     instructor,
     details,
     value,
+    validity,
+    location,
     contact,
     "image": image.asset->url,
     slug,

@@ -16,6 +16,8 @@ export interface RaffleItem {
   instructor: string;
   details: string;
   value: string;
+  validity?: string;
+  location?: string;
   contact: LinkItem[];
   image: string | null;
   slug: { current: string };
@@ -125,6 +127,16 @@ export default function RaffleGrid({ items, isDrawn = false }: RaffleGridProps) 
             <p className="text-xs sm:text-sm text-secondary-foreground">
               <span className="font-normal">Value:</span> {item.value}
             </p>
+            {item.location && (
+              <p className="text-xs sm:text-sm text-secondary-foreground">
+                <span className="font-normal">Location:</span> {item.location}
+              </p>
+            )}
+            {item.validity && (
+              <p className="text-xs sm:text-sm text-secondary-foreground">
+                <span className="font-normal">Valid:</span> {item.validity}
+              </p>
+            )}
 
             <div className="flex flex-wrap gap-2">
               <span className="text-xs sm:text-sm text-secondary-foreground font-normal">
