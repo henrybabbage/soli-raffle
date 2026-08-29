@@ -66,16 +66,21 @@ const raffleItems = [
     order: 3,
   },
   {
-    title: "60-Minute Personal Training Session",
+    title: "Personal Training Session",
     description:
-      "Eliza offers a 60-minute personal training session with focus on strength training fundamentals, barbell technique, and building mobility and control.",
+      "1 x 60 min personal training session at the Adidas Sports Base.",
     instructor:
-      "Eliza Cumming – Personal Trainer & Biomechanics Coach. Eliza is a strength and mobility coach based in Berlin, working primarily with FLINTA clients.",
+      "Eliza is a personal trainer and head coach at Dopamine Berlin. She specialises in functional strength and powerlifting-style training, coaching FLINTA-focussed sessions.",
     details:
-      "1 x 60-minute personal training session with Eliza. Includes a full-body strength session tailored to your goals, technique coaching, and guidance around mobility or lifting basics.",
-    value: "105€",
+      "1 x 60 min personal training session at the Adidas Sports Base.",
+    value: "110€",
+    validity: "3 months",
+    location: "Adidas Sports Base",
     contact: [
-      { label: "@elizacumming", href: "https://instagram.com/elizacumming" },
+      {
+        label: "Instagram",
+        href: "https://www.instagram.com/elizacumming/",
+      },
     ],
     image: "/images/4_.jpg",
     order: 4,
