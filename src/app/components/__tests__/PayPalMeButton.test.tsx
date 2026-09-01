@@ -16,6 +16,11 @@ describe("PayPalMeButton", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     localStorage.clear();
+    process.env.NEXT_PUBLIC_PAYPAL_ME_USERNAME = "palirafflefundraiser";
+  });
+
+  afterEach(() => {
+    delete process.env.NEXT_PUBLIC_PAYPAL_ME_USERNAME;
   });
 
   it("renders payment details and button", () => {
@@ -135,5 +140,18 @@ describe("PayPalMeButton", () => {
     expect(screen.getByText("• Total: €10.50")).toBeInTheDocument();
     expect(screen.queryByText(/• Name:/)).toBeNull();
     expect(screen.queryByText(/• Email:/)).toBeNull();
+  });
+
+  it("disables payment when PayPal.Me username is not configured", () => {
+    delete process.env.NEXT_PUBLIC_PAYPAL_ME_USERNAME;
+
+    render(<PayPalMeButton {...defaultProps} />);
+
+    expect(
+      screen.getByText(/PayPal payments are temporarily unavailable/)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Pay €10.00 with PayPal" })
+    ).toBeDisabled();
   });
 });

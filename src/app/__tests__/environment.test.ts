@@ -3,6 +3,7 @@ describe('PayPal Environment Configuration', () => {
     // Reset environment variables
     process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID = 'ZPAXXQHPYQN2Q'
     process.env.NEXT_PUBLIC_PAYPAL_BUSINESS_EMAIL = 'seedsofliberationraffle@proton.me'
+    process.env.NEXT_PUBLIC_PAYPAL_ME_USERNAME = 'palirafflefundraiser'
   })
 
   afterEach(() => {
@@ -17,11 +18,17 @@ describe('PayPal Environment Configuration', () => {
     expect(process.env.NEXT_PUBLIC_PAYPAL_BUSINESS_EMAIL).toBe('seedsofliberationraffle@proton.me')
   })
 
+  it('has the correct PayPal.Me username configured', () => {
+    expect(process.env.NEXT_PUBLIC_PAYPAL_ME_USERNAME).toBe('palirafflefundraiser')
+  })
+
   it('verifies business account credentials are set', () => {
     expect(process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID).toBeDefined()
     expect(process.env.NEXT_PUBLIC_PAYPAL_BUSINESS_EMAIL).toBeDefined()
+    expect(process.env.NEXT_PUBLIC_PAYPAL_ME_USERNAME).toBeDefined()
     expect(process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID).not.toBe('')
     expect(process.env.NEXT_PUBLIC_PAYPAL_BUSINESS_EMAIL).not.toBe('')
+    expect(process.env.NEXT_PUBLIC_PAYPAL_ME_USERNAME).not.toBe('')
   })
 
   it('ensures business email matches the documented account', () => {
@@ -37,6 +44,7 @@ describe('PayPal Environment Configuration', () => {
   it('confirms environment variables are properly named', () => {
     expect(process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID).toBeDefined()
     expect(process.env.NEXT_PUBLIC_PAYPAL_BUSINESS_EMAIL).toBeDefined()
+    expect(process.env.NEXT_PUBLIC_PAYPAL_ME_USERNAME).toBeDefined()
   })
 
   it('validates business email format', () => {

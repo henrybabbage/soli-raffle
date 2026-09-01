@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { buildPayPalMeUrl } from "@/utils/paypal-me";
 import { PayPalIcon } from "./PayPalIcon";
 
 interface PayPalMeButtonProps {
@@ -24,6 +25,8 @@ export default function PayPalMeButton({
 }: PayPalMeButtonProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const totalAmount = (amount * quantity).toFixed(2);
+  const paypalMeUrl = buildPayPalMeUrl(totalAmount);
+  const isPaymentConfigured = paypalMeUrl !== null;
 
   // Create a reference for the payment
   const reference =
@@ -34,9 +37,12 @@ export default function PayPalMeButton({
 
   // PayPal.Me link with amount in EUR
   // The link format is: https://www.paypal.me/[username]/[amount][currency]
-  const paypalMeUrl = `https://www.paypal.me/palirafflefundraiser/${totalAmount}EUR`;
 
   const handlePayment = () => {
+    if (!paypalMeUrl) {
+      return;
+    }
+
     setIsProcessing(true);
     const transactionId = `PPLME_${Date.now()}_${Math.random()
       .toString(36)
@@ -127,12 +133,18 @@ export default function PayPalMeButton({
           After clicking {`"Pay with PayPal"`}, you&apos;ll be redirected to
           PayPal to complete your payment.
         </p>
+        {!isPaymentConfigured && (
+          <p className="text-xs text-red-600 mt-2">
+            PayPal payments are temporarily unavailable. Please try again
+            later.
+          </p>
+        )}
       </div>
 
       <button
         type="button"
         onClick={handlePayment}
-        disabled={isProcessing}
+        disabled={isProcessing || !isPaymentConfigured}
         className="font-sans w-full bg-background border border-primary hover:bg-neutral-200 disabled:bg-neutral-200 disabled:cursor-not-allowed text-foreground font-normal h-12 leading-none whitespace-nowrap px-6 rounded-xs transition-colors duration-200 flex items-center justify-center gap-2"
         style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}
         aria-label={`Pay €${totalAmount} with PayPal`}

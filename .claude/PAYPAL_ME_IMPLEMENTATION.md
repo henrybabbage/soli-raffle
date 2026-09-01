@@ -7,7 +7,7 @@ This raffle application has been refactored to use PayPal.Me payment links inste
 ## Implementation Details
 
 ### PayPal.Me Account
-- **Account URL**: https://www.paypal.me/palirafflefundraiser
+- **Env var**: `NEXT_PUBLIC_PAYPAL_ME_USERNAME` (e.g. `palirafflefundraiser`)
 - **Payment Method**: Direct PayPal.Me links with pre-filled amounts
 
 ### Key Changes
