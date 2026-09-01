@@ -142,7 +142,7 @@ All GROQ queries are in `src/sanity/lib/queries.ts`:
 
 ### Current Implementation: PayPal.Me
 - Simple link-based payments via `PayPalMeButton` component
-- URL: https://www.paypal.me/BiancaHeuser
+- URL: https://www.paypal.me/palirafflefundraiser
 - Automatic purchase tracking in Sanity
 - Manual payment verification required
 

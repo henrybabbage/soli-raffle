@@ -34,7 +34,7 @@ export default function PayPalMeButton({
 
   // PayPal.Me link with amount in EUR
   // The link format is: https://www.paypal.me/[username]/[amount][currency]
-  const paypalMeUrl = `https://www.paypal.me/BiancaHeuser/${totalAmount}EUR`;
+  const paypalMeUrl = `https://www.paypal.me/palirafflefundraiser/${totalAmount}EUR`;
 
   const handlePayment = () => {
     setIsProcessing(true);

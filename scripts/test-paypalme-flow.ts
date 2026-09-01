@@ -45,7 +45,7 @@ async function testPayPalMeFlow() {
 
   // 3. Create purchase record (this happens when PayPal.Me button is clicked)
   const transactionId = `PPLME_${Date.now()}_${Math.random().toString(36).substring(7)}`
-  const paypalMeUrl = `https://www.paypal.me/BiancaHeuser/${userInput.totalAmount / 100}EUR`
+  const paypalMeUrl = `https://www.paypal.me/palirafflefundraiser/${userInput.totalAmount / 100}EUR`
 
   console.log('\n💾 Creating purchase record in Sanity...')
   const purchaseData = {
