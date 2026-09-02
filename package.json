@@ -14,7 +14,8 @@
     "test:secure-api": "tsx scripts/test-secure-api.ts",
     "update:personal-training-image": "tsx scripts/update-personal-training-image.ts",
     "studio": "next dev --port 3333",
-    "migrate": "tsx scripts/migrate-to-sanity.ts"
+    "migrate": "tsx scripts/migrate-to-sanity.ts",
+    "clear:purchases": "tsx scripts/clear-purchases.ts"
   },
   "dependencies": {
     "@paypal/paypal-js": "^8.2.0",
