@@ -13,6 +13,7 @@ global.window.paypal = {
 // Mock environment variables
 process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID = "test-client-id";
 process.env.NEXT_PUBLIC_PAYPAL_BUSINESS_EMAIL = "test@example.com";
+process.env.NEXT_PUBLIC_PAYPAL_ME_USERNAME = "palirafflefundraiser";
 process.env.NEXT_PUBLIC_SANITY_DATASET = "test";
 process.env.NEXT_PUBLIC_SANITY_PROJECT_ID = "test";
 
