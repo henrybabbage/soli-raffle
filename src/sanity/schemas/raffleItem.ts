@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {orderRankField, orderRankOrdering} from "@sanity/orderable-document-list";
+import {PackageIcon} from "@sanity/icons";
 
 const raffleItem = {
   name: "raffleItem",
   title: "Raffle Item",
   type: "document",
+  icon: PackageIcon,
   fields: [
     orderRankField({ type: "raffleItem", newItemPosition: "before" }),
     {

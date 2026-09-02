@@ -1,5 +1,6 @@
 import type {StructureResolver} from "sanity/structure";
 import {orderableDocumentListDeskItem} from "@sanity/orderable-document-list";
+import {DocumentTextIcon, PackageIcon} from "@sanity/icons";
 
 // https://www.sanity.io/docs/structure-builder-cheat-sheet
 export const structure: StructureResolver = (S, context) =>
@@ -8,6 +9,7 @@ export const structure: StructureResolver = (S, context) =>
     .items([
       S.listItem()
         .title("Raffle Introduction")
+        .icon(DocumentTextIcon)
         .child(
           S.document()
             .schemaType("raffleAbout")
@@ -18,6 +20,7 @@ export const structure: StructureResolver = (S, context) =>
       orderableDocumentListDeskItem({
         type: "raffleItem",
         title: "Raffle Items (drag to reorder)",
+        icon: PackageIcon,
         S,
         context,
       }),

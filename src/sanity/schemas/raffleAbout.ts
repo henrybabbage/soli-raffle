@@ -7,6 +7,7 @@ export default defineType({
   type: "document",
   icon: DocumentTextIcon,
   initialValue: {
+    title: "Raffle Introduction",
     fundraisingDetails:
       "This online raffle is raising funds for families in Gaza to help meet basic needs, including food, shelter, clothing, medicine, and hygiene products. Our goal is to raise 500€ for each of three families, for a total of 1.500€. Any additional funds raised will be distributed in 50-100€ amounts to support other families.",
     contactIntroduction:
@@ -21,6 +22,13 @@ export default defineType({
     closingMessage: "Good luck!",
   },
   fields: [
+    defineField({
+      name: "title",
+      title: "Title",
+      type: "string",
+      initialValue: "Raffle Introduction",
+      validation: (rule) => rule.required(),
+    }),
     defineField({
       name: "fundraisingDetails",
       title: "Fundraising details",
@@ -81,4 +89,7 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
   ],
+  preview: {
+    select: { title: "title" },
+  },
 });
