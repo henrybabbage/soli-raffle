@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { buildPayPalMeUrl } from "../config/paypal";
+import { buildPayPalMeUrl } from "@/utils/paypal-me";
 import { PayPalIcon } from "./PayPalIcon";
 
 interface PayPalMeButtonProps {
@@ -34,8 +34,6 @@ export default function PayPalMeButton({
       0,
       100
     );
-
-  const paypalMeUrl = buildPayPalMeUrl(totalAmount);
 
   const handlePayment = () => {
     if (!paypalMeUrl) {
