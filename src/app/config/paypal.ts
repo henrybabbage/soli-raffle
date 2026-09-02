@@ -1,5 +1,7 @@
+export const DEFAULT_PAYPAL_ME_USERNAME = 'palirafflefundraiser'
+
 const PAYPAL_ME_USERNAME =
-	process.env.NEXT_PUBLIC_PAYPAL_ME_USERNAME || 'palirafflefundraiser'
+	process.env.NEXT_PUBLIC_PAYPAL_ME_USERNAME || DEFAULT_PAYPAL_ME_USERNAME
 
 export const paypalConfig = {
 	clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || 'test',

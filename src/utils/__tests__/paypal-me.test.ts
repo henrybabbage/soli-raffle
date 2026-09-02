@@ -19,10 +19,18 @@ describe('paypal-me utils', () => {
 		)
 	})
 
-	it('returns null when username is missing', () => {
+	it('uses the production username when the environment variable is missing', () => {
 		delete process.env.NEXT_PUBLIC_PAYPAL_ME_USERNAME
 
-		expect(getPayPalMeUsername()).toBeUndefined()
-		expect(buildPayPalMeUrl('10.00')).toBeNull()
+		expect(getPayPalMeUsername()).toBe('palirafflefundraiser')
+		expect(buildPayPalMeUrl('10.00')).toBe(
+			'https://www.paypal.me/palirafflefundraiser/10.00EUR'
+		)
+	})
+
+	it('strips a leading @ from a configured username', () => {
+		process.env.NEXT_PUBLIC_PAYPAL_ME_USERNAME = '@palirafflefundraiser'
+
+		expect(getPayPalMeUsername()).toBe('palirafflefundraiser')
 	})
 })

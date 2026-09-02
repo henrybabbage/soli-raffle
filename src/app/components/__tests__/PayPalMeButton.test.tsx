@@ -142,16 +142,16 @@ describe("PayPalMeButton", () => {
     expect(screen.queryByText(/• Email:/)).toBeNull();
   });
 
-  it("disables payment when PayPal.Me username is not configured", () => {
+  it("keeps payment available when the environment variable is not configured", () => {
     delete process.env.NEXT_PUBLIC_PAYPAL_ME_USERNAME;
 
     render(<PayPalMeButton {...defaultProps} />);
 
     expect(
-      screen.getByText(/PayPal payments are temporarily unavailable/)
-    ).toBeInTheDocument();
+      screen.queryByText(/PayPal payments are temporarily unavailable/)
+    ).not.toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Pay €10.00 with PayPal" })
-    ).toBeDisabled();
+    ).toBeEnabled();
   });
 });

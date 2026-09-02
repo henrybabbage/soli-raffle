@@ -1,6 +1,11 @@
+import { DEFAULT_PAYPAL_ME_USERNAME } from '@/app/config/paypal'
+
 export function getPayPalMeUsername(): string | undefined {
-	const username = process.env.NEXT_PUBLIC_PAYPAL_ME_USERNAME?.trim()
-	return username || undefined
+	const username =
+		process.env.NEXT_PUBLIC_PAYPAL_ME_USERNAME?.trim() ||
+		DEFAULT_PAYPAL_ME_USERNAME
+
+	return username.replace(/^@/, '')
 }
 
 export function buildPayPalMeUrl(totalAmount: string): string | null {
