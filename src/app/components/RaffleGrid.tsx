@@ -150,8 +150,11 @@ export default function RaffleGrid({ items, isDrawn = false }: RaffleGridProps) 
                   rel="noopener noreferrer"
                   className="text-xs sm:text-sm text-secondary-foreground hover:text-brand transition-colors duration-200"
                 >
-                  {link.label}{" "}
-                  <span aria-hidden="true">↗</span>
+                  <span>{link.label}</span>
+                  <span
+                    aria-hidden="true"
+                    className="ml-1 inline-block size-3 align-[-0.1em] bg-current [mask:url('/arrow.svg')_center/contain_no-repeat]"
+                  />
                 </a>
               ))}
             </div>
