@@ -6,6 +6,15 @@ export const structure: StructureResolver = (S, context) =>
   S.list()
     .title("Content")
     .items([
+      S.listItem()
+        .title("Raffle Introduction")
+        .child(
+          S.document()
+            .schemaType("raffleAbout")
+            .documentId("raffleAbout")
+            .title("Raffle Introduction"),
+        ),
+      S.divider(),
       orderableDocumentListDeskItem({
         type: "raffleItem",
         title: "Raffle Items (drag to reorder)",
@@ -14,6 +23,6 @@ export const structure: StructureResolver = (S, context) =>
       }),
       S.divider(),
       ...S.documentTypeListItems().filter(
-        (item) => item.getId() !== "raffleItem",
+        (item) => !["raffleAbout", "raffleItem"].includes(item.getId() ?? ""),
       ),
     ]);

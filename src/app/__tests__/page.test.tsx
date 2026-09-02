@@ -112,6 +112,14 @@ describe("RaffleGrid - PayPal Integration", () => {
     expect(buyButtons.length).toBe(12);
   });
 
+  it("marks external contact links with a northeast arrow", () => {
+    render(<RaffleGrid items={sampleItems.slice(0, 1)} />);
+
+    expect(screen.getByRole("link", { name: "Link" })).toHaveTextContent(
+      "Link ↗"
+    );
+  });
+
   it("shows quantity controls for each item", async () => {
     render(<RaffleGrid items={sampleItems} />);
 

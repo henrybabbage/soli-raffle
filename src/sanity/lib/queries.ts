@@ -1,5 +1,19 @@
 import { groq } from "next-sanity";
 
+export const raffleAboutQuery = groq`
+  *[_id == "raffleAbout"][0] {
+    fundraisingDetails,
+    contactIntroduction,
+    contactEmail,
+    entryInstructions,
+    drawIntroduction,
+    instagramHandle,
+    instagramUrl,
+    drawConclusion,
+    closingMessage
+  }
+`;
+
 // Query for fetching active raffle items
 export const raffleItemsQuery = groq`
   *[_type == "raffleItem" && isActive == true] | order(orderRank asc) {
