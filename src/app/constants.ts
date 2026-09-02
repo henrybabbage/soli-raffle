@@ -1,1 +1,2 @@
 export const TICKET_PRICE_EUR = 10;
+export const TICKET_PRICE_CENTS = TICKET_PRICE_EUR * 100;

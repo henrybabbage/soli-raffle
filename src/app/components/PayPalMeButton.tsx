@@ -5,7 +5,7 @@ import { buildPayPalMeUrl } from "@/utils/paypal-me";
 import { PayPalIcon } from "./PayPalIcon";
 
 interface PayPalMeButtonProps {
-  amount: number; // Amount in EUR
+  amount: number;
   itemName: string;
   itemId: string;
   quantity: number;
@@ -24,95 +24,44 @@ export default function PayPalMeButton({
   onPaymentInitiated,
 }: PayPalMeButtonProps) {
   const [isProcessing, setIsProcessing] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
   const totalAmount = (amount * quantity).toFixed(2);
   const paypalMeUrl = buildPayPalMeUrl(totalAmount);
   const isPaymentConfigured = paypalMeUrl !== null;
 
-  // Create a reference for the payment
-  const reference =
-    `${itemName} - ${quantity}x tickets - ${buyerName || "Guest"} - ${buyerEmail || ""}`.slice(
-      0,
-      100
-    );
-
-  const handlePayment = () => {
+  const handlePayment = async () => {
     if (!paypalMeUrl) {
       return;
     }
 
     setIsProcessing(true);
-    const transactionId = `PPLME_${Date.now()}_${Math.random()
-      .toString(36)
-      .substr(2, 9)}`;
+    setPaymentError(null);
 
-    if (typeof window !== "undefined") {
-      const purchaseIntent = {
-        itemId,
-        itemName,
-        quantity,
-        totalAmount,
-        buyerEmail,
-        buyerName,
-        timestamp: new Date().toISOString(),
-        reference,
-        transactionId,
-      };
-
-      try {
-        const existingIntents = JSON.parse(
-          localStorage.getItem("paypalMePurchaseIntents") || "[]"
-        );
-        existingIntents.push(purchaseIntent);
-        localStorage.setItem(
-          "paypalMePurchaseIntents",
-          JSON.stringify(existingIntents)
-        );
-      } catch (error) {
-        console.error("Error storing purchase intent:", error);
-      }
-
-      try {
-        const purchaseData = {
-          buyerEmail: buyerEmail || "pending@email.com",
-          buyerName: buyerName || "Pending Name",
+    try {
+      const response = await fetch("/api/purchases", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          buyerEmail,
+          buyerName,
           raffleItemId: itemId,
           quantity,
-          totalAmount: Math.round(parseFloat(totalAmount) * 100),
-          paypalTransactionId: transactionId,
-          paymentStatus: "pending",
-          notes: `PayPal.Me payment initiated. Reference: ${reference}. PayPal.Me URL: ${paypalMeUrl}`,
-        };
+        }),
+      });
 
-        const payload = JSON.stringify(purchaseData);
-        const blob = new Blob([payload], { type: "application/json" });
-
-        let sent = false;
-        if ("navigator" in window && "sendBeacon" in navigator) {
-          sent = navigator.sendBeacon("/api/purchases", blob);
-        }
-
-        if (!sent) {
-          fetch("/api/purchases", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: payload,
-            keepalive: true,
-          }).catch(() => {});
-        }
-      } catch (error) {
-        console.error("Error sending purchase data:", error);
+      if (!response.ok) {
+        throw new Error("Purchase intent could not be recorded");
       }
 
-      console.log("Payment initiated:", purchaseIntent);
-    }
-
-    onPaymentInitiated?.();
-
-    window.location.assign(paypalMeUrl);
-
-    setTimeout(() => {
+      onPaymentInitiated?.();
+      window.location.assign(paypalMeUrl);
+    } catch (error) {
+      console.error("Error recording purchase intent:", error);
+      setPaymentError(
+        "We could not record your ticket selection. Please try again before continuing to PayPal."
+      );
       setIsProcessing(false);
-    }, 2000);
+    }
   };
 
   return (
@@ -127,13 +76,18 @@ export default function PayPalMeButton({
           {buyerEmail && <li>• Email: {buyerEmail}</li>}
         </ul>
         <p className="text-xs italic mt-3">
-          After clicking {`"Pay with PayPal"`}, you&apos;ll be redirected to
-          PayPal to complete your payment.
+          After clicking {`"Pay with PayPal"`}, your ticket selection will be
+          recorded and you&apos;ll be redirected to PayPal to complete payment.
         </p>
         {!isPaymentConfigured && (
           <p className="text-xs text-red-600 mt-2">
             PayPal payments are temporarily unavailable. Please try again
             later.
+          </p>
+        )}
+        {paymentError && (
+          <p className="text-xs text-red-600 mt-2" role="alert">
+            {paymentError}
           </p>
         )}
       </div>
@@ -161,14 +115,14 @@ export default function PayPalMeButton({
                 r="10"
                 stroke="currentColor"
                 strokeWidth="4"
-              ></circle>
+              />
               <path
                 className="opacity-75"
                 fill="currentColor"
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
+              />
             </svg>
-            Processing...
+            Recording selection...
           </>
         ) : (
           <>

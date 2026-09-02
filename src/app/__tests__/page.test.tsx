@@ -283,9 +283,8 @@ describe("RaffleGrid - PayPal Integration", () => {
     expect(firstPlusButton).toBeDisabled();
   });
 
-  it("logs payment initiated details to console when paying", async () => {
-    jest.useFakeTimers();
-    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+  it("records the selected raffle item before sending the buyer to PayPal", async () => {
+    const user = userEvent.setup();
 
     render(<RaffleGrid items={sampleItems} />);
 
@@ -303,13 +302,19 @@ describe("RaffleGrid - PayPal Integration", () => {
     await user.click(payButton);
 
     await waitFor(() => {
-      expect(console.log).toHaveBeenCalledWith(
-        "Payment initiated:",
-        expect.objectContaining({ itemId: expect.any(String) })
+      expect(global.fetch).toHaveBeenCalledWith(
+        "/api/purchases",
+        expect.objectContaining({
+          method: "POST",
+          body: JSON.stringify({
+            buyerEmail: "test@example.com",
+            buyerName: "Test User",
+            raffleItemId: "item-1",
+            quantity: 1,
+          }),
+        })
       );
     });
-
-    jest.useRealTimers();
   });
 
   // No error logging path now

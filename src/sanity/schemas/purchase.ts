@@ -1,130 +1,144 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-const purchase = {
-  name: "purchase",
-  title: "Purchase",
-  type: "document",
+import { BasketIcon } from '@sanity/icons'
+import { defineField, defineType } from 'sanity'
+
+const purchase = defineType({
+  name: 'purchase',
+  title: 'Payment Intent',
+  type: 'document',
+  icon: BasketIcon,
   fields: [
-    {
-      name: "buyerEmail",
-      title: "Buyer Email",
-      type: "string",
-      validation: (Rule: any) => Rule.required().email(),
-    },
-    {
-      name: "buyerName",
-      title: "Buyer Name",
-      type: "string",
-      validation: (Rule: any) => Rule.required(),
-    },
-    {
-      name: "raffleItem",
-      title: "Raffle Item",
-      type: "reference",
-      to: [{ type: "raffleItem" }],
-      validation: (Rule: any) => Rule.required(),
-    },
-    {
-      name: "quantity",
-      title: "Quantity",
-      type: "number",
-      validation: (Rule: any) => Rule.required().min(1),
-    },
-    {
-      name: "totalAmount",
-      title: "Total Amount",
-      type: "number",
-      validation: (Rule: any) => Rule.required().min(0),
+    defineField({
+      name: 'buyerEmail',
+      title: 'Buyer Email',
+      type: 'string',
+      validation: (rule) => rule.required().email(),
+    }),
+    defineField({
+      name: 'buyerName',
+      title: 'Buyer Name',
+      type: 'string',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'raffleItem',
+      title: 'Raffle Item',
+      type: 'reference',
+      to: [{ type: 'raffleItem' }],
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'raffleItemTitle',
+      title: 'Raffle Item Title at Time of Selection',
+      type: 'string',
+      readOnly: true,
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'quantity',
+      title: 'Tickets Requested',
+      type: 'number',
+      validation: (rule) => rule.required().integer().min(1),
+    }),
+    defineField({
+      name: 'ticketPriceCents',
+      title: 'Ticket Price (cents)',
+      type: 'number',
+      readOnly: true,
+      validation: (rule) => rule.required().integer().positive(),
+    }),
+    defineField({
+      name: 'totalAmount',
+      title: 'Total Amount (cents)',
+      type: 'number',
+      validation: (rule) => rule.required().integer().min(0),
       description:
-        "Total amount paid in the smallest currency unit (e.g., cents for USD)",
-    },
-    {
-      name: "paypalTransactionId",
-      title: "PayPal Transaction ID",
-      type: "string",
-      description: "Unique identifier from PayPal for this transaction",
-    },
-    {
-      name: "paymentStatus",
-      title: "Payment Status",
-      type: "string",
+        'Calculated on the server from the raffle ticket price; 1000 means 10 EUR.',
+    }),
+    defineField({
+      name: 'paypalTransactionId',
+      title: 'PayPal Transaction ID',
+      type: 'string',
+      description:
+        'Optional. Add this when manually reconciling a confirmed PayPal payment.',
+    }),
+    defineField({
+      name: 'paymentStatus',
+      title: 'Payment Status',
+      type: 'string',
       options: {
         list: [
-          { title: "Pending", value: "pending" },
-          { title: "Completed", value: "completed" },
-          { title: "Failed", value: "failed" },
-          { title: "Refunded", value: "refunded" },
+          {
+            title: 'Payment initiated — awaiting confirmation',
+            value: 'pending',
+          },
+          { title: 'Completed', value: 'completed' },
+          { title: 'Failed', value: 'failed' },
+          { title: 'Refunded', value: 'refunded' },
         ],
       },
-      initialValue: "completed",
-      validation: (Rule: any) => Rule.required(),
-    },
-    {
-      name: "purchaseDate",
-      title: "Purchase Date",
-      type: "datetime",
+      initialValue: 'pending',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'purchaseDate',
+      title: 'Payment Initiated At',
+      type: 'datetime',
       initialValue: () => new Date().toISOString(),
-      validation: (Rule: any) => Rule.required(),
-    },
-    {
-      name: "notes",
-      title: "Notes",
-      type: "text",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'notes',
+      title: 'Notes',
+      type: 'text',
       rows: 3,
-      description:
-        "Additional notes about this purchase (e.g., customer service notes)",
-    },
+      description: 'Optional payment reconciliation or customer-service notes.',
+    }),
   ],
   preview: {
     select: {
-      title: "buyerName",
-      subtitle: "buyerEmail",
-      media: "raffleItem.image",
-      quantity: "quantity",
-      totalAmount: "totalAmount",
-      purchaseDate: "purchaseDate",
-      paymentStatus: "paymentStatus",
+      title: 'buyerName',
+      subtitle: 'buyerEmail',
+      media: 'raffleItem.image',
+      quantity: 'quantity',
+      totalAmount: 'totalAmount',
+      purchaseDate: 'purchaseDate',
+      paymentStatus: 'paymentStatus',
     },
-    prepare(selection: any) {
-      const {
-        title,
-        subtitle,
-        media,
-        quantity,
-        totalAmount,
-        purchaseDate,
-        paymentStatus,
-      } = selection;
-      const date = new Date(purchaseDate).toLocaleDateString();
-      const amount = (totalAmount / 100).toFixed(2); // Assuming amount is in cents
+    prepare({ title, subtitle, media, quantity, totalAmount, purchaseDate, paymentStatus }) {
+      const date = purchaseDate
+        ? new Date(purchaseDate).toLocaleDateString()
+        : 'Unknown date'
+      const amount = typeof totalAmount === 'number' ? (totalAmount / 100).toFixed(2) : '—'
+
       return {
-        title: `${title} (${quantity}x)`,
-        subtitle: `${subtitle} • ${amount}€ • ${date} • ${paymentStatus}`,
-        media: media,
-      };
+        title: `${title ?? 'Unnamed buyer'} (${quantity ?? 0}x)`,
+        subtitle: `${subtitle ?? 'No email'} • ${amount} EUR • ${date} • ${paymentStatus ?? 'pending'}`,
+        media,
+      }
     },
   },
   orderings: [
     {
-      title: "Purchase Date (Newest)",
-      name: "purchaseDateDesc",
-      by: [{ field: "purchaseDate", direction: "desc" }],
+      title: 'Payment Initiated (Newest)',
+      name: 'purchaseDateDesc',
+      by: [{ field: 'purchaseDate', direction: 'desc' }],
     },
     {
-      title: "Purchase Date (Oldest)",
-      name: "purchaseDateAsc",
-      by: [{ field: "purchaseDate", direction: "asc" }],
+      title: 'Payment Initiated (Oldest)',
+      name: 'purchaseDateAsc',
+      by: [{ field: 'purchaseDate', direction: 'asc' }],
     },
     {
-      title: "Buyer Name A-Z",
-      name: "buyerNameAsc",
-      by: [{ field: "buyerName", direction: "asc" }],
+      title: 'Buyer Name A-Z',
+      name: 'buyerNameAsc',
+      by: [{ field: 'buyerName', direction: 'asc' }],
     },
     {
-      title: "Payment Status",
-      name: "paymentStatusAsc",
-      by: [{ field: "paymentStatus", direction: "asc" }],
+      title: 'Payment Status',
+      name: 'paymentStatusAsc',
+      by: [{ field: 'paymentStatus', direction: 'asc' }],
     },
   ],
-};
+})
 
-export default purchase;
+export default purchase
