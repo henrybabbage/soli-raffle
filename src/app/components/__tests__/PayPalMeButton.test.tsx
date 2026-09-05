@@ -41,6 +41,6 @@ describe('PayPalMeButton', () => {
     expect(fetch).not.toHaveBeenCalled()
     expect(
       screen.getByRole('link', { name: 'Redirecting to PayPal' })
-    ).toHaveTextContent('Redirecting to PayPal…')
+    ).toHaveTextContent('Redirecting…')
   })
 })

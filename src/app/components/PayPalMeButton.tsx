@@ -62,7 +62,7 @@ export default function PayPalMeButton({
         }
       >
         <PayPalIcon width={20} height={20} />
-        {isRedirecting ? "Redirecting to PayPal…" : "Pay with PayPal"}
+        {isRedirecting ? "Redirecting…" : "Pay with PayPal"}
       </a>
     </div>
   );
