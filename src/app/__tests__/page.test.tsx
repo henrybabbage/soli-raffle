@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import RaffleGrid from "../components/RaffleGrid";
 
@@ -203,7 +203,7 @@ describe("RaffleGrid - PayPal Integration", () => {
     await user.click(firstBuyButton);
 
     expect(
-      screen.getByText(/Please fill in your email and name/)
+      screen.getByRole("link", { name: "Pay €10.00 with PayPal" })
     ).toBeInTheDocument();
   });
 
@@ -217,7 +217,7 @@ describe("RaffleGrid - PayPal Integration", () => {
     await user.click(firstBuyButton);
 
     // Should show total amount (10€ * quantity)
-    expect(screen.getByText(/Total: €/)).toBeInTheDocument();
+    expect(screen.getByText("Total: €10.00")).toBeInTheDocument();
   });
 
   it("calculates total amount correctly based on quantity", async () => {
@@ -260,11 +260,11 @@ describe("RaffleGrid - PayPal Integration", () => {
     const firstBuyButton = buyButtons[0];
 
     await user.click(firstBuyButton);
-    expect(screen.getByText(/Total: €/)).toBeInTheDocument();
+    expect(screen.getByText("Total: €10.00")).toBeInTheDocument();
 
     await user.click(screen.getByText("Cancel"));
 
-    expect(screen.queryByText(/Total: €/)).not.toBeInTheDocument();
+    expect(screen.queryByText("Total: €10.00")).not.toBeInTheDocument();
   });
 
   // PayPal.Me flow redirects; no inline success handling to assert
@@ -285,7 +285,7 @@ describe("RaffleGrid - PayPal Integration", () => {
     expect(firstPlusButton).toBeDisabled();
   });
 
-  it("records the selected raffle item before sending the buyer to PayPal", async () => {
+  it("links directly to PayPal without requiring buyer details", async () => {
     const user = userEvent.setup();
 
     render(<RaffleGrid items={sampleItems} />);
@@ -293,30 +293,14 @@ describe("RaffleGrid - PayPal Integration", () => {
     const buyButtons = await screen.findAllByText("Buy Ticket");
     await user.click(buyButtons[0]);
 
-    const emailInput = screen.getByLabelText("Email *");
-    const nameInput = screen.getByLabelText("Name *");
-    await user.type(emailInput, "test@example.com");
-    await user.type(nameInput, "Test User");
-
-    const payButton = screen.getByRole("button", {
+    const payLink = screen.getByRole("link", {
       name: /Pay €10.00 with PayPal/,
     });
-    await user.click(payButton);
-
-    await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith(
-        "/api/purchases",
-        expect.objectContaining({
-          method: "POST",
-          body: JSON.stringify({
-            buyerEmail: "test@example.com",
-            buyerName: "Test User",
-            raffleItemId: "item-1",
-            quantity: 1,
-          }),
-        })
-      );
-    });
+    expect(payLink).toHaveAttribute(
+      "href",
+      "https://www.paypal.me/palirafflefundraiser/10.00EUR"
+    );
+    expect(global.fetch).not.toHaveBeenCalled();
   });
 
   // No error logging path now

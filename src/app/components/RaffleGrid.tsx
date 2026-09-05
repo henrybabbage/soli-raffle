@@ -32,9 +32,6 @@ interface RaffleGridProps {
 export default function RaffleGrid({ items, isDrawn = false }: RaffleGridProps) {
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [showPayPal, setShowPayPal] = useState<Record<string, boolean>>({});
-  const [buyerInfo, setBuyerInfo] = useState<
-    Record<string, { email: string; name: string }>
-  >({});
 
   useEffect(() => {
     if (items.length > 0) {
@@ -60,28 +57,7 @@ export default function RaffleGrid({ items, isDrawn = false }: RaffleGridProps) 
   function handlePaymentInitiated(itemId: string) {
     setTimeout(() => {
       setShowPayPal((prev) => ({ ...prev, [itemId]: false }));
-      setBuyerInfo((prev) => {
-        const next = { ...prev };
-        delete next[itemId];
-        return next;
-      });
     }, 2000);
-  }
-
-  function updateBuyerInfo(
-    itemId: string,
-    field: "email" | "name",
-    value: string
-  ) {
-    setBuyerInfo((prev) => ({
-      ...prev,
-      [itemId]: { ...prev[itemId], [field]: value },
-    }));
-  }
-
-  function isValidEmail(email: string) {
-    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return pattern.test(email);
   }
 
   // Handle null or undefined items
@@ -207,100 +183,15 @@ export default function RaffleGrid({ items, isDrawn = false }: RaffleGridProps) 
                     Total: €{(TICKET_PRICE_EUR * (quantities[item._id] || 1)).toFixed(2)}
                   </div>
 
-                  <div className="mt-3 mb-4 space-y-3">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label
-                          htmlFor={`email-${item._id}`}
-                          className="block text-xs text-foreground mb-1"
-                        >
-                          Email *
-                        </label>
-                        {(() => {
-                          const email = buyerInfo[item._id]?.email || "";
-                          const showError =
-                            email.length > 0 && !isValidEmail(email);
-                          return (
-                            <>
-                              <input
-                                type="email"
-                                id={`email-${item._id}`}
-                                value={email}
-                                onChange={(e) =>
-                                  updateBuyerInfo(
-                                    item._id,
-                                    "email",
-                                    e.target.value
-                                  )
-                                }
-                                className={`w-full px-3 py-2 text-sm border rounded-xs focus:outline-none focus:ring-2 focus:border-transparent ${
-                                  showError
-                                    ? "border-red-500 focus:ring-red-500"
-                                    : "border-secondary-foreground focus:ring-brand"
-                                }`}
-                                placeholder="Email address"
-                                required
-                                aria-invalid={showError}
-                                autoComplete="email"
-                                inputMode="email"
-                                pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
-                              />
-                              {showError && (
-                                <p className="mt-1 text-xs text-red-600">
-                                  Please enter a valid email address.
-                                </p>
-                              )}
-                            </>
-                          );
-                        })()}
-                      </div>
-                      <div>
-                        <label
-                          htmlFor={`name-${item._id}`}
-                          className="block text-xs text-foreground mb-1"
-                        >
-                          Name *
-                        </label>
-                        <input
-                          type="text"
-                          id={`name-${item._id}`}
-                          value={buyerInfo[item._id]?.name || ""}
-                          onChange={(e) =>
-                            updateBuyerInfo(item._id, "name", e.target.value)
-                          }
-                          className="w-full px-3 py-2 text-sm border border-secondary-foreground rounded-xs focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
-                          placeholder="Name"
-                          required
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {(() => {
-                    const email = buyerInfo[item._id]?.email || "";
-                    const name = buyerInfo[item._id]?.name || "";
-                    const canProceed =
-                      isValidEmail(email) && name.trim().length > 0;
-                    return canProceed;
-                  })() ? (
-                    <PayPalMeButton
-                      key={`${item._id}-${quantities[item._id]}`}
-                      amount={TICKET_PRICE_EUR}
-                      itemName={item.title}
-                      itemId={item._id}
-                      quantity={quantities[item._id] || 1}
-                      buyerEmail={buyerInfo[item._id]?.email}
-                      buyerName={buyerInfo[item._id]?.name}
-                      onPaymentInitiated={() =>
-                        handlePaymentInitiated(item._id)
-                      }
-                    />
-                  ) : (
-                    <div className="text-left py-4 text-sm text-secondary-foreground">
-                      Please fill in your email and name to proceed with
-                      payment.
-                    </div>
-                  )}
+                  <PayPalMeButton
+                    key={`${item._id}-${quantities[item._id]}`}
+                    amount={TICKET_PRICE_EUR}
+                    itemName={item.title}
+                    quantity={quantities[item._id] || 1}
+                    onPaymentInitiated={() =>
+                      handlePaymentInitiated(item._id)
+                    }
+                  />
                 </div>
               )}
             </div>
