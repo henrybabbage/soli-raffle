@@ -2,6 +2,10 @@
   "name": "soli-raffle-next-15",
   "version": "0.1.0",
   "private": true,
+  "overrides": {
+    "tar": "7.5.22",
+    "npm-run-path": "5.3.0"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -28,11 +32,11 @@
     "clsx": "^2.1.1",
     "dotenv": "^17.2.1",
     "lenis": "^1.3.8",
-    "next": "15.4.10",
+    "next": "15.5.25",
     "next-sanity": "^10.0.10",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "sanity": "^4.3.0",
+    "sanity": "^4.22.1",
     "styled-components": "^6.1.19",
     "tailwind-merge": "^3.3.1"
   },
