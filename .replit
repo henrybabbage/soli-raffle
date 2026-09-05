@@ -1,4 +1,5 @@
 run = "npm run dev"
+modules = ["nodejs-24"]
 
 [deployment]
 build = "npm run build"
