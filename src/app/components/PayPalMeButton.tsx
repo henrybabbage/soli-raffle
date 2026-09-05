@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { buildPayPalMeUrl } from "@/utils/paypal-me";
 import { PayPalIcon } from "./PayPalIcon";
 
@@ -14,9 +17,15 @@ export default function PayPalMeButton({
   quantity,
   onPaymentInitiated,
 }: PayPalMeButtonProps) {
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const totalAmount = (amount * quantity).toFixed(2);
   const paypalMeUrl = buildPayPalMeUrl(totalAmount);
   const isPaymentConfigured = paypalMeUrl !== null;
+
+  const handlePayment = () => {
+    setIsRedirecting(true);
+    onPaymentInitiated?.();
+  };
 
   return (
     <div className="space-y-4">
@@ -41,14 +50,19 @@ export default function PayPalMeButton({
 
       <a
         href={paypalMeUrl ?? undefined}
-        onClick={isPaymentConfigured ? onPaymentInitiated : undefined}
+        onClick={isPaymentConfigured ? handlePayment : undefined}
         aria-disabled={!isPaymentConfigured}
+        aria-busy={isRedirecting}
         className="font-sans w-full bg-background border border-primary hover:bg-neutral-200 aria-disabled:bg-neutral-200 aria-disabled:cursor-not-allowed text-foreground font-normal h-12 leading-none whitespace-nowrap px-6 rounded-xs transition-colors duration-200 flex items-center justify-center gap-2"
         style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}
-        aria-label={`Pay €${totalAmount} with PayPal`}
+        aria-label={
+          isRedirecting
+            ? "Redirecting to PayPal"
+            : `Pay €${totalAmount} with PayPal`
+        }
       >
         <PayPalIcon width={20} height={20} />
-        Pay with PayPal
+        {isRedirecting ? "Redirecting to PayPal…" : "Pay with PayPal"}
       </a>
     </div>
   );

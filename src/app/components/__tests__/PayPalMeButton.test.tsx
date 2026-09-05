@@ -39,5 +39,8 @@ describe('PayPalMeButton', () => {
     fireEvent.click(link)
     expect(defaultProps.onPaymentInitiated).toHaveBeenCalledTimes(1)
     expect(fetch).not.toHaveBeenCalled()
+    expect(
+      screen.getByRole('link', { name: 'Redirecting to PayPal' })
+    ).toHaveTextContent('Redirecting to PayPal…')
   })
 })
