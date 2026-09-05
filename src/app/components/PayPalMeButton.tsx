@@ -24,44 +24,42 @@ export default function PayPalMeButton({
   onPaymentInitiated,
 }: PayPalMeButtonProps) {
   const [isProcessing, setIsProcessing] = useState(false);
-  const [paymentError, setPaymentError] = useState<string | null>(null);
   const totalAmount = (amount * quantity).toFixed(2);
   const paypalMeUrl = buildPayPalMeUrl(totalAmount);
   const isPaymentConfigured = paypalMeUrl !== null;
 
-  const handlePayment = async () => {
+  const handlePayment = () => {
     if (!paypalMeUrl) {
       return;
     }
 
     setIsProcessing(true);
-    setPaymentError(null);
 
-    try {
-      const response = await fetch("/api/purchases", {
+    // Payment must not depend on analytics-style intent tracking. `keepalive`
+    // lets the small request continue while the browser starts the PayPal
+    // navigation; failures are logged for operators without blocking buyers.
+    void fetch("/api/purchases", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        keepalive: true,
         body: JSON.stringify({
           buyerEmail,
           buyerName,
           raffleItemId: itemId,
           quantity,
         }),
+      })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Purchase intent could not be recorded");
+        }
+      })
+      .catch((error) => {
+        console.error("Error recording purchase intent:", error);
       });
 
-      if (!response.ok) {
-        throw new Error("Purchase intent could not be recorded");
-      }
-
-      onPaymentInitiated?.();
-      window.location.assign(paypalMeUrl);
-    } catch (error) {
-      console.error("Error recording purchase intent:", error);
-      setPaymentError(
-        "We could not record your ticket selection. Please try again before continuing to PayPal."
-      );
-      setIsProcessing(false);
-    }
+    onPaymentInitiated?.();
+    window.location.assign(paypalMeUrl);
   };
 
   return (
@@ -83,11 +81,6 @@ export default function PayPalMeButton({
           <p className="text-xs text-red-600 mt-2">
             PayPal payments are temporarily unavailable. Please try again
             later.
-          </p>
-        )}
-        {paymentError && (
-          <p className="text-xs text-red-600 mt-2" role="alert">
-            {paymentError}
           </p>
         )}
       </div>

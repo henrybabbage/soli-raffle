@@ -46,6 +46,7 @@ describe('PayPalMeButton', () => {
     expect(fetch).toHaveBeenCalledWith('/api/purchases', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      keepalive: true,
       body: JSON.stringify({
         buyerEmail: 'buyer@example.com',
         buyerName: 'Buyer Name',
@@ -56,7 +57,7 @@ describe('PayPalMeButton', () => {
     expect(defaultProps.onPaymentInitiated).toHaveBeenCalledTimes(1)
   })
 
-  it('does not redirect when the intent cannot be recorded', async () => {
+  it('continues to PayPal when the intent cannot be recorded', async () => {
     ;(fetch as unknown as jest.Mock).mockResolvedValue({ ok: false })
 
     render(<PayPalMeButton {...defaultProps} />)
@@ -65,14 +66,12 @@ describe('PayPalMeButton', () => {
       screen.getByRole('button', { name: 'Pay €20.00 with PayPal' })
     )
 
+    await waitFor(() => expect(fetch).toHaveBeenCalledTimes(1))
+    expect(defaultProps.onPaymentInitiated).toHaveBeenCalledTimes(1)
     expect(
-      await screen.findByText(
+      screen.queryByText(
         'We could not record your ticket selection. Please try again before continuing to PayPal.'
       )
-    ).toBeInTheDocument()
-    expect(defaultProps.onPaymentInitiated).not.toHaveBeenCalled()
-    expect(
-      screen.getByRole('button', { name: 'Pay €20.00 with PayPal' })
-    ).toBeEnabled()
+    ).not.toBeInTheDocument()
   })
 })
