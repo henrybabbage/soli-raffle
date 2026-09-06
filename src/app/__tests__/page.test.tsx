@@ -18,55 +18,6 @@ const sampleItems = Array.from({ length: 12 }).map((_, idx) => {
   };
 });
 
-// Mock PayPal components
-jest.mock("../components/PayPalButton", () => {
-  return function MockPayPalButton({
-    amount,
-    quantity,
-    onSuccess,
-    onError,
-  }: {
-    amount: string;
-    quantity: number;
-    onSuccess?: (details: unknown) => void;
-    onError?: (error: unknown) => void;
-  }) {
-    return (
-      <div data-testid="paypal-button">
-        <button
-          data-testid="mock-paypal-button"
-          onClick={() => {
-            // Simulate successful payment
-            onSuccess?.({
-              id: "test-payment-id",
-              status: "COMPLETED",
-              payer: { email_address: "test@example.com" },
-              purchase_units: [
-                {
-                  amount: {
-                    currency_code: "EUR",
-                    value: (parseFloat(amount) * quantity).toFixed(2),
-                  },
-                },
-              ],
-            });
-          }}
-        >
-          Pay with PayPal
-        </button>
-        <button
-          data-testid="mock-paypal-error-button"
-          onClick={() => {
-            onError?.(new Error("Payment failed"));
-          }}
-        >
-          Simulate Error
-        </button>
-      </div>
-    );
-  };
-});
-
 // Mock Next.js Image component
 jest.mock("next/image", () => {
   return function MockImage({
