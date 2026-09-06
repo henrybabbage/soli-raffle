@@ -1,6 +1,6 @@
 import type {StructureResolver} from "sanity/structure";
 import {orderableDocumentListDeskItem} from "@sanity/orderable-document-list";
-import {DocumentTextIcon, PackageIcon} from "@sanity/icons";
+import {CogIcon, DocumentTextIcon, PackageIcon} from "@sanity/icons";
 
 // https://www.sanity.io/docs/structure-builder-cheat-sheet
 export const structure: StructureResolver = (S, context) =>
@@ -25,7 +25,21 @@ export const structure: StructureResolver = (S, context) =>
         context,
       }),
       S.divider(),
+      S.listItem()
+        .title("Site Settings")
+        .id("siteSettings")
+        .icon(CogIcon)
+        .child(
+          S.document()
+            .schemaType("siteSettings")
+            .documentId("siteSettings")
+            .title("Site Settings"),
+        ),
+      S.divider(),
       ...S.documentTypeListItems().filter(
-        (item) => !["raffleAbout", "raffleItem"].includes(item.getId() ?? ""),
+        (item) =>
+          !["raffleAbout", "raffleItem", "siteSettings"].includes(
+            item.getId() ?? "",
+          ),
       ),
     ]);
