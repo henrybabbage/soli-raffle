@@ -262,9 +262,14 @@ describe("RaffleGrid - PayPal Integration", () => {
     // Wait for items to load
     await screen.findByText("Private Qigong Session");
     await screen.findByText(/Lingji Hon/);
-    const valueLabels = await screen.findAllByText("Value:");
-    expect(valueLabels).toHaveLength(12);
-    const hundredValues = await screen.findAllByText("100€");
+    // Value is rendered as a pill overlaid on each item image.
+    const valuePills = await screen.findAllByText(/^value /i);
+    expect(valuePills).toHaveLength(12);
+    const hundredValues = await screen.findAllByText(/^value 100€$/i);
     expect(hundredValues.length).toBeGreaterThan(0);
+
+    // Each card carries a zero-padded index badge.
+    expect(await screen.findByText("01")).toBeInTheDocument();
+    expect(await screen.findByText("12")).toBeInTheDocument();
   });
 });
