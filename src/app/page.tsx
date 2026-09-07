@@ -1,6 +1,11 @@
 import { client } from "@/sanity/lib/client";
-import { raffleAboutQuery, raffleItemsQuery } from "@/sanity/lib/queries";
+import {
+  raffleAboutQuery,
+  raffleItemsQuery,
+  siteSettingsQuery,
+} from "@/sanity/lib/queries";
 import Image from "next/image";
+import Banner from "./components/Banner";
 import RaffleGrid from "./components/RaffleGrid";
 import { TICKET_PRICE_EUR } from "./constants";
 
@@ -37,8 +42,17 @@ export default async function Home() {
 
   const about = { ...defaultRaffleAbout, ...raffleAbout };
 
+  let siteSettings: { bannerText?: string | null } | null = null;
+  try {
+    siteSettings = await client.fetch(siteSettingsQuery);
+  } catch (error) {
+    console.error('Failed to fetch site settings:', error);
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-background font-sans">
+      <Banner text={siteSettings?.bannerText} />
+
       <header className="sticky top-0 z-50 bg-background w-full">
         <div className="mx-auto w-full max-w-[82rem] border-b">
           <div className="max-w-7xl mx-auto px-4 py-6 sm:py-8">

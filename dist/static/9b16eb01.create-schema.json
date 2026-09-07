@@ -375,5 +375,17 @@
     ],
     "name": "purchase",
     "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": "Raffle on until 1st October",
+        "description": "Shown in the banner at the very top of the site. Leave empty to hide the banner.",
+        "name": "bannerText",
+        "type": "string"
+      }
+    ],
+    "name": "siteSettings",
+    "type": "document"
   }
 ]

@@ -88,6 +88,13 @@ export default function RaffleGrid({ items, isDrawn = false }: RaffleGridProps) 
                 Photo Coming Soon
               </div>
             )}
+
+            <span className="absolute top-3 left-3 z-10 rounded-full bg-background/95 px-3 py-1 font-mono text-xs text-foreground">
+              {String(index + 1).padStart(2, '0')}
+            </span>
+            <span className="absolute bottom-3 right-3 z-10 rounded-full bg-accent px-3 py-1 font-mono text-xs text-white">
+              value {item.value}
+            </span>
           </div>
 
           <div className="space-y-3">
@@ -99,9 +106,6 @@ export default function RaffleGrid({ items, isDrawn = false }: RaffleGridProps) 
             </p>
             <p className="text-xs sm:text-sm text-secondary-foreground leading-relaxed">
               {item.details}
-            </p>
-            <p className="text-xs sm:text-sm text-secondary-foreground">
-              <span className="font-normal">Value:</span> {item.value}
             </p>
             {item.location && (
               <p className="text-xs sm:text-sm text-secondary-foreground">

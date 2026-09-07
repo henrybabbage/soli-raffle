@@ -14,6 +14,13 @@ export const raffleAboutQuery = groq`
   }
 `;
 
+// Query for fetching the site settings singleton
+export const siteSettingsQuery = groq`
+  *[_type == "siteSettings"][0] {
+    bannerText
+  }
+`;
+
 // Query for fetching active raffle items
 export const raffleItemsQuery = groq`
   *[_type == "raffleItem" && isActive == true] | order(orderRank asc) {
