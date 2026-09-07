@@ -1,6 +1,6 @@
 import type {StructureResolver} from "sanity/structure";
 import {orderableDocumentListDeskItem} from "@sanity/orderable-document-list";
-import {DocumentTextIcon, PackageIcon} from "@sanity/icons";
+import {BellIcon, DocumentTextIcon, PackageIcon} from "@sanity/icons";
 
 // https://www.sanity.io/docs/structure-builder-cheat-sheet
 export const structure: StructureResolver = (S, context) =>
@@ -17,13 +17,14 @@ export const structure: StructureResolver = (S, context) =>
             .title("Raffle Introduction"),
         ),
       S.listItem()
-        .title("Site Settings")
-        .id("siteSettings")
+        .title("Banner")
+        .id("banner")
+        .icon(BellIcon)
         .child(
           S.document()
-            .schemaType("siteSettings")
-            .documentId("siteSettings")
-            .title("Site Settings"),
+            .schemaType("banner")
+            .documentId("banner")
+            .title("Banner"),
         ),
       S.divider(),
       orderableDocumentListDeskItem({
@@ -36,7 +37,7 @@ export const structure: StructureResolver = (S, context) =>
       S.divider(),
       ...S.documentTypeListItems().filter(
         (item) =>
-          !["raffleAbout", "raffleItem", "siteSettings"].includes(
+          !["raffleAbout", "raffleItem", "banner"].includes(
             item.getId() ?? "",
           ),
       ),
