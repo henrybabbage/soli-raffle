@@ -210,8 +210,21 @@
     "type": "document"
   },
   {
+    "initialValue": {
+      "title": "Raffle Introduction",
+      "fundraisingDetails": "This online raffle is raising funds for families in Gaza to help meet basic needs, including food, shelter, clothing, medicine, and hygiene products. Our goal is to raise 500€ for each of three families, for a total of 1.500€. Any additional funds raised will be distributed in 50-100€ amounts to support other families.",
+      "contactIntroduction": "If you would like to learn more about the families receiving the funds, please email Lilith at",
+      "contactEmail": "lilith.spink@proton.me",
+      "entryInstructions": "To enter the raffle, simply select the ticket below the prize(s) you would like to win and purchase as many entries as you wish. Each ticket costs 10€, with payment via PayPal.",
+      "drawIntroduction": "The winners will be drawn live on Lilith's Instagram",
+      "instagramHandle": "lilith__llllllll",
+      "instagramUrl": "https://www.instagram.com/lilith__llllllll/",
+      "drawConclusion": "on the 1st October using an online random name selector.",
+      "closingMessage": "Good luck!"
+    },
     "fields": [
       {
+        "initialValue": "Raffle Introduction",
         "validation": [
           {
             "rules": [
@@ -223,10 +236,11 @@
             "level": "error"
           }
         ],
-        "name": "buyerEmail",
+        "name": "title",
         "type": "string"
       },
       {
+        "rows": 5,
         "validation": [
           {
             "rules": [
@@ -238,143 +252,160 @@
             "level": "error"
           }
         ],
-        "name": "buyerName",
-        "type": "string"
-      },
-      {
-        "validation": [
-          {
-            "rules": [
-              {
-                "flag": "presence",
-                "constraint": "required"
-              }
-            ],
-            "level": "error"
-          }
-        ],
-        "to": [
-          {
-            "type": "raffleItem"
-          }
-        ],
-        "name": "raffleItem",
-        "type": "reference"
-      },
-      {
-        "validation": [
-          {
-            "rules": [
-              {
-                "flag": "presence",
-                "constraint": "required"
-              },
-              {
-                "flag": "min",
-                "constraint": 1
-              }
-            ],
-            "level": "error"
-          }
-        ],
-        "name": "quantity",
-        "type": "number"
-      },
-      {
-        "validation": [
-          {
-            "rules": [
-              {
-                "flag": "presence",
-                "constraint": "required"
-              },
-              {
-                "flag": "min",
-                "constraint": 0
-              }
-            ],
-            "level": "error"
-          }
-        ],
-        "description": "Total amount paid in the smallest currency unit (e.g., cents for USD)",
-        "name": "totalAmount",
-        "type": "number"
-      },
-      {
-        "description": "Unique identifier from PayPal for this transaction",
-        "name": "paypalTransactionId",
-        "type": "string",
-        "title": "PayPal Transaction ID"
-      },
-      {
-        "options": {
-          "list": [
-            {
-              "title": "Pending",
-              "value": "pending"
-            },
-            {
-              "title": "Completed",
-              "value": "completed"
-            },
-            {
-              "title": "Failed",
-              "value": "failed"
-            },
-            {
-              "title": "Refunded",
-              "value": "refunded"
-            }
-          ]
-        },
-        "initialValue": "completed",
-        "validation": [
-          {
-            "rules": [
-              {
-                "flag": "valid",
-                "constraint": [
-                  "pending",
-                  "completed",
-                  "failed",
-                  "refunded"
-                ]
-              },
-              {
-                "flag": "presence",
-                "constraint": "required"
-              }
-            ],
-            "level": "error"
-          }
-        ],
-        "name": "paymentStatus",
-        "type": "string"
-      },
-      {
-        "validation": [
-          {
-            "rules": [
-              {
-                "flag": "presence",
-                "constraint": "required"
-              }
-            ],
-            "level": "error"
-          }
-        ],
-        "name": "purchaseDate",
-        "type": "datetime"
+        "name": "fundraisingDetails",
+        "type": "text",
+        "title": "Fundraising details"
       },
       {
         "rows": 3,
-        "description": "Additional notes about this purchase (e.g., customer service notes)",
-        "name": "notes",
-        "type": "text"
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "contactIntroduction",
+        "type": "text",
+        "title": "Contact introduction"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "contactEmail",
+        "type": "string",
+        "title": "Contact email"
+      },
+      {
+        "rows": 4,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "entryInstructions",
+        "type": "text",
+        "title": "How to enter"
+      },
+      {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "drawIntroduction",
+        "type": "text",
+        "title": "Winner announcement introduction"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "instagramHandle",
+        "type": "string",
+        "title": "Instagram handle"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "instagramUrl",
+        "type": "url",
+        "title": "Instagram URL"
+      },
+      {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "drawConclusion",
+        "type": "text",
+        "title": "Winner announcement conclusion"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "closingMessage",
+        "type": "string",
+        "title": "Closing message"
       }
     ],
-    "name": "purchase",
-    "type": "document"
+    "name": "raffleAbout",
+    "type": "document",
+    "title": "Raffle Introduction"
   },
   {
     "fields": [

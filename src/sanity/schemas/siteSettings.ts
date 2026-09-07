@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const siteSettings = {
   name: "siteSettings",
   title: "Site Settings",
