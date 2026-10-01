@@ -154,7 +154,7 @@ describe("RaffleGrid - PayPal Integration", () => {
     await user.click(firstBuyButton);
 
     expect(
-      screen.getByRole("link", { name: "Pay €10.00 with PayPal" })
+      screen.getByRole("button", { name: "Pay €10.00 with PayPal" })
     ).toBeInTheDocument();
   });
 
@@ -236,21 +236,19 @@ describe("RaffleGrid - PayPal Integration", () => {
     expect(firstPlusButton).toBeDisabled();
   });
 
-  it("links directly to PayPal without requiring buyer details", async () => {
-    const user = userEvent.setup();
+  it("collects buyer details before recording a purchase", async () => {
+    const user = userEvent.setup()
 
     render(<RaffleGrid items={sampleItems} />);
 
     const buyButtons = await screen.findAllByText("Buy Ticket");
     await user.click(buyButtons[0]);
 
-    const payLink = screen.getByRole("link", {
-      name: /Pay €10.00 with PayPal/,
-    });
-    expect(payLink).toHaveAttribute(
-      "href",
-      "https://www.paypal.me/palirafflefundraiser/10.00EUR"
-    );
+    expect(screen.getByLabelText("Full name")).toBeInTheDocument();
+    expect(screen.getByLabelText("Email")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Pay €10.00 with PayPal/ }),
+    ).toBeDisabled();
     expect(global.fetch).not.toHaveBeenCalled();
   });
 
@@ -262,9 +260,9 @@ describe("RaffleGrid - PayPal Integration", () => {
     // Wait for items to load
     await screen.findByText("Private Qigong Session");
     await screen.findByText(/Lingji Hon/);
-    const valueLabels = await screen.findAllByText("Value:");
+    const valueLabels = await screen.findAllByText(/value /i);
     expect(valueLabels).toHaveLength(12);
-    const hundredValues = await screen.findAllByText("100€");
+    const hundredValues = await screen.findAllByText(/100€/);
     expect(hundredValues.length).toBeGreaterThan(0);
   });
 });

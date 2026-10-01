@@ -1,14 +1,16 @@
 import "@testing-library/jest-dom";
 
-// Mock PayPal SDK
-global.window.paypal = {
-  Buttons: jest.fn(),
-  FUNDING: {
-    PAYPAL: "paypal",
-    PAYLATER: "paylater",
-    VENMO: "venmo",
-  },
-};
+// Mock PayPal SDK (jsdom only)
+if (typeof window !== "undefined") {
+  global.window.paypal = {
+    Buttons: jest.fn(),
+    FUNDING: {
+      PAYPAL: "paypal",
+      PAYLATER: "paylater",
+      VENMO: "venmo",
+    },
+  };
+}
 
 // Mock environment variables
 process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID = "test-client-id";
