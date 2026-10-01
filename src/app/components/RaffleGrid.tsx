@@ -190,6 +190,7 @@ export default function RaffleGrid({ items, isDrawn = false }: RaffleGridProps) 
                   <PayPalMeButton
                     key={`${item._id}-${quantities[item._id]}`}
                     amount={TICKET_PRICE_EUR}
+                    itemId={item._id}
                     itemName={item.title}
                     quantity={quantities[item._id] || 1}
                     onPaymentInitiated={() =>

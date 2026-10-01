@@ -1,5 +1,6 @@
 import raffleItem from './raffleItem'
 import raffleAbout from './raffleAbout'
-import siteSettings from './siteSettings'
+import banner from './siteSettings'
+import purchase from './purchase'
 
-export const schemaTypes = [raffleItem, raffleAbout, siteSettings]
+export const schemaTypes = [raffleItem, raffleAbout, banner, purchase]

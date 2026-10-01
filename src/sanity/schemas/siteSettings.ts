@@ -1,12 +1,20 @@
-import { CogIcon } from "@sanity/icons";
+import { BellIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
 
-export default defineType({
-  name: "siteSettings",
-  title: "Site Settings",
+const banner = defineType({
+  name: "banner",
+  title: "Banner",
   type: "document",
-  icon: CogIcon,
+  icon: BellIcon,
   fields: [
+    defineField({
+      name: "title",
+      title: "Title",
+      type: "string",
+      initialValue: "Banner",
+      hidden: true,
+      readOnly: true,
+    }),
     defineField({
       name: "bannerText",
       title: "Banner Text",
@@ -17,6 +25,8 @@ export default defineType({
     }),
   ],
   preview: {
-    prepare: () => ({ title: "Site Settings" }),
+    prepare: () => ({ title: "Banner" }),
   },
 });
+
+export default banner;

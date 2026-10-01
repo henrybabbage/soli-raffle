@@ -14,9 +14,10 @@ export const raffleAboutQuery = groq`
   }
 `;
 
-// Query for fetching the site settings singleton
+// Prefer the Banner singleton, retaining the prior settings document as a safe
+// fallback while existing Studio content moves to the new document ID.
 export const siteSettingsQuery = groq`
-  *[_type == "siteSettings"][0] {
+  coalesce(*[_id == "banner"][0], *[_id == "siteSettings"][0]) {
     bannerText
   }
 `;
