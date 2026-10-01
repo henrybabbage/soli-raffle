@@ -65,7 +65,7 @@ export default async function Home() {
                   className="align-baseline h-10 w-auto sm:h-12"
                   priority
                 />
-                <h1 className="text-4xl sm:text-5xl font-light tracking-wide italic text-foreground font-mono">
+                <h1 className="text-4xl sm:text-5xl font-light tracking-wide text-foreground font-mono">
                   Soli-Raffle
                 </h1>
               </div>

@@ -4,37 +4,15 @@ import localFont from "next/font/local";
 import LenisProvider from "./components/lenis-provider";
 import "./globals.css";
 
-const quadrantText = localFont({
+const lingo = localFont({
   src: [
     {
-      path: "../../public/fonts/QuadrantText/QuadrantText-Regular.woff2",
+      path: "../../public/fonts/Lingo-Regular.otf",
       weight: "400",
       style: "normal",
     },
-    {
-      path: "../../public/fonts/QuadrantText/QuadrantText-RegularItalic.woff2",
-      weight: "400",
-      style: "italic",
-    },
   ],
-  variable: "--font-quadrant-text",
-  display: "swap",
-});
-
-const quadrantTextMono = localFont({
-  src: [
-    {
-      path: "../../public/fonts/QuadrantTextMono/QuadrantTextMono-Regular.woff2",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/QuadrantTextMono/QuadrantTextMono-RegularItalic.woff2",
-      weight: "400",
-      style: "italic",
-    },
-  ],
-  variable: "--font-quadrant-text-mono",
+  variable: "--font-lingo",
   display: "swap",
 });
 
@@ -74,11 +52,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={cn(
-          quadrantText.variable,
-          quadrantTextMono.variable,
-          "antialiased"
-        )}
+        className={cn(lingo.variable, "antialiased")}
       >
         <LenisProvider>{children}</LenisProvider>
       </body>

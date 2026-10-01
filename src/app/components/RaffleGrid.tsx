@@ -93,7 +93,7 @@ export default function RaffleGrid({ items, isDrawn = false }: RaffleGridProps) 
               {String(index + 1).padStart(2, '0')}
             </span>
             <span className="absolute bottom-3 right-3 z-10 rounded-full bg-accent px-3 py-1 font-mono text-xs text-white">
-              value {item.value}
+              Value {item.value}
             </span>
           </div>
 
