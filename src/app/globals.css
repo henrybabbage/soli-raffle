@@ -14,8 +14,8 @@
   --color-brand: oklch(0.65 0.25 22);
   --color-secondary-foreground: oklch(0.67 0 0);
   --color-accent: #009639;
-  --font-sans: var(--font-quadrant-text);
-  --font-mono: var(--font-quadrant-text-mono);
+  --font-sans: var(--font-lingo);
+  --font-mono: var(--font-lingo);
 }
 
 body {

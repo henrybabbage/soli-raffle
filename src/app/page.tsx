@@ -26,28 +26,26 @@ const defaultRaffleAbout = {
 
 type RaffleAbout = Partial<typeof defaultRaffleAbout>;
 
+type SiteSettings = { bannerText?: string | null };
+
 export default async function Home() {
   let raffleItems;
   let raffleAbout: RaffleAbout | null;
+  let siteSettings: SiteSettings | null;
   try {
-    [raffleItems, raffleAbout] = await Promise.all([
+    [raffleItems, raffleAbout, siteSettings] = await Promise.all([
       client.fetch(raffleItemsQuery),
       client.fetch<RaffleAbout | null>(raffleAboutQuery),
+      client.fetch<SiteSettings | null>(siteSettingsQuery),
     ]);
   } catch (error) {
     console.error("Failed to fetch raffle content:", error);
     raffleItems = [];
     raffleAbout = null;
+    siteSettings = null;
   }
 
   const about = { ...defaultRaffleAbout, ...raffleAbout };
-
-  let siteSettings: { bannerText?: string | null } | null = null;
-  try {
-    siteSettings = await client.fetch(siteSettingsQuery);
-  } catch (error) {
-    console.error('Failed to fetch site settings:', error);
-  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background font-sans">
@@ -67,7 +65,7 @@ export default async function Home() {
                   className="align-baseline h-10 w-auto sm:h-12"
                   priority
                 />
-                <h1 className="text-4xl sm:text-5xl font-light tracking-wide italic text-foreground font-mono">
+                <h1 className="text-4xl sm:text-5xl font-light tracking-wide text-foreground font-mono">
                   Soli-Raffle
                 </h1>
               </div>
