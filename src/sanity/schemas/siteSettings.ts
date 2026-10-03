@@ -21,7 +21,8 @@ const banner = defineType({
       description:
         "Shown in the banner at the very top of the site. Leave empty to hide the banner.",
       type: "string",
-      initialValue: "Raffle on until 1st October",
+      initialValue:
+        "The raffle has concluded. Winners will be drawn and contacted soon.",
     }),
   ],
   preview: {

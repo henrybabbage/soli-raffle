@@ -63,6 +63,20 @@ describe("RaffleGrid - PayPal Integration", () => {
     expect(buyButtons.length).toBe(12);
   });
 
+  it("greys out buy ticket buttons when the raffle is closed", async () => {
+    const user = userEvent.setup();
+    render(<RaffleGrid items={sampleItems.slice(0, 1)} isClosed />);
+
+    const buyButton = await screen.findByRole("button", { name: "Buy Ticket" });
+    expect(buyButton).toBeDisabled();
+    expect(buyButton).toHaveClass("text-neutral-400", "cursor-not-allowed");
+
+    await user.click(buyButton);
+    expect(screen.queryByLabelText("Full name")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "-" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "+" })).toBeDisabled();
+  });
+
   it("marks external contact links with the arrow icon", () => {
     render(<RaffleGrid items={sampleItems.slice(0, 1)} />);
 

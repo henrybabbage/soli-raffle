@@ -27,9 +27,14 @@ export interface RaffleItem {
 interface RaffleGridProps {
   items: RaffleItem[];
   isDrawn?: boolean;
+  isClosed?: boolean;
 }
 
-export default function RaffleGrid({ items, isDrawn = false }: RaffleGridProps) {
+export default function RaffleGrid({
+  items,
+  isDrawn = false,
+  isClosed = false,
+}: RaffleGridProps) {
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [showPayPal, setShowPayPal] = useState<Record<string, boolean>>({});
 
@@ -51,6 +56,7 @@ export default function RaffleGrid({ items, isDrawn = false }: RaffleGridProps) 
   }
 
   function handleBuyTicket(item: RaffleItem) {
+    if (isClosed || isDrawn) return;
     setShowPayPal((prev) => ({ ...prev, [item._id]: true }));
   }
 
@@ -143,11 +149,15 @@ export default function RaffleGrid({ items, isDrawn = false }: RaffleGridProps) 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-6 sm:gap-3">
                 {!showPayPal[item._id] ? (
                   <button
-                    className={`px-4 sm:px-6 py-2 bg-transparent border border-foreground text-foreground hover:border-brand hover:text-brand uppercase rounded transition-colors duration-200 text-xs order-2 sm:order-1 ${isDrawn ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`px-4 sm:px-6 py-2 bg-transparent border uppercase rounded text-xs order-2 sm:order-1 transition-colors duration-200 ${
+                      isClosed
+                        ? "border-neutral-400 text-neutral-400 cursor-not-allowed"
+                        : "border-foreground text-foreground hover:border-brand hover:text-brand"
+                    } ${isDrawn ? "opacity-50 cursor-not-allowed" : ""}`}
                     onClick={() => handleBuyTicket(item)}
-                    disabled={isDrawn}
+                    disabled={isDrawn || isClosed}
                   >
-                    {isDrawn ? 'Raffle Drawn' : 'Buy Ticket'}
+                    {isDrawn ? "Raffle Drawn" : "Buy Ticket"}
                   </button>
                 ) : (
                   <button
@@ -164,7 +174,7 @@ export default function RaffleGrid({ items, isDrawn = false }: RaffleGridProps) 
                   <button
                     className="w-8 h-8 rounded-full border border-foreground flex items-center justify-center hover:border-brand hover:text-brand transition-colors duration-200 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={() => updateQuantity(item._id, -1)}
-                    disabled={showPayPal[item._id]}
+                    disabled={showPayPal[item._id] || isClosed}
                   >
                     -
                   </button>
@@ -174,7 +184,7 @@ export default function RaffleGrid({ items, isDrawn = false }: RaffleGridProps) 
                   <button
                     className="w-8 h-8 rounded-full border border-foreground flex items-center justify-center hover:border-brand hover:text-brand transition-colors duration-200 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={() => updateQuantity(item._id, 1)}
-                    disabled={showPayPal[item._id]}
+                    disabled={showPayPal[item._id] || isClosed}
                   >
                     +
                   </button>

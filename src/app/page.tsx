@@ -7,7 +7,7 @@ import {
 import Image from "next/image";
 import Banner from "./components/Banner";
 import RaffleGrid from "./components/RaffleGrid";
-import { TICKET_PRICE_EUR } from "./constants";
+import { RAFFLE_CONCLUDED_NOTICE, TICKET_PRICE_EUR } from "./constants";
 
 const defaultRaffleAbout = {
   fundraisingDetails:
@@ -49,7 +49,7 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background font-sans">
-      <Banner text={siteSettings?.bannerText} />
+      <Banner text={siteSettings?.bannerText || RAFFLE_CONCLUDED_NOTICE} />
 
       <header className="sticky top-0 z-50 bg-background w-full">
         <div className="mx-auto w-full max-w-[82rem] border-b">
@@ -111,7 +111,7 @@ export default async function Home() {
           </p>
         </div>
 
-        <RaffleGrid items={raffleItems} isDrawn={false} />
+        <RaffleGrid items={raffleItems} isClosed />
       </main>
 
       <footer className="bg-background h-[300px] mt-auto flex items-end">
