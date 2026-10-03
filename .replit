@@ -4,6 +4,7 @@ modules = ["nodejs-24"]
 [deployment]
 build = "NODE_OPTIONS='--max-old-space-size=2048' npm run build"
 run = "npm run start"
+deploymentTarget = "cloudrun"
 
 [[ports]]
 localPort = 3000
