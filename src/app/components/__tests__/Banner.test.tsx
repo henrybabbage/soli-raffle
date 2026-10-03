@@ -4,7 +4,11 @@ import Banner from "../Banner";
 describe("Banner", () => {
   it("renders the banner text when set", () => {
     render(<Banner text="Raffle on until 1st October" />);
-    expect(screen.getByText("Raffle on until 1st October")).toBeInTheDocument();
+    const notice = screen.getByText("Raffle on until 1st October");
+    expect(notice).toBeInTheDocument();
+    expect(notice).toHaveClass("[font-family:system-ui,sans-serif]");
+    expect(notice).not.toHaveClass("uppercase");
+    expect(notice.parentElement?.parentElement).toHaveClass("bg-accent");
   });
 
   it("renders nothing when the text is undefined", () => {
