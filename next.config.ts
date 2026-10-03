@@ -1,17 +1,21 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "cdn.sanity.io",
-        port: "",
-        pathname: "/images/**",
-        search: "",
-      },
-    ],
-  },
+	// Keep Replit/low-memory builds from spawning too many webpack workers.
+	experimental: {
+		cpus: 1,
+	},
+	images: {
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "cdn.sanity.io",
+				port: "",
+				pathname: "/images/**",
+				search: "",
+			},
+		],
+	},
 };
 
 export default nextConfig;
